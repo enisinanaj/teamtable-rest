@@ -1,5 +1,5 @@
 # rest-api
-Sagittarius REST server API. Example build in Groovy/Java Compliant with JAX-RS specifications through Jersey 2.24
+Sagittarius REST server API. Example built in Groovy/Java Compliant with JAX-RS specifications using Jersey 2.24
 
 # Incompatibility between Jersey and Groovy
 
