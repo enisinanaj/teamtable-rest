@@ -4,7 +4,7 @@
  
 <web-app>
  
-    <display-name>Sagittarius Generated API</display-name>
+    <display-name>Sagittarius</display-name>
  
     <servlet>
         <servlet-name>jersey-serlvet</servlet-name>

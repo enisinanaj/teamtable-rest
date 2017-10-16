@@ -2,10 +2,10 @@ package org.sagittarius90.api.security;
 
 import java.security.Principal;
 
-public class SagittariusSecurityContext implements javax.ws.rs.core.SecurityContext {
+public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 	
 	String authenticationScheme;
-	private Principal sagittariusPrincipal;
+	private Principal principal;
 	
 	public class SagittariusPrincipal implements Principal {
 		private String username;
@@ -35,7 +35,7 @@ public class SagittariusSecurityContext implements javax.ws.rs.core.SecurityCont
 
 	@Override
 	public Principal getUserPrincipal() {
-		return getSagittariusPrincipal();
+		return getPrincipal();
 	}
 
 	@Override
@@ -57,20 +57,20 @@ public class SagittariusSecurityContext implements javax.ws.rs.core.SecurityCont
 		authenticationScheme = scheme;
 	}
 
-	public Principal getSagittariusPrincipal() {
-		return sagittariusPrincipal;
+	public Principal getPrincipal() {
+		return principal;
 	}
 
-	public void setSagittariusPrincipal(SagittariusPrincipal sagittariusPrincipal) {
-		this.sagittariusPrincipal = sagittariusPrincipal;
+	public void setPrincipal(SagittariusPrincipal principal) {
+		this.principal = principal;
 	}
 	
 	public SagittariusPrincipal getSagittariusPrincipalInstance() {
-		if (this.sagittariusPrincipal == null) {
-			this.sagittariusPrincipal = new SagittariusPrincipal();
+		if (this.principal == null) {
+			this.principal = new SagittariusPrincipal();
 		}
 		
-		return (SagittariusPrincipal) this.sagittariusPrincipal;
+		return (SagittariusPrincipal) this.principal;
 	}
 
 }

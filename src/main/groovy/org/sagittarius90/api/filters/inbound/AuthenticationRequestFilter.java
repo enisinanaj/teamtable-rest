@@ -17,10 +17,9 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
 import org.glassfish.jersey.internal.util.Base64;
-import org.sagittarius90.api.security.SagittariusSecurityContext;
+import org.sagittarius90.api.security.SecurityContext;
 
 public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	
@@ -34,7 +33,7 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	boolean authenticated = false;
 	List<String> authorization;
 	private Method method;
-	private SagittariusSecurityContext security;
+	private SecurityContext security;
 	
 	private static final String AUTHORIZATION_PROPERTY = "Authorization";
     private static final String AUTHENTICATION_SCHEME = "Basic";
@@ -152,11 +151,11 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	}
 
 	void createSecurityContext() {
-		security = new SagittariusSecurityContext();
-		SagittariusSecurityContext.SagittariusPrincipal principal = security.getSagittariusPrincipalInstance();
+		security = new SecurityContext();
+		SecurityContext.SagittariusPrincipal principal = security.getSagittariusPrincipalInstance();
 		
 		principal.setPassword(password);
 		principal.setUsername(username);
-		security.setAuthenticationScheme(SecurityContext.BASIC_AUTH);
+		security.setAuthenticationScheme(javax.ws.rs.core.SecurityContext.BASIC_AUTH);
 	}
 }
