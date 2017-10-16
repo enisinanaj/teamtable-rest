@@ -7,20 +7,20 @@
  * user guide available at https://docs.gradle.org/2.14.1/userguide/tutorial_java_projects.html
  */
 
-buildscript {
+/*buildscript {
 	repositories {
 		jcenter()
 	}
 	dependencies {
 		classpath 'org.akhikhl.gretty:gretty:2.0.0'
 	}
-}
+}*/
 
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'war'
-apply plugin: 'org.akhikhl.gretty'
+//apply plugin: 'org.akhikhl.gretty'
 
 // In this section you declare where to find the dependencies of your project
 repositories {
