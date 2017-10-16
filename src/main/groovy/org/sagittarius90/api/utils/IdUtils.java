@@ -16,6 +16,7 @@ public class IdUtils {
 		if (decodedObj.length > 0) {
 			return decodedObj[0];
 		} else {
+			//TODO: use logger!
 			System.out.println("Id not able to decode with Hashids.");
 		}
 		
