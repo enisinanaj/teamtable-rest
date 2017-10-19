@@ -1,4 +1,4 @@
-package org.sagittarius90.api.service;
+package org.sagittarius90.service;
 
 public class LegalPracticeService {
 }

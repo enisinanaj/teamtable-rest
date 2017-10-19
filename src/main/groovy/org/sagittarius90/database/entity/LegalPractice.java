@@ -4,10 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 @Table(name="legal_practice")
 public class LegalPractice implements Serializable {
 
     @Id @Column(name="practice_id")
+    @GeneratedValue
     private long id;
 
     @OneToMany(fetch= FetchType.EAGER, mappedBy="practice")

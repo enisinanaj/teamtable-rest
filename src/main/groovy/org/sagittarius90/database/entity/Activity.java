@@ -1,12 +1,18 @@
 package org.sagittarius90.database.entity;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GeneratorType;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
+@Entity
 @Table(name="activity")
 public class Activity implements Serializable {
 
     @Id @Column(name="activity_id")
+    @GeneratedValue
     private long id;
 
     @OneToOne(fetch= FetchType.EAGER)
@@ -29,7 +35,7 @@ public class Activity implements Serializable {
 
     @Column(name="expiration_date")
     @Temporal(value=TemporalType.TIMESTAMP)
-    private String expirationDate;
+    private Date expirationDate;
 
     @Column(name="status")
     private String status;
@@ -40,11 +46,11 @@ public class Activity implements Serializable {
 
     @Column(name="completion_date")
     @Temporal(value=TemporalType.TIMESTAMP)
-    private String completionDate;
+    private Date completionDate;
 
     @Column(name="creation_date")
     @Temporal(value=TemporalType.TIMESTAMP)
-    private String creationDate;
+    private Date creationDate;
 
     public long getId() {
         return id;
@@ -95,14 +101,6 @@ public class Activity implements Serializable {
         this.description = description;
     }
 
-    public String getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(String expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
     public String getStatus() {
         //TODO: convert to an Enum/Type/LookupTable
         return status;
@@ -120,19 +118,27 @@ public class Activity implements Serializable {
         this.archived = archived;
     }
 
-    public String getCompletionDate() {
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public Date getCompletionDate() {
         return completionDate;
     }
 
-    public void setCompletionDate(String completionDate) {
+    public void setCompletionDate(Date completionDate) {
         this.completionDate = completionDate;
     }
 
-    public String getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(String creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 }

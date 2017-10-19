@@ -5,10 +5,12 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 @Table(name="event")
 public class Event implements Serializable {
 
     @Id @Column(name="event_id")
+    @GeneratedValue
     private long id;
 
     @OneToOne(fetch=FetchType.EAGER)

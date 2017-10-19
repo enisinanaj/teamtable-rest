@@ -4,10 +4,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 @Table(name="user")
 public class User implements Serializable {
 
     @Id @Column(name="user_id")
+    @GeneratedValue
     private long id;
 
     @Column(name="username")
