@@ -13,6 +13,7 @@ buildscript {
 	}
 	dependencies {
 		classpath 'org.akhikhl.gretty:gretty:2.0.0'
+		classpath 'org.hibernate:hibernate-gradle-plugin:5.2.11.Final'
 	}
 }
 
@@ -21,8 +22,9 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'org.hibernate.orm'
 
-war.archiveName "rest-activity.war"
+war.archiveName "teamtable.war"
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -30,6 +32,12 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
 	mavenCentral()
     jcenter()
+}
+
+hibernate {
+	enhance {
+		enableDirtyTracking = true
+	}
 }
 
 gretty {
@@ -62,7 +70,7 @@ dependencies {
 	compile 'org.hashids:hashids:1.0.1'
 
 	// database
-	compile 'org.hibernate:hibernate-core:5.2.11.Final'
+	compile 'org.hibernate:hibernate-entitymanager:5.2.11.Final'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
