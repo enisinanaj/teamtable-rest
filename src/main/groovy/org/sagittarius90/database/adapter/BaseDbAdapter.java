@@ -1,24 +1,15 @@
 package org.sagittarius90.database.adapter;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@ApplicationScoped
 public class BaseDbAdapter {
 
-    @PersistenceContext(
-            unitName = "teamtable",
-            properties = {
-                    @PersistenceProperty(name="org.hibernate.flushMode", value="AUTO")
-            }
-    )
-    private EntityManager entityManager;
+    private static Logger logger = LoggerFactory.getLogger(BaseDbAdapter.class);
 
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
+    protected static void endEmTransaction() {
+        logger.info("Ending transaction of EntityManager");
 
-    public EntityManager getEm() {
-        return entityManager;
+        PersistenceUtil.killEntityManagerFactory();
     }
 }

@@ -1,15 +1,17 @@
 package org.sagittarius90.database.entity;
 
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GeneratorType;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name="activity")
+@NamedQueries(
+        @NamedQuery(name = Activity.ALL_ACTIVITIES, query = "from Activity")
+)
 public class Activity implements Serializable {
+
+    public static final String ALL_ACTIVITIES = "Activity.allActivities";
 
     @Id @Column(name="activity_id")
     @GeneratedValue

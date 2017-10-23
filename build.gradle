@@ -42,7 +42,7 @@ hibernate {
 
 gretty {
 	httpPort = 8000
-	contextPath = '/rest-activity'
+	contextPath = '/teamtable'
 	fastReload = true
 	// ... many more properties
 }
@@ -70,6 +70,10 @@ dependencies {
 	compile 'org.hashids:hashids:1.0.1'
 
 	// database
+    compile 'javax.el:el-api:2.2'
+    compile 'mysql:mysql-connector-java:5.1.6'
+	compile 'org.hibernate:hibernate-core:5.2.11.Final'
+    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
 	compile 'org.hibernate:hibernate-entitymanager:5.2.11.Final'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
@@ -78,3 +82,15 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
 }
+
+task deploygf(type: Copy) {
+    from "${buildDir}/libs/teamtable.war"
+    into "/usr/local/Cellar/glassfish/5.0/libexec/glassfish/domains/domain1/autodeploy/"
+}
+
+deploygf.dependsOn war
+deploygf.doFirst {
+    println "Copying to autodeploy dir"
+}
+
+defaultTasks "deploygf"
