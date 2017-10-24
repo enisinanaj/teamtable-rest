@@ -10,7 +10,15 @@ public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 	public class SagittariusPrincipal implements Principal {
 		private String username;
 		private String password;
-		
+
+		public SagittariusPrincipal() {
+		}
+
+		public SagittariusPrincipal(String username, String password) {
+			this.username = username;
+			this.password = password;
+		}
+
 		@Override
 		public String getName() {
 			return username;

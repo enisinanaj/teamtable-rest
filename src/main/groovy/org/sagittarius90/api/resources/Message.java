@@ -15,9 +15,8 @@ public class Message {
 	@Path("/{messageId}")
 	@GET
 	public Response get(@PathParam("messageId") String messageId) {
-		Long realId = IdUtils.decodeId(messageId);
-		
-		//TODO: implement
+		Long realId = IdUtils.getInstance().decodeId(messageId);
+
 		MessageModel messageModel = new MessageModel();
 		messageModel.setId(realId);
 		messageModel.setBody("body");
