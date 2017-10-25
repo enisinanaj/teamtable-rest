@@ -1,25 +1,46 @@
 package org.sagittarius90.api.utils;
 
 import org.hashids.Hashids;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class IdUtils {
 
-	public static String encodeId(Long id) {
-		Hashids h = new Hashids();
+	private static IdUtils instance;
+	private static Logger logger= LoggerFactory.getLogger(IdUtils.class);
+
+	public static IdUtils getInstance() {
+		if (instance == null) {
+			instance = new IdUtils();
+		}
+
+		return instance;
+	}
+
+	protected IdUtils() {
+
+	}
+
+	public String encodeId(Long id) {
+		Hashids h = getHashids();
 		return h.encode(id);
 	}
 	
-	public static long decodeId(String hashId) {
-		Hashids h = new Hashids();
+	public long decodeId(String hashId) {
+		Hashids h = getHashids();
 		long[] decodedObj = h.decode(hashId);
 		
-		if (decodedObj.length > 0) {
+		if (decodedObj != null && decodedObj.length > 0) {
 			return decodedObj[0];
 		} else {
-			//TODO: use logger!
-			System.out.println("Id not able to decode with Hashids.");
+			logger.warn("Id not able to decode with Hashids.");
 		}
 		
 		return 0l;
+	}
+
+	protected Hashids getHashids() {
+		return new Hashids();
 	}
 }
