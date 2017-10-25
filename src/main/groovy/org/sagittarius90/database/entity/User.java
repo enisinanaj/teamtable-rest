@@ -10,7 +10,7 @@ public class User implements Serializable {
 
     @Id @Column(name="user_id")
     @GeneratedValue
-    private long id;
+    private Integer id;
 
     @Column(name="username")
     private String username;
@@ -26,12 +26,16 @@ public class User implements Serializable {
     @Temporal(value=TemporalType.TIMESTAMP)
     private Date lastAccess;
 
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JoinColumn(name="team", referencedColumnName="team_id", insertable=false, updatable=false)
+    private Team team;
 
-    public long getId() {
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

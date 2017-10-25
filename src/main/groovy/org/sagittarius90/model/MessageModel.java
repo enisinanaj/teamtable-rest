@@ -1,4 +1,4 @@
-package org.sagittarius90.api.model;
+package org.sagittarius90.model;
 
 public class MessageModel {
 	

@@ -44,7 +44,7 @@ public class Activity implements Serializable {
 
     //TODO: archived if ActivityStatus.ARCHIVED
     @Transient
-    private String archived;
+    private transient String archived;
 
     @Column(name="completion_date")
     @Temporal(value=TemporalType.TIMESTAMP)

@@ -2,10 +2,13 @@ package org.sagittarius90.api.resources;
 
 import org.sagittarius90.database.adapter.ActivityDbAdapter;
 import org.sagittarius90.database.entity.Activity;
+import org.sagittarius90.io.activity.ActivityConverterImpl;
+import org.sagittarius90.model.ActivityModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -32,7 +35,9 @@ public class ActivityResource {
         logger.info("Called GET method");
 
         List<Activity> activities = getActivityDbAdapter().getAllActivities();
-        return Response.ok().entity(activities).build();
+        GenericEntity<List<ActivityModel>> result = new GenericEntity<List<ActivityModel>>(new ActivityConverterImpl().createFromEntities(activities)) {};
+
+        return Response.ok().entity(result).build();
     }
 
     public ActivityDbAdapter getActivityDbAdapter() {

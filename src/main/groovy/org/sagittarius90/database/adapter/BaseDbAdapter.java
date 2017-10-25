@@ -9,7 +9,6 @@ public class BaseDbAdapter {
 
     protected static void endEmTransaction() {
         logger.info("Ending transaction of EntityManager");
-
-        PersistenceUtil.killEntityManagerFactory();
+        //PersistenceUtil.killEntityManagerFactory();
     }
 }

@@ -4,7 +4,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.sagittarius90.api.model.MessageModel;
+import org.sagittarius90.model.MessageModel;
 import org.sagittarius90.api.utils.IdUtils;
 
 @Path("messages")

@@ -11,7 +11,7 @@ public class Event implements Serializable {
 
     @Id @Column(name="event_id")
     @GeneratedValue
-    private long id;
+    private Integer id;
 
     @OneToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="creator", referencedColumnName="user_id")
@@ -36,11 +36,11 @@ public class Event implements Serializable {
     /*@JoinColumn(name="activity", referencedColumnName="activity_id")*/
     private List<Activity> activities;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
