@@ -3,9 +3,10 @@ package org.sagittarius90.io.event;
 import org.sagittarius90.database.entity.Event;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
+import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.model.EventModel;
 
-public class EventConverterImpl implements EventConverter {
+public class EventConverterImpl extends BaseConverter implements EventConverter {
 
     private static UserConverterImpl userConverter;
     private static LegalPracticeConverterImpl legalPracticeConverter;
@@ -19,7 +20,7 @@ public class EventConverterImpl implements EventConverter {
     public EventModel createFrom(final Event entity) {
         EventModel model = new EventModel();
 
-        model.setId(entity.getId());
+        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
         model.setCreationDate(entity.getCreationDate());
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setDescription(entity.getDescription());

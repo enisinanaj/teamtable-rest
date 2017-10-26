@@ -1,4 +1,4 @@
-package org.sagittarius90.api.utils;
+package org.sagittarius90.io.utils;
 
 import org.hashids.Hashids;
 import org.slf4j.Logger;

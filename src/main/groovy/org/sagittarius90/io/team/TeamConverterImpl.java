@@ -1,9 +1,10 @@
 package org.sagittarius90.io.team;
 
 import org.sagittarius90.database.entity.Team;
+import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.model.TeamModel;
 
-public class TeamConverterImpl implements TeamConverter {
+public class TeamConverterImpl extends BaseConverter implements TeamConverter {
 
     @Override
     public Team createFrom(final TeamModel model) {
@@ -14,7 +15,7 @@ public class TeamConverterImpl implements TeamConverter {
     public TeamModel createFrom(final Team entity) {
         TeamModel model = new TeamModel();
 
-        model.setId(entity.getId());
+        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
         model.setName(entity.getName());
         model.setDescription(entity.getDescription());
         model.setLeft(entity.getLeft());

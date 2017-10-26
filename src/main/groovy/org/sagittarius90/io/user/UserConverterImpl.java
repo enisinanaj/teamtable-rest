@@ -2,9 +2,10 @@ package org.sagittarius90.io.user;
 
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.team.TeamConverterImpl;
+import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.model.UserModel;
 
-public class UserConverterImpl implements UserConverter {
+public class UserConverterImpl extends BaseConverter implements UserConverter {
 
     private static TeamConverterImpl teamConverter;
 
@@ -17,7 +18,7 @@ public class UserConverterImpl implements UserConverter {
     public UserModel createFrom(final User entity) {
         UserModel model = new UserModel();
 
-        model.setId(entity.getId());
+        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
         model.setCreationDate(entity.getCreationDate());
         model.setTeam(getTeamConverter().createFrom(entity.getTeam()));
         model.setLastAccess(entity.getLastAccess());

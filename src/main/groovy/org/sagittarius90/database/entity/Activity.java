@@ -15,7 +15,7 @@ public class Activity implements Serializable {
 
     @Id @Column(name="activity_id")
     @GeneratedValue
-    private long id;
+    private Integer id;
 
     @OneToOne(fetch= FetchType.EAGER)
     @JoinColumn(name="creator", referencedColumnName="user_id")
@@ -54,11 +54,11 @@ public class Activity implements Serializable {
     @Temporal(value=TemporalType.TIMESTAMP)
     private Date creationDate;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

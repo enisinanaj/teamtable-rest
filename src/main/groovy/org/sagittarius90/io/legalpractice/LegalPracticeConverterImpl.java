@@ -2,9 +2,10 @@ package org.sagittarius90.io.legalpractice;
 
 import org.sagittarius90.database.entity.LegalPractice;
 import org.sagittarius90.io.user.UserConverterImpl;
+import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.model.LegalPracticeModel;
 
-public class LegalPracticeConverterImpl implements LegalPracticeConverter {
+public class LegalPracticeConverterImpl extends BaseConverter implements LegalPracticeConverter {
 
     private static UserConverterImpl userConverter;
 
@@ -17,7 +18,7 @@ public class LegalPracticeConverterImpl implements LegalPracticeConverter {
     public LegalPracticeModel createFrom(final LegalPractice entity) {
         LegalPracticeModel model = new LegalPracticeModel();
 
-        model.setId(entity.getId());
+        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setDescription(entity.getDescription());
 

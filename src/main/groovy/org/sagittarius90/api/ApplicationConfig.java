@@ -1,8 +1,9 @@
 package org.sagittarius90.api;
 
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.Path;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.glassfish.jersey.message.filtering.SelectableEntityFilteringFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 @ApplicationPath("/api")
@@ -12,18 +13,29 @@ public class ApplicationConfig extends ResourceConfig {
         registerModels();
 		registerFilters();
 		registerResourcesPackage();
+		//registerFeatures();
     }
-	
-	void registerModels() {
-		packages(true, "org.sagittarus90.api.model");
+
+	private void registerFeatures() {
+		register(SelectableEntityFilteringFeature.class);
+		property(SelectableEntityFilteringFeature.QUERY_PARAM_NAME, "select");
+
+		register(JacksonFeature.class);
+		//register(MoxyJsonFeature.class);
+		//register(JsonMoxyConfigurationContextResolver.class);
+		//register(new MoxyJsonConfig().setFormattedOutput(true).resolver());
 	}
-	
-	void registerFilters() {
+
+	private void registerModels() {
+		packages(true, "org.sagittarus90.model");
+	}
+
+	private void registerFilters() {
 		packages(true, "org.sagittarus90.api.filters.inbound");
 		packages(true, "org.sagittarus90.api.filters.outbound");
 	}
-	
-	void registerResourcesPackage() {
+
+	private void registerResourcesPackage() {
 		packages(true, "org.sagittarus90.api.resources");
 	}
 }

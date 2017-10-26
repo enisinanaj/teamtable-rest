@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 public class ActivityModel extends AbstractModel {
-    private long id;
+    private String id;
     private UserModel creator;
     private UserModel assignee;
     private EventModel event;
@@ -19,11 +19,11 @@ public class ActivityModel extends AbstractModel {
 
     private String archived;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
