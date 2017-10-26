@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     @Column(name="creation_date")
     @Temporal(value=TemporalType.TIMESTAMP)
-    private Date date;
+    private Date creationDate;
 
     @Column(name="last_access")
     @Temporal(value=TemporalType.TIMESTAMP)
@@ -55,12 +55,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Date getLastAccess() {
@@ -69,5 +69,13 @@ public class User implements Serializable {
 
     public void setLastAccess(Date lastAccess) {
         this.lastAccess = lastAccess;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

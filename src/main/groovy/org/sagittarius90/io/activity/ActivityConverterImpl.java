@@ -1,10 +1,16 @@
 package org.sagittarius90.io.activity;
 
-import org.sagittarius90.io.utils.ClassUtils;
+import org.sagittarius90.io.event.EventConverterImpl;
+import org.sagittarius90.io.user.UserConverterImpl;
+import org.sagittarius90.io.utils.GenericConverter;
 import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.database.entity.Activity;
+import org.sagittarius90.model.utils.AbstractModel;
 
 public class ActivityConverterImpl implements ActivityConverter {
+
+    private static UserConverterImpl userConverter;
+    private static EventConverterImpl eventConverter;
 
     @Override
     public Activity createFrom(final ActivityModel model) {
@@ -18,11 +24,11 @@ public class ActivityConverterImpl implements ActivityConverter {
         model.setId(entity.getId());
         model.setActivityType(entity.getActivityType());
         model.setArchived(entity.getArchived());
-        model.setAsignee(entity.getAsignee().getId());
+        model.setAssignee(getUserConverter().createFrom(entity.getAssignee()));
         model.setDescription(entity.getDescription());
         model.setCompletionDate(entity.getCompletionDate());
-        model.setCreator(entity.getCreator().getId());
-        model.setEvent(entity.getEvent().getId());
+        model.setCreator(getUserConverter().createFrom(entity.getCreator()));
+        model.setEvent(getEventConverter().createFrom(entity.getEvent()));
         model.setExpirationDate(entity.getExpirationDate());
         model.setStatus(entity.getStatus());
 
@@ -35,5 +41,21 @@ public class ActivityConverterImpl implements ActivityConverter {
         entity.setDescription(model.getDescription());
 
         return entity;
+    }
+
+    private static UserConverterImpl getUserConverter() {
+        if (userConverter == null) {
+            userConverter = new UserConverterImpl();
+        }
+
+        return userConverter;
+    }
+
+    private static EventConverterImpl getEventConverter() {
+        if (eventConverter == null) {
+            eventConverter = new EventConverterImpl();
+        }
+
+        return eventConverter;
     }
 }

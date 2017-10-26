@@ -22,8 +22,8 @@ public class Activity implements Serializable {
     private User creator;
 
     @OneToOne(fetch= FetchType.EAGER)
-    @JoinColumn(name="asignee", referencedColumnName="user_id")
-    private User asignee;
+    @JoinColumn(name="assignee", referencedColumnName="user_id")
+    private User assignee;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="event", referencedColumnName="event_id")
@@ -70,12 +70,12 @@ public class Activity implements Serializable {
         this.creator = creator;
     }
 
-    public User getAsignee() {
-        return asignee;
+    public User getAssignee() {
+        return assignee;
     }
 
-    public void setAsignee(User asignee) {
-        this.asignee = asignee;
+    public void setAssignee(User assignee) {
+        this.assignee = assignee;
     }
 
     public Event getEvent() {

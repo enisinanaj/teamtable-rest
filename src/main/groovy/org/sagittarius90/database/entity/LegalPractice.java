@@ -10,7 +10,7 @@ public class LegalPractice implements Serializable {
 
     @Id @Column(name="practice_id")
     @GeneratedValue
-    private long id;
+    private Integer id;
 
     @OneToMany(fetch= FetchType.EAGER, mappedBy="practice")
     /*@JoinColumn(name="practice_id", referencedColumnName="practice")*/
@@ -23,11 +23,11 @@ public class LegalPractice implements Serializable {
     @Column(name="description")
     private String description;
 
-    public long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

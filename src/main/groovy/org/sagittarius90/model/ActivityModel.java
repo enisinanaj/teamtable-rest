@@ -1,17 +1,15 @@
 package org.sagittarius90.model;
 
-import org.sagittarius90.database.entity.Event;
-import org.sagittarius90.database.entity.User;
 import org.sagittarius90.model.utils.AbstractModel;
 
 import javax.persistence.*;
 import java.util.Date;
 
-public class ActivityModel implements AbstractModel {
+public class ActivityModel extends AbstractModel {
     private long id;
-    private Integer creator;
-    private Integer asignee;
-    private Integer event;
+    private UserModel creator;
+    private UserModel assignee;
+    private EventModel event;
     private String activityType;
     private String description;
     private Date expirationDate;
@@ -19,8 +17,7 @@ public class ActivityModel implements AbstractModel {
     private Date completionDate;
     private Date creationDate;
 
-    @Transient
-    private transient String archived;
+    private String archived;
 
     public long getId() {
         return id;
@@ -30,27 +27,27 @@ public class ActivityModel implements AbstractModel {
         this.id = id;
     }
 
-    public Integer getCreator() {
+    public UserModel getCreator() {
         return creator;
     }
 
-    public void setCreator(Integer creator) {
+    public void setCreator(UserModel creator) {
         this.creator = creator;
     }
 
-    public Integer getAsignee() {
-        return asignee;
+    public UserModel getAssignee() {
+        return assignee;
     }
 
-    public void setAsignee(Integer asignee) {
-        this.asignee = asignee;
+    public void setAssignee(UserModel assignee) {
+        this.assignee = assignee;
     }
 
-    public Integer getEvent() {
+    public EventModel getEvent() {
         return event;
     }
 
-    public void setEvent(Integer event) {
+    public void setEvent(EventModel event) {
         this.event = event;
     }
 
