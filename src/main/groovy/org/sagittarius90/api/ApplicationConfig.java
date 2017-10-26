@@ -2,7 +2,6 @@ package org.sagittarius90.api;
 
 import javax.ws.rs.ApplicationPath;
 
-import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.message.filtering.SelectableEntityFilteringFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
@@ -20,7 +19,7 @@ public class ApplicationConfig extends ResourceConfig {
 		register(SelectableEntityFilteringFeature.class);
 		property(SelectableEntityFilteringFeature.QUERY_PARAM_NAME, "select");
 
-		register(JacksonFeature.class);
+		//register(JacksonFeature.class);
 		//register(MoxyJsonFeature.class);
 		//register(JsonMoxyConfigurationContextResolver.class);
 		//register(new MoxyJsonConfig().setFormattedOutput(true).resolver());
