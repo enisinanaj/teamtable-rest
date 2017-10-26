@@ -1,10 +1,9 @@
-package org.sagittarius90.api.utils;
+package org.sagittarius90.io.utils;
 
 import org.hashids.Hashids;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
