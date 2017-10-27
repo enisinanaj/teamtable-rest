@@ -34,8 +34,9 @@ public class ActivityResource {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
 
-        Activity activity = getActivityDbAdapter().getActivityById(activityRealId);
-        return Response.ok().entity(activity).build();
+        Activity activity = getActivityDbAdapter().getActivityById((int) activityRealId);
+        ActivityModel activityModel = new ActivityConverterImpl().createFrom(activity);
+        return Response.ok().entity(activityModel).build();
     }
 
     private boolean idNotFound() {
@@ -44,11 +45,13 @@ public class ActivityResource {
 
     private void resolveId(String activityId) {
         this.activityId = activityId;
-        activityRealId = getIdUtils().decodeId(activityId);
+        this.activityRealId = getIdUtils().decodeId(activityId);
 
         if (!correctId()) {
             status = Response.Status.NOT_FOUND;
         }
+
+        status = Response.Status.FOUND;
     }
 
     private boolean correctId() {
