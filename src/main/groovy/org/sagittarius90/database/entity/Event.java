@@ -7,7 +7,12 @@ import java.util.List;
 
 @Entity
 @Table(name="event")
+@NamedQueries(
+        @NamedQuery(name = Event.ALL_EVENTS, query = "from Event")
+)
 public class Event implements Serializable {
+
+    public static final String ALL_EVENTS = "Event.allEvents";
 
     @Id @Column(name="event_id")
     @GeneratedValue

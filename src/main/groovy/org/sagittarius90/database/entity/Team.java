@@ -5,7 +5,12 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="team")
+@NamedQueries(
+        @NamedQuery(name = Team.ALL_TEAMS, query = "from Team")
+)
 public class Team  implements Serializable{
+
+    public static final String ALL_TEAMS = "Event.allTeams";
 
     @Id @Column(name="team_id")
     private Integer id;

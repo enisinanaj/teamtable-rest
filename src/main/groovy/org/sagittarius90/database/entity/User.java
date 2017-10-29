@@ -6,7 +6,12 @@ import java.util.Date;
 
 @Entity
 @Table(name="user")
+@NamedQueries(
+        @NamedQuery(name = User.ALL_USERS, query = "from User")
+)
 public class User implements Serializable {
+
+    public static final String ALL_USERS = "User.allUsers";
 
     @Id @Column(name="user_id")
     @GeneratedValue
