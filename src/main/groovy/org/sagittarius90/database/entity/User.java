@@ -31,8 +31,8 @@ public class User implements Serializable {
     @Temporal(value=TemporalType.TIMESTAMP)
     private Date lastAccess;
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="team", referencedColumnName="team_id", insertable=false, updatable=false)
+    @ManyToOne
+    @JoinColumn(name="team", referencedColumnName="team_id")
     private Team team;
 
 

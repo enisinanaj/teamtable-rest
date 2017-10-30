@@ -23,16 +23,10 @@ public class ActivityDbAdapter extends BaseDbAdapter {
         logger.info("Getting instance of BaseDbAdapter -> ActivityDbAdapter");
 
         if (dbAdapterInstance == null) {
-            init();
             dbAdapterInstance = new ActivityDbAdapter();
         }
 
         return dbAdapterInstance;
-    }
-
-    public static void init() {
-        logger.info("Initializing persistence context");
-        PersistenceUtil.buildEntityManagerFactory();
     }
 
     public List<Activity> getAllActivities() {

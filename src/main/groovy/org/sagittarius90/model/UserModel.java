@@ -12,6 +12,7 @@ public class UserModel extends AbstractModel {
     private Date creationDate;
     private Date lastAccess;
     private TeamModel team;
+    private String teamId;
 
     public String getId() {
         return id;
@@ -59,5 +60,13 @@ public class UserModel extends AbstractModel {
 
     public void setTeam(TeamModel team) {
         this.team = team;
+    }
+
+    public String getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(String teamId) {
+        this.teamId = teamId;
     }
 }

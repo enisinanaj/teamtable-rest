@@ -1,5 +1,9 @@
 package org.sagittarius90.database.adapter;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
 import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.User;
@@ -22,23 +26,14 @@ public class UserDbAdapter extends BaseDbAdapter {
         logger.info("Getting instance of BaseDbAdapter -> UserDbAdapter");
 
         if (dbAdapterInstance == null) {
-            init();
             dbAdapterInstance = new UserDbAdapter();
         }
 
         return dbAdapterInstance;
     }
 
-    public static void init() {
-        logger.info("Initializing persistence context");
-        PersistenceUtil.buildEntityManagerFactory();
-    }
-
     public List<User> getAllUsers() {
-        List<User> users = (List<User>) getEm().createNamedQuery(User.ALL_USERS).getResultList();
-
-        endEmTransaction();
-        return users;
+        return (List<User>) getEm().createNamedQuery(User.ALL_USERS).getResultList();
     }
 
     public User getUserById(Integer userRealId) {
@@ -49,8 +44,6 @@ public class UserDbAdapter extends BaseDbAdapter {
         User newUser = new UserConverterImpl().createFrom(userModel);
         newUser.setId(null);
 
-        getEm().persist(newUser);
-        getEm().getTransaction().begin();
-        getEm().flush()
+        commit(newUser);
     }
 }

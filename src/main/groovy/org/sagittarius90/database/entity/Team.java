@@ -1,7 +1,10 @@
 package org.sagittarius90.database.entity;
 
+import org.hibernate.annotations.Fetch;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name="team")
@@ -26,6 +29,9 @@ public class Team  implements Serializable{
 
     @Column(name="rgt")
     private Integer right;
+
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="team")
+    private List<User> users;
 
     public Integer getId() {
         return id;
@@ -65,5 +71,13 @@ public class Team  implements Serializable{
 
     public void setRight(Integer right) {
         this.right = right;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }

@@ -23,23 +23,14 @@ public class EventDbAdapter extends BaseDbAdapter {
         logger.info("Getting instance of BaseDbAdapter -> EventDbAdapter");
 
         if (dbAdapterInstance == null) {
-            init();
             dbAdapterInstance = new EventDbAdapter();
         }
 
         return dbAdapterInstance;
     }
 
-    public static void init() {
-        logger.info("Initializing persistence context");
-        PersistenceUtil.buildEntityManagerFactory();
-    }
-
     public List<Event> getAllEvents() {
-        List<Event> events = (List<Event>) getEm().createNamedQuery(Event.ALL_EVENTS).getResultList();
-
-        endEmTransaction();
-        return events;
+        return (List<Event>) getEm().createNamedQuery(Event.ALL_EVENTS).getResultList();
     }
 
     public Event getEventById(Integer eventRealId) {

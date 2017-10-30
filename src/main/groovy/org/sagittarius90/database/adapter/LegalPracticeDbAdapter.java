@@ -23,23 +23,14 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         logger.info("Getting instance of BaseDbAdapter -> LegalPracticeDbAdapter");
 
         if (dbAdapterInstance == null) {
-            init();
             dbAdapterInstance = new LegalPracticeDbAdapter();
         }
 
         return dbAdapterInstance;
     }
 
-    public static void init() {
-        logger.info("Initializing persistence context");
-        PersistenceUtil.buildEntityManagerFactory();
-    }
-
     public List<LegalPractice> getAllLegalPractices() {
-        List<LegalPractice> legalPractices = (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
-
-        endEmTransaction();
-        return legalPractices;
+        return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
     }
 
     public LegalPractice getLegalPracticeById(Integer legalPracticeRealId) {

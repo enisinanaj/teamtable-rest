@@ -23,23 +23,14 @@ public class TeamDbAdapter extends BaseDbAdapter {
         logger.info("Getting instance of BaseDbAdapter -> TeamDbAdapter");
 
         if (dbAdapterInstance == null) {
-            init();
             dbAdapterInstance = new TeamDbAdapter();
         }
 
         return dbAdapterInstance;
     }
 
-    public static void init() {
-        logger.info("Initializing persistence context");
-        PersistenceUtil.buildEntityManagerFactory();
-    }
-
     public List<Team> getAllTeams() {
-        List<Team> teams = (List<Team>) getEm().createNamedQuery(Team.ALL_TEAMS).getResultList();
-
-        endEmTransaction();
-        return teams;
+        return (List<Team>) getEm().createNamedQuery(Team.ALL_TEAMS).getResultList();
     }
 
     public Team getTeamById(Integer teamRealId) {
