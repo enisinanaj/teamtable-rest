@@ -1,5 +1,7 @@
 package org.sagittarius90.database.adapter;
 
+import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
+import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.LegalPractice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,7 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(LegalPracticeDbAdapter.class);
 
-    private LegalPracticeDbAdapter() {
+    protected LegalPracticeDbAdapter() {
 
     }
 
@@ -33,10 +35,6 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         PersistenceUtil.buildEntityManagerFactory();
     }
 
-    private EntityManager getEm() {
-        return PersistenceUtil.getEntityManager();
-    }
-
     public List<LegalPractice> getAllLegalPractices() {
         List<LegalPractice> legalPractices = (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
 
@@ -44,11 +42,7 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         return legalPractices;
     }
 
-    protected static BaseDbAdapter createDbAdapterInstance() {
-        return new LegalPracticeDbAdapter();
-    }
-
     public LegalPractice getLegalPracticeById(Integer legalPracticeRealId) {
-        return (LegalPractice) getEm().find(LegalPractice.class, legalPracticeRealId);
+        return getEm().find(LegalPractice.class, legalPracticeRealId);
     }
 }
