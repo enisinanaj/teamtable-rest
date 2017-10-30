@@ -4,14 +4,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-@Entity(name="legal_practice")
+@Entity
 @Table(name="legal_practice")
 @NamedQueries(
-        @NamedQuery(name = LegalPractice.ALL_LEGAL_PRACTICES, query = "from legal_practice")
+        @NamedQuery(name = LegalPractice.ALL_LEGAL_PRACTICES, query = "from LegalPractice")
 )
 public class LegalPractice implements Serializable {
 
-    public static final String ALL_LEGAL_PRACTICES = "legalPractice.allLegalPractices";
+    public static final String ALL_LEGAL_PRACTICES = "LegalPractice.allLegalPractices";
 
     @Id @Column(name="practice_id")
     @GeneratedValue
