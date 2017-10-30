@@ -7,6 +7,9 @@
  * user guide available at https://docs.gradle.org/2.14.1/userguide/tutorial_java_projects.html
  */
 
+
+/************* BUILD CONFIGURATION ***************/
+
 buildscript {
 	repositories {
 		jcenter()
@@ -24,16 +27,6 @@ apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
 apply plugin: 'org.hibernate.orm'
 
-war.archiveName "teamtable.war"
-
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-	mavenCentral()
-    jcenter()
-}
-
 hibernate {
 	enhance {
 		enableDirtyTracking = true
@@ -45,6 +38,18 @@ gretty {
 	contextPath = '/teamtable'
 	fastReload = true
 	// ... many more properties
+}
+
+/************* RUNTIME CONFIGURATION ***************/
+
+war.archiveName "teamtable.war"
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use 'jcenter' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+	mavenCentral()
+    jcenter()
 }
 
 def jersey_version = 2.24
@@ -94,3 +99,11 @@ deploygf.doFirst {
 }
 
 defaultTasks "deploygf"
+
+tasks.withType(Test) {
+	testLogging {
+		exceptionFormat "full"
+		events "started", "skipped", "passed", "failed"
+		showStandardStreams true
+	}
+}
