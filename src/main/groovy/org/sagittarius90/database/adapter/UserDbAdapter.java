@@ -40,10 +40,8 @@ public class UserDbAdapter extends BaseDbAdapter {
         return getEm().find(User.class, userRealId);
     }
 
-    public void createNewUser(UserModel userModel) {
-        User newUser = new UserConverterImpl().createFrom(userModel);
-        newUser.setId(null);
-
-        commit(newUser);
+    public void createNewUser(User user) {
+        user.setId(null);
+        commit(user);
     }
 }

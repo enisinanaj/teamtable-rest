@@ -41,6 +41,6 @@ public class IdUtils {
 	}
 
 	protected Hashids getHashids() {
-		return new Hashids();
+		return new Hashids("HeiseNerds");
 	}
 }
