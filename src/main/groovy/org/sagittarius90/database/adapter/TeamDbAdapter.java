@@ -1,5 +1,7 @@
 package org.sagittarius90.database.adapter;
 
+import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
+import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.Team;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,7 @@ public class TeamDbAdapter extends BaseDbAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(TeamDbAdapter.class);
 
-    private TeamDbAdapter() {
+    protected TeamDbAdapter() {
 
     }
 
@@ -33,10 +35,6 @@ public class TeamDbAdapter extends BaseDbAdapter {
         PersistenceUtil.buildEntityManagerFactory();
     }
 
-    private EntityManager getEm() {
-        return PersistenceUtil.getEntityManager();
-    }
-
     public List<Team> getAllTeams() {
         List<Team> teams = (List<Team>) getEm().createNamedQuery(Team.ALL_TEAMS).getResultList();
 
@@ -44,11 +42,7 @@ public class TeamDbAdapter extends BaseDbAdapter {
         return teams;
     }
 
-    protected static BaseDbAdapter createDbAdapterInstance() {
-        return new TeamDbAdapter();
-    }
-
     public Team getTeamById(Integer teamRealId) {
-        return (Team) getEm().find(Team.class, teamRealId);
+        return getEm().find(Team.class, teamRealId);
     }
 }

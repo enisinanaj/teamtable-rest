@@ -63,6 +63,7 @@ public class UserResource {
     public Response getUsers() {
         logger.info("Called GET method");
 
+        //TODO: pass through service class that converts and builds the result accordingly
         List<User> users = getUserDbAdapter().getAllUsers();
         GenericEntity<List<UserModel>> result = new GenericEntity<List<UserModel>>(new UserConverterImpl().createFromEntities(users)) {};
 
@@ -71,7 +72,7 @@ public class UserResource {
 
     @POST
     @Path("/{userId}")
-    public Response updateUser(@PathParam("userId") String userId, User user) {
+    public Response updateUser(@PathParam("userId") String userId, UserModel user) {
         logger.info(userId);
         logger.info(user.getUsername());
 
@@ -80,8 +81,12 @@ public class UserResource {
 
     @POST
     @Path("/")
-    public Response createUser(User user) {
+    public Response createUser(UserModel user) {
         logger.info(user.getUsername());
+
+        //TODO: go through a service class that converts the user model to entity and then calls the dbAdapter
+        UserDbAdapter.getInstance().createNewUser(user);
+
         return Response.created(null).build();
     }
 

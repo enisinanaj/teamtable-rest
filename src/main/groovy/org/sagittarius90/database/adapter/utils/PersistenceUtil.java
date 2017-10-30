@@ -1,4 +1,4 @@
-package org.sagittarius90.database.adapter;
+package org.sagittarius90.database.adapter.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

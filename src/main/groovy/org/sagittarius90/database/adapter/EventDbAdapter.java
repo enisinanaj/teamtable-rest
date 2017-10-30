@@ -1,5 +1,7 @@
 package org.sagittarius90.database.adapter;
 
+import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
+import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.Event;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +13,7 @@ public class EventDbAdapter extends BaseDbAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(EventDbAdapter.class);
 
-    private EventDbAdapter() {
+    protected EventDbAdapter() {
 
     }
 
@@ -33,10 +35,6 @@ public class EventDbAdapter extends BaseDbAdapter {
         PersistenceUtil.buildEntityManagerFactory();
     }
 
-    private EntityManager getEm() {
-        return PersistenceUtil.getEntityManager();
-    }
-
     public List<Event> getAllEvents() {
         List<Event> events = (List<Event>) getEm().createNamedQuery(Event.ALL_EVENTS).getResultList();
 
@@ -44,11 +42,7 @@ public class EventDbAdapter extends BaseDbAdapter {
         return events;
     }
 
-    protected static BaseDbAdapter createDbAdapterInstance() {
-        return new EventDbAdapter();
-    }
-
     public Event getEventById(Integer eventRealId) {
-        return (Event) getEm().find(Event.class, eventRealId);
+        return getEm().find(Event.class, eventRealId);
     }
 }
