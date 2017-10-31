@@ -44,8 +44,24 @@ public class UserService extends BaseServiceImpl<UserModel> {
     }
 
     @Override
-    public boolean update(UserModel fromModel) {
-        return false;
+    public boolean update(String id, UserModel fromModel) {
+        resolveId(id);
+
+        if (!correctId()) {
+            throw new RuntimeException("not correct Id");
+        }
+
+        User user = UserDbAdapter.getInstance().getUserById((int)realId);
+        UserConverterImpl userConverter = new UserConverterImpl();
+        user = userConverter.updateEntity(user, fromModel);
+
+        try {
+            UserDbAdapter.getInstance().commit(user);
+        } catch (Exception e) {
+            return false;
+        }
+        
+        return true;
     }
 
 }

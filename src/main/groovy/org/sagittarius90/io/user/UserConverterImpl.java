@@ -48,6 +48,18 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
 
     @Override
     public User updateEntity(final User entity, final UserModel model) {
+        if (model.getUsername() != null) {
+            entity.setUsername(model.getUsername());
+        }
+
+        if (model.getPassword() != null) {
+            entity.setPassword(model.getPassword());
+        }
+
+        if (model.getTeamId() != null) {
+            Team team = getTeamDbAdapter().getTeamById(extractTeamId(model));
+            entity.setTeam(team);
+        }
 
         return entity;
     }

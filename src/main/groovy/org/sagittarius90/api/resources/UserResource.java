@@ -42,7 +42,11 @@ public class UserResource {
         logger.info(userId);
         logger.info(user.getUsername());
 
-        return Response.ok().build();
+        if (userUpdated(userId, user)) {
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
@@ -59,6 +63,10 @@ public class UserResource {
 
     private boolean userCreated(UserModel user) {
         return getUserService().create(user);
+    }
+
+    private boolean userUpdated(String id, UserModel user) {
+        return getUserService().update(id, user);
     }
 
     public UserService getUserService() {
