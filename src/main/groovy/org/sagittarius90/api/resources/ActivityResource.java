@@ -5,6 +5,7 @@ import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.io.activity.ActivityConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.ActivityModel;
+import org.sagittarius90.service.ActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,40 +23,12 @@ public class ActivityResource {
     private static Logger logger = LoggerFactory.getLogger(ActivityResource.class);
 
     private String activityId;
-    private long activityRealId;
-    private Response.Status status;
 
     @GET
     @Path("/{activityId}")
     public Response getActivity(@PathParam("activityId") String activityId) {
-        resolveId(activityId);
-
-        if (idNotFound()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        Activity activity = getActivityDbAdapter().getActivityById((int) activityRealId);
-        ActivityModel activityModel = new ActivityConverterImpl().createFrom(activity);
+        ActivityModel activityModel = new ActivityService().getSingleResultById(activityId);
         return Response.ok().entity(activityModel).build();
-    }
-
-    private boolean idNotFound() {
-        return status.equals(Response.Status.NOT_FOUND);
-    }
-
-    private void resolveId(String activityId) {
-        this.activityId = activityId;
-        this.activityRealId = getIdUtils().decodeId(activityId);
-
-        if (!correctId()) {
-            status = Response.Status.NOT_FOUND;
-        }
-
-        status = Response.Status.FOUND;
-    }
-
-    private boolean correctId() {
-        return activityRealId > 0;
     }
 
     @GET
@@ -63,34 +36,43 @@ public class ActivityResource {
     public Response getActivities() {
         logger.info("Called GET method");
 
-        List<Activity> activities = getActivityDbAdapter().getAllActivities();
-        GenericEntity<List<ActivityModel>> result = new GenericEntity<List<ActivityModel>>(new ActivityConverterImpl().createFromEntities(activities)) {};
+        List<ActivityModel> collection = new ActivityService().getCollection();
+        GenericEntity<List<ActivityModel>> result = new GenericEntity<List<ActivityModel>>(collection) {};
 
         return Response.ok().entity(result).build();
     }
 
     @POST
     @Path("/{activityId}")
-    public Response updateActivity(@PathParam("activityId") String activityId, Activity activity) {
-        logger.info(activityId);
-        logger.info(activity.getStatus());
+    public Response updateActivity(@PathParam("activityId") String activityId, ActivityModel activity) {
+        this.activityId = activityId;
 
-        return Response.ok().build();
+        if (modelUpdated(activity)) {
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    private boolean modelUpdated(ActivityModel activity) {
+        return new ActivityService().update(activityId, activity);
     }
 
     @POST
     @Path("/")
-    public Response createActivity(Activity activity) {
-        logger.info(activity.getStatus());
-        return Response.created(null).build();
+    public Response createActivity(ActivityModel activity) {
+        if (activityCreated(activity)) {
+            return Response.created(null).build();
+        }
+
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    public ActivityDbAdapter getActivityDbAdapter() {
-        logger.info("Getting ActivityDbAdapter");
-        return ActivityDbAdapter.getInstance();
+    private boolean activityCreated(ActivityModel activity) {
+        return getActivityService().create(activity);
     }
 
-    public IdUtils getIdUtils() {
-        return IdUtils.getInstance();
+    public ActivityService getActivityService() {
+        return new ActivityService();
     }
 }

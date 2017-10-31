@@ -58,7 +58,7 @@ public class UserResource {
             return Response.created(null).build();
         }
 
-        return Response.status(Response.Status.NOT_FOUND).build();
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
     private boolean userCreated(UserModel user) {
