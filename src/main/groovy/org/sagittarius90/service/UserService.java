@@ -1,11 +1,16 @@
 package org.sagittarius90.service;
 
+import org.sagittarius90.api.resources.UserResource;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.utils.BaseServiceImpl;
 
+import javax.persistence.Column;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
 public class UserService extends BaseServiceImpl<UserModel> {

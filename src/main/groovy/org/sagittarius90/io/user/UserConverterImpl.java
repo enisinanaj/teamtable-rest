@@ -1,5 +1,7 @@
 package org.sagittarius90.io.user;
 
+import org.sagittarius90.api.ApplicationConfig;
+import org.sagittarius90.api.resources.UserResource;
 import org.sagittarius90.database.adapter.TeamDbAdapter;
 import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.database.entity.User;
@@ -7,6 +9,12 @@ import org.sagittarius90.io.team.TeamConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.UserModel;
+
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.Provider;
+import java.util.List;
 
 public class UserConverterImpl extends BaseConverter implements UserConverter {
 
@@ -37,7 +45,9 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
     public UserModel createFrom(final User entity) {
         UserModel model = new UserModel();
 
-        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
+        String userId = getIdUtils().encodeId(Long.valueOf(entity.getId()));
+
+        model.sethRef(getModelUri(userId));
         model.setCreationDate(entity.getCreationDate());
         model.setTeam(getTeamConverter().createFrom(entity.getTeam()));
         model.setLastAccess(entity.getLastAccess());
@@ -74,5 +84,9 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
 
     public TeamDbAdapter getTeamDbAdapter() {
         return TeamDbAdapter.getInstance();
+    }
+
+    protected UriBuilder getResourcePath() {
+        return getUriInfo().getBaseUriBuilder().path(UserResource.class).path("/");
     }
 }

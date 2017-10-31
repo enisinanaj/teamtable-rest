@@ -1,9 +1,14 @@
 package org.sagittarius90.io.legalpractice;
 
+import org.sagittarius90.api.ApplicationConfig;
+import org.sagittarius90.api.resources.LegalPracticeResource;
 import org.sagittarius90.database.entity.LegalPractice;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.model.LegalPracticeModel;
+
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 public class LegalPracticeConverterImpl extends BaseConverter implements LegalPracticeConverter {
 
@@ -18,7 +23,8 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
     public LegalPracticeModel createFrom(final LegalPractice entity) {
         LegalPracticeModel model = new LegalPracticeModel();
 
-        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
+        String practiceId = getIdUtils().encodeId(Long.valueOf(entity.getId()));
+        model.sethRef(getModelUri(practiceId));
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setDescription(entity.getDescription());
 
@@ -37,5 +43,9 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         }
 
         return userConverter;
+    }
+
+    protected UriBuilder getResourcePath() {
+        return getUriInfo().getBaseUriBuilder().path(LegalPracticeResource.class).path("/");
     }
 }

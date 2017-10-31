@@ -6,8 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.util.List;
 
 @Path("/users")
@@ -21,7 +20,6 @@ public class UserResource {
     @Path("/{userId}")
     public Response getUser(@PathParam("userId") String userId) {
         UserModel userModel = getUserService().getSingleResultById(userId);
-
         return Response.ok().entity(userModel).build();
     }
 
@@ -39,9 +37,6 @@ public class UserResource {
     @POST
     @Path("/{userId}")
     public Response updateUser(@PathParam("userId") String userId, UserModel user) {
-        logger.info(userId);
-        logger.info(user.getUsername());
-
         if (userUpdated(userId, user)) {
             return Response.ok().build();
         }
@@ -52,8 +47,6 @@ public class UserResource {
     @POST
     @Path("/")
     public Response createUser(UserModel user) {
-        logger.info(user.getUsername());
-
         if (userCreated(user)) {
             return Response.created(null).build();
         }

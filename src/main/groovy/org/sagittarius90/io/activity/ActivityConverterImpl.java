@@ -1,15 +1,14 @@
 package org.sagittarius90.io.activity;
 
+import org.sagittarius90.api.resources.ActivityResource;
 import org.sagittarius90.io.event.EventConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.ClassUtils;
-import org.sagittarius90.io.utils.GenericConverter;
-import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.database.entity.Activity;
-import org.sagittarius90.model.utils.AbstractModel;
 
+import javax.ws.rs.core.UriBuilder;
 import java.util.Date;
 
 public class ActivityConverterImpl extends BaseConverter implements ActivityConverter {
@@ -39,7 +38,9 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
     public ActivityModel createFrom(final Activity entity) {
         ActivityModel model = new ActivityModel();
 
-        model.setId(getIdUtils().encodeId(Long.valueOf(entity.getId())));
+        String activityId = getIdUtils().encodeId(Long.valueOf(entity.getId()));
+
+        model.sethRef(getModelUri(activityId));
         model.setActivityType(entity.getActivityType());
         model.setArchived(entity.getArchived());
         model.setAssignee(getUserConverter().createFrom(entity.getAssignee()));
@@ -86,6 +87,10 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         }
 
         return eventConverter;
+    }
+
+    protected UriBuilder getResourcePath() {
+        return getUriInfo().getBaseUriBuilder().path(ActivityResource.class).path("/");
     }
 
     protected EventConverterImpl createEventConverter() {

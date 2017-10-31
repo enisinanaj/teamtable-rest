@@ -1,18 +1,28 @@
 package org.sagittarius90.api;
 
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 
 import org.glassfish.jersey.message.filtering.SelectableEntityFilteringFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 @ApplicationPath("/api")
 public class ApplicationConfig extends ResourceConfig {
+
+	@Context
+	private UriInfo uriInfo;
+
+	private static ApplicationConfig instance;
     
 	public ApplicationConfig() {
         registerModels();
 		registerFilters();
 		registerResourcesPackage();
 		//registerFeatures();
+
+		instance = this;
     }
 
 	private void registerFeatures() {
@@ -36,5 +46,18 @@ public class ApplicationConfig extends ResourceConfig {
 
 	private void registerResourcesPackage() {
 		packages(true, "org.sagittarus90.api.resources");
+	}
+
+	public UriInfo getUriInfo() {
+		return uriInfo;
+	}
+
+	public static ApplicationConfig getInstance() {
+		if (instance == null) {
+			instance = new ApplicationConfig();
+			throw new RuntimeException("Should never reach this point!");
+		}
+
+		return instance;
 	}
 }
