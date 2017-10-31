@@ -1,5 +1,6 @@
 package org.sagittarius90.io.activity;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.sagittarius90.database.entity.Activity;
@@ -27,15 +28,19 @@ public class ActivityConverterImplUT {
     private UserConverterImpl userConverterMocked;
     private User userEntityMocked;
     private Event eventEntityMocked;
+    private ActivityModel modelMocked;
+    private EventModel eventModelMocked;
+    private UserModel userModelMocked;
+    private String ANY_ID_STRING = "ID";
 
     private class ActivityConverterImplTestable extends ActivityConverterImpl {
         @Override
-        protected EventConverterImpl createEventConverter() {
+        protected EventConverterImpl getEventConverter() {
             return eventConverterMocked;
         }
 
         @Override
-        protected UserConverterImpl createUserConverter() {
+        protected UserConverterImpl getUserConverter() {
             return userConverterMocked;
         }
     }
@@ -45,17 +50,18 @@ public class ActivityConverterImplUT {
         converter = new ActivityConverterImplTestable();
         eventConverterMocked = mock(EventConverterImpl.class);
         userConverterMocked = mock(UserConverterImpl.class);
+        entityMocked = mock(Activity.class);
+        modelMocked = mock(ActivityModel.class);
+        userEntityMocked = mock(User.class);
+        eventEntityMocked = mock(Event.class);
+        eventModelMocked = mock(EventModel.class);
+        userModelMocked = mock(UserModel.class);
 
         createEntityMocked();
+        createModelMocked();
     }
 
     private void createEntityMocked() {
-        entityMocked = mock(Activity.class);
-        userEntityMocked = mock(User.class);
-        eventEntityMocked = mock(Event.class);
-        EventModel eventModelMocked = mock(EventModel.class);
-        UserModel userModelMocked = mock(UserModel.class);
-
         given(eventConverterMocked.createFrom(eventEntityMocked)).willReturn(eventModelMocked);
         given(userConverterMocked.createFrom(userEntityMocked)).willReturn(userModelMocked);
         
@@ -74,6 +80,25 @@ public class ActivityConverterImplUT {
         given(entityMocked.getStatus()).willReturn("ANY_STATUS");
     }
 
+    private void createModelMocked() {
+        given(eventConverterMocked.createFrom(eventEntityMocked)).willReturn(eventModelMocked);
+        given(userConverterMocked.createFrom(userEntityMocked)).willReturn(userModelMocked);
+
+        given(modelMocked.getId()).willReturn(ANY_ID_STRING);
+        given(modelMocked.getActivityType()).willReturn("ANY_ACTIVITY_TYPE");
+        given(modelMocked.getArchived()).willReturn("ANY_ARCHIVED_STATUS");
+
+        given(modelMocked.getAssignee()).willReturn(userModelMocked);
+        given(modelMocked.getDescription()).willReturn("ANY_DESCRIPTION");
+        given(modelMocked.getCompletionDate()).willReturn(mock(Date.class));
+
+        given(modelMocked.getCreator()).willReturn(userModelMocked);
+        given(modelMocked.getEvent()).willReturn(eventModelMocked);
+
+        given(modelMocked.getExpirationDate()).willReturn(mock(Date.class));
+        given(modelMocked.getStatus()).willReturn("ANY_STATUS");
+    }
+
     @Test
     public void createFromEntityToModelIntegrityTest() {
         //when
@@ -89,12 +114,30 @@ public class ActivityConverterImplUT {
 
     @Test
     public void createFromModelToEntityIntegrityTest() throws Exception {
+        //when
+        Activity result = converter.createFrom(modelMocked);
 
+        //then
+        then(userConverterMocked).should(times(2)).createFrom(userModelMocked);
+        then(eventConverterMocked).should(times(1)).createFrom(eventModelMocked);
+        assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
+        assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
+        assert result.getDescription().equals("ANY_DESCRIPTION");
     }
 
     @Test
-    public void updateEntity() throws Exception {
+    public void ensureThatUpdateEntityDoesNotReturnANewObject() throws Exception {
+        //given
+        Activity entity = new Activity();
 
+        //when
+        Activity result = converter.updateEntity(entity, modelMocked);
+
+        //then
+        assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
+        assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
+        assert result.getDescription().equals("ANY_DESCRIPTION");
+        assert entity == result;
     }
 
 }

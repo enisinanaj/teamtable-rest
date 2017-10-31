@@ -19,7 +19,20 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
 
     @Override
     public Activity createFrom(final ActivityModel model) {
-        return updateEntity(new Activity(), model);
+        Activity entity = new Activity();
+
+        entity.setId((int) getIdUtils().decodeId(model.getId()));
+        entity.setActivityType(model.getActivityType());
+        entity.setArchived(model.getArchived());
+        entity.setAssignee(getUserConverter().createFrom(model.getAssignee()));
+        entity.setDescription(model.getDescription());
+        entity.setCompletionDate(model.getCompletionDate());
+        entity.setCreator(getUserConverter().createFrom(model.getCreator()));
+        entity.setEvent(getEventConverter().createFrom(model.getEvent()));
+        entity.setExpirationDate(model.getExpirationDate());
+        entity.setStatus(model.getStatus());
+
+        return entity;
     }
 
     @Override
