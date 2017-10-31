@@ -12,9 +12,12 @@ import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.model.EventModel;
 import org.sagittarius90.model.UserModel;
 
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 import java.util.Date;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
@@ -32,6 +35,7 @@ public class ActivityConverterImplUT {
     private EventModel eventModelMocked;
     private UserModel userModelMocked;
     private String ANY_ID_STRING = "ID";
+    private UriInfo uriInfoMocked;
 
     private class ActivityConverterImplTestable extends ActivityConverterImpl {
         @Override
@@ -42,6 +46,11 @@ public class ActivityConverterImplUT {
         @Override
         protected UserConverterImpl getUserConverter() {
             return userConverterMocked;
+        }
+
+        @Override
+        protected UriInfo getUriInfo() {
+            return uriInfoMocked;
         }
     }
 
@@ -56,6 +65,12 @@ public class ActivityConverterImplUT {
         eventEntityMocked = mock(Event.class);
         eventModelMocked = mock(EventModel.class);
         userModelMocked = mock(UserModel.class);
+        uriInfoMocked = mock(UriInfo.class);
+        UriBuilder uriBuilderMocked = mock(UriBuilder.class);
+
+        given(uriInfoMocked.getBaseUriBuilder()).willReturn(uriBuilderMocked);
+        given(uriBuilderMocked.path(any(Class.class))).willReturn(uriBuilderMocked);
+        given(uriBuilderMocked.path(anyString())).willReturn(uriBuilderMocked);
 
         createEntityMocked();
         createModelMocked();
