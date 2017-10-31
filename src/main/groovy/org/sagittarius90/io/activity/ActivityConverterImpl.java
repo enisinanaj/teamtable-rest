@@ -3,11 +3,14 @@ package org.sagittarius90.io.activity;
 import org.sagittarius90.io.event.EventConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
+import org.sagittarius90.io.utils.ClassUtils;
 import org.sagittarius90.io.utils.GenericConverter;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.model.utils.AbstractModel;
+
+import java.util.Date;
 
 public class ActivityConverterImpl extends BaseConverter implements ActivityConverter {
 
@@ -40,24 +43,39 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
     @Override
     public Activity updateEntity(final Activity entity, final ActivityModel model) {
 
-        entity.setDescription(model.getDescription());
+        new ClassUtils<String>().setIfNotNull(model::getActivityType, entity::setActivityType);
+        new ClassUtils<String>().setIfNotNull(model::getArchived, entity::setArchived);
+        new ClassUtils<Date>().setIfNotNull(model::getCompletionDate, entity::setCompletionDate);
+        new ClassUtils<Date>().setIfNotNull(model::getCreationDate, entity::setCreationDate);
+        new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
+        new ClassUtils<Date>().setIfNotNull(model::getExpirationDate, entity::setExpirationDate);
+        new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
+        new ClassUtils<Date>().setIfNotNull(model::getCompletionDate, entity::setCompletionDate);
 
         return entity;
     }
 
-    private static UserConverterImpl getUserConverter() {
+    protected UserConverterImpl getUserConverter() {
         if (userConverter == null) {
-            userConverter = new UserConverterImpl();
+            userConverter = createUserConverter();
         }
 
         return userConverter;
     }
 
-    private static EventConverterImpl getEventConverter() {
+    protected UserConverterImpl createUserConverter() {
+        return new UserConverterImpl();
+    }
+
+    protected EventConverterImpl getEventConverter() {
         if (eventConverter == null) {
-            eventConverter = new EventConverterImpl();
+            eventConverter = createEventConverter();
         }
 
         return eventConverter;
+    }
+
+    protected EventConverterImpl createEventConverter() {
+        return new EventConverterImpl();
     }
 }

@@ -3,12 +3,12 @@ package org.sagittarius90.io.utils;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ClassUtils {
+public class ClassUtils<T> {
 
-    protected ClassUtils() { }
+    public ClassUtils() { }
 
-    public static  void setIfNotNull(final Supplier getter, final Consumer setter) {
-        Object t = getter.get();
+    public void setIfNotNull(final Supplier<T> getter, final Consumer<T> setter) {
+        T t = getter.get();
 
         if (null != t) {
             setter.accept(t);

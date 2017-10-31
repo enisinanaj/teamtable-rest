@@ -4,6 +4,7 @@ import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.model.UserModel;
+import org.sagittarius90.service.utils.BaseServiceImpl;
 
 import java.util.List;
 
@@ -12,8 +13,7 @@ public class UserService extends BaseServiceImpl<UserModel> {
     @Override
     public List<UserModel> getCollection() {
         List<User> users = UserDbAdapter.getInstance().getAllUsers();
-        UserConverterImpl userConverter = new UserConverterImpl();
-        return userConverter.createFromEntities(users);
+        return getUserConverter().createFromEntities(users);
     }
 
     @Override
@@ -25,14 +25,12 @@ public class UserService extends BaseServiceImpl<UserModel> {
         }
 
         User user = UserDbAdapter.getInstance().getUserById((int) realId);
-        UserConverterImpl userConverter = new UserConverterImpl();
-        return userConverter.createFrom(user);
+        return getUserConverter().createFrom(user);
     }
 
     @Override
     public boolean create(UserModel fromModel) {
-        UserConverterImpl userConverter = new UserConverterImpl();
-        User user = userConverter.createFrom(fromModel);
+        User user = getUserConverter().createFrom(fromModel);
 
         try {
             UserDbAdapter.getInstance().createNewUser(user);
@@ -52,8 +50,7 @@ public class UserService extends BaseServiceImpl<UserModel> {
         }
 
         User user = UserDbAdapter.getInstance().getUserById((int)realId);
-        UserConverterImpl userConverter = new UserConverterImpl();
-        user = userConverter.updateEntity(user, fromModel);
+        user = getUserConverter().updateEntity(user, fromModel);
 
         try {
             UserDbAdapter.getInstance().commit(user);
@@ -64,4 +61,7 @@ public class UserService extends BaseServiceImpl<UserModel> {
         return true;
     }
 
+    private UserConverterImpl getUserConverter() {
+        return new UserConverterImpl();
+    }
 }

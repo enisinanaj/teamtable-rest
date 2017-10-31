@@ -1,4 +1,4 @@
-package org.sagittarius90.service;
+package org.sagittarius90.service.utils;
 
 import org.sagittarius90.io.utils.IdUtils;
 

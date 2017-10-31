@@ -1,6 +1,5 @@
 package org.sagittarius90.io.utils;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.junit.Before;
 import org.junit.Test;
 import org.sagittarius90.model.utils.AbstractModel;
@@ -8,7 +7,6 @@ import org.sagittarius90.model.utils.AbstractModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 

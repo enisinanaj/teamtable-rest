@@ -36,4 +36,9 @@ public class ActivityDbAdapter extends BaseDbAdapter {
     public Activity getActivityById(Integer activityRealId) {
         return getEm().find(Activity.class, activityRealId);
     }
+
+    public void createNewActivity(Activity activity) {
+        activity.setId(null);
+        commit(activity);
+    }
 }

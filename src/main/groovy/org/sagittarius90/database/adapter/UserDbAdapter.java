@@ -1,14 +1,7 @@
 package org.sagittarius90.database.adapter;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
-import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.User;
-import org.sagittarius90.io.user.UserConverterImpl;
-import org.sagittarius90.model.UserModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
