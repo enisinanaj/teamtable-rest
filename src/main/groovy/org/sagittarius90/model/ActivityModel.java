@@ -8,8 +8,11 @@ import java.util.Date;
 public class ActivityModel extends AbstractModel {
     private String id;
     private UserModel creator;
+    private String creatorId;
     private UserModel assignee;
+    private String assigneeId;
     private EventModel event;
+    private String eventId;
     private String activityType;
     private String description;
     private Date expirationDate;
@@ -105,5 +108,29 @@ public class ActivityModel extends AbstractModel {
 
     public void setArchived(String archived) {
         this.archived = archived;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
+    public String getAssigneeId() {
+        return assigneeId;
+    }
+
+    public void setAssigneeId(String assigneeId) {
+        this.assigneeId = assigneeId;
+    }
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
     }
 }

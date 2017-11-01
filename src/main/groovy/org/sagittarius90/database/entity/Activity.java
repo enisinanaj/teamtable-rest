@@ -1,5 +1,8 @@
 package org.sagittarius90.database.entity;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -23,6 +26,7 @@ public class Activity implements Serializable {
 
     @OneToOne(fetch= FetchType.EAGER)
     @JoinColumn(name="assignee", referencedColumnName="user_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private User assignee;
 
     @ManyToOne(fetch=FetchType.EAGER)

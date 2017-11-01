@@ -1,0 +1,1 @@
+alter table activity change activity_id activity_id int(10) AUTO_INCREMENT;
