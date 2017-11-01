@@ -6,6 +6,7 @@ public class LegalPracticeModel extends AbstractModel {
 
     private String id;
     private UserModel creator;
+    private String creatorId;
     private String description;
 
     public String getId() {
@@ -22,6 +23,14 @@ public class LegalPracticeModel extends AbstractModel {
 
     public void setCreator(UserModel creator) {
         this.creator = creator;
+    }
+
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
     }
 
     public String getDescription() {

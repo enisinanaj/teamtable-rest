@@ -5,6 +5,7 @@ import org.sagittarius90.database.entity.LegalPractice;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.LegalPracticeModel;
+import org.sagittarius90.service.LegalPracticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,41 +22,11 @@ public class LegalPracticeResource {
 
     private static Logger logger = LoggerFactory.getLogger(LegalPracticeResource.class);
 
-    private String legalPracticeId;
-    private long legalPracticeRealId;
-    private Response.Status status;
-
     @GET
     @Path("/{legalPracticeId}")
     public Response getLegalPractice(@PathParam("legalPracticeId") String legalPracticeId) {
-        resolveId(legalPracticeId);
-
-        if (idNotFound()) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        LegalPractice legalPractice = getLegalPracticeDbAdapter().getLegalPracticeById((int) legalPracticeRealId);
-        LegalPracticeModel legalPracticeModel = new LegalPracticeConverterImpl().createFrom(legalPractice);
+        LegalPracticeModel legalPracticeModel = getLegalPracticeService().getSingleResultById(legalPracticeId);
         return Response.ok().entity(legalPracticeModel).build();
-    }
-
-    private boolean idNotFound() {
-        return status.equals(Response.Status.NOT_FOUND);
-    }
-
-    private void resolveId(String legalPracticeId) {
-        this.legalPracticeId = legalPracticeId;
-        this.legalPracticeRealId = getIdUtils().decodeId(legalPracticeId);
-
-        if (!correctId()) {
-            status = Response.Status.NOT_FOUND;
-        }
-
-        status = Response.Status.FOUND;
-    }
-
-    private boolean correctId() {
-        return legalPracticeRealId > 0;
     }
 
     @GET
@@ -63,34 +34,42 @@ public class LegalPracticeResource {
     public Response getLegalPractices() {
         logger.info("Called GET method");
 
-        List<LegalPractice> legalPractices = getLegalPracticeDbAdapter().getAllLegalPractices();
-        GenericEntity<List<LegalPracticeModel>> result = new GenericEntity<List<LegalPracticeModel>>(new LegalPracticeConverterImpl().createFromEntities(legalPractices)) {};
+        List<LegalPracticeModel> legalPractices = getLegalPracticeService().getCollection();
+        GenericEntity<List<LegalPracticeModel>> result = new GenericEntity<List<LegalPracticeModel>>(legalPractices) {};
 
         return Response.ok().entity(result).build();
     }
 
     @POST
     @Path("/{legalPracticeId}")
-    public Response updateLegalPractice(@PathParam("legalPracticeId") String legalPracticeId, LegalPractice legalPractice) {
-        logger.info(legalPracticeId);
-        logger.info(legalPractice.getDescription());
+    public Response updateLegalPractice(@PathParam("legalPracticeId") String legalPracticeId, LegalPracticeModel legalPractice) {
+        if (legalPracticeUpdated(legalPracticeId, legalPractice)) {
+            return Response.ok().build();
+        }
 
-        return Response.ok().build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
     @Path("/")
-    public Response createLegalPractice(LegalPractice legalPractice) {
-        logger.info(legalPractice.getDescription());
-        return Response.created(null).build();
+    public Response createLegalPractice(LegalPracticeModel legalPractice) {
+        if (legalPracticeCreated(legalPractice)) {
+            return Response.created(null).build();
+        }
+
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    public LegalPracticeDbAdapter getLegalPracticeDbAdapter() {
-        logger.info("Getting LegalPracticeDbAdapter");
-        return LegalPracticeDbAdapter.getInstance();
+    private boolean legalPracticeUpdated(String id, LegalPracticeModel legalPractice) {
+        return getLegalPracticeService().update(id, legalPractice);
     }
 
-    public IdUtils getIdUtils() {
-        return IdUtils.getInstance();
+    private boolean legalPracticeCreated(LegalPracticeModel legalPractice) {
+        return getLegalPracticeService().create(legalPractice);
+    }
+
+    public LegalPracticeService getLegalPracticeService() {
+        logger.info("Getting LegalPracticeService");
+        return new LegalPracticeService();
     }
 }

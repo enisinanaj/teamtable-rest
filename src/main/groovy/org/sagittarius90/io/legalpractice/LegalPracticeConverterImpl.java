@@ -2,13 +2,18 @@ package org.sagittarius90.io.legalpractice;
 
 import org.sagittarius90.api.ApplicationConfig;
 import org.sagittarius90.api.resources.LegalPracticeResource;
+import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.LegalPractice;
+import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
+import org.sagittarius90.io.utils.ClassUtils;
+import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.LegalPracticeModel;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 
 public class LegalPracticeConverterImpl extends BaseConverter implements LegalPracticeConverter {
 
@@ -16,7 +21,18 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
 
     @Override
     public LegalPractice createFrom(final LegalPracticeModel model) {
-        return updateEntity(new LegalPractice(), model);
+        if (model.getCreatorId() == null) {
+            throw new RuntimeException("Creator Identifier is required for new Legal Practices.");
+        }
+
+        User user = getUserDbAdapter().getUserById(extractUserId(model));
+
+        LegalPractice legalPractice = new LegalPractice();
+
+        legalPractice.setDescription(model.getDescription());
+        legalPractice.setCreator(user);
+
+        return legalPractice;
     }
 
     @Override
@@ -33,7 +49,8 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
 
     @Override
     public LegalPractice updateEntity(final LegalPractice entity, final LegalPracticeModel model) {
-        //TODO: implement
+        new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
+
         return entity;
     }
 
@@ -47,5 +64,13 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
 
     protected UriBuilder getResourcePath() {
         return getUriInfo().getBaseUriBuilder().path(LegalPracticeResource.class).path("/");
+    }
+
+    public UserDbAdapter getUserDbAdapter() {
+        return UserDbAdapter.getInstance();
+    }
+
+    private Integer extractUserId(LegalPracticeModel model) {
+        return (int) IdUtils.getInstance().decodeId(model.getCreatorId());
     }
 }

@@ -36,4 +36,9 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
     public LegalPractice getLegalPracticeById(Integer legalPracticeRealId) {
         return getEm().find(LegalPractice.class, legalPracticeRealId);
     }
+
+    public void createNewLegalPractice(LegalPractice legalPractice) {
+        legalPractice.setId(null);
+        commit(legalPractice);
+    }
 }
