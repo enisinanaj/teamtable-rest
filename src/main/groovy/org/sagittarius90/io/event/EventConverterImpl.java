@@ -1,6 +1,5 @@
 package org.sagittarius90.io.event;
 
-import org.sagittarius90.api.ApplicationConfig;
 import org.sagittarius90.api.resources.EventResource;
 import org.sagittarius90.database.adapter.LegalPracticeDbAdapter;
 import org.sagittarius90.database.adapter.UserDbAdapter;
@@ -10,11 +9,12 @@ import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
+import org.sagittarius90.io.utils.ClassUtils;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.EventModel;
 
 import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
+import java.util.Date;
 
 public class EventConverterImpl extends BaseConverter implements EventConverter {
 
@@ -23,25 +23,22 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
 
     @Override
     public Event createFrom(final EventModel model) {
+        if (model.getPracticeId() == null) {
+            throw new RuntimeException("Practice Identifier is required for new Events.");
+        }
+
+        if (model.getCreatorId() == null) {
+            throw new RuntimeException("Creator Identifier is required for new Events.");
+        }
+
+        LegalPractice legalPractice = getLegalPracticeDbAdapter().getLegalPracticeById(extractLegalPracticeId(model));
+        User user = getUserDbAdapter().getUserById(extractUserId(model));
+
         Event event = new Event();
 
         event.setEventDate(model.getEventDate());
         event.setDescription(model.getDescription());
-
-        if (model.getPracticeId() == null) {
-            //TODO: Use custom exceptions and converters to return them in a user-friendly manner from the API requests
-            throw new RuntimeException("Practice Identifier is required for new Events.");
-        }
-
-        LegalPractice legalPractice = getLegalPracticeDbAdapter().getLegalPracticeById(extractLegalPracticeId(model));
         event.setPractice(legalPractice);
-
-        if (model.getCreatorId() == null) {
-            //TODO: Use custom exceptions and converters to return them in a user-friendly manner from the API requests
-            throw new RuntimeException("Creator Identifier is required for new Events.");
-        }
-
-        User user = getUserDbAdapter().getUserById(extractUserId(model));
         event.setCreator(user);
 
         return event;
@@ -63,6 +60,14 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
 
     @Override
     public Event updateEntity(final Event entity, final EventModel model) {
+        if (model.getPracticeId() != null) {
+            LegalPractice legalPractice = getLegalPracticeDbAdapter().getLegalPracticeById(extractLegalPracticeId(model));
+            entity.setPractice(legalPractice);
+        }
+
+        new ClassUtils<Date>().setIfNotNull(model::getEventDate, entity::setEventDate);
+        new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
+
         return entity;
     }
 
