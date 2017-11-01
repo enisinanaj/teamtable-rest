@@ -5,13 +5,13 @@ import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.io.team.TeamConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.TeamModel;
+import org.sagittarius90.service.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import java.net.URI;
 import java.util.List;
 
 @Path("/teams")
@@ -71,18 +71,35 @@ public class TeamResource {
 
     @POST
     @Path("/{teamId}")
-    public Response updateTeam(@PathParam("teamId") String teamId, Team team) {
-        logger.info(teamId);
-        logger.info(team.getDescription());
+    public Response updateTeam(@PathParam("teamId") String teamId, TeamModel team) {
+        if (teamUpdated(teamId, team)) {
+            return Response.ok().build();
+        }
 
-        return Response.ok().build();
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 
     @POST
     @Path("/")
-    public Response createTeam(Team team) {
-        logger.info(team.getDescription());
-        return Response.created(null).build();
+    public Response createTeam(TeamModel team) {
+        if (teamCreated(team)) {
+            return Response.created(null).build();
+        }
+
+        return Response.status(Response.Status.EXPECTATION_FAILED).build();
+    }
+
+    private boolean teamCreated(TeamModel team) {
+        return getTeamService().create(team);
+    }
+
+    private boolean teamUpdated(String id, TeamModel team) {
+        return getTeamService().update(id, team);
+    }
+
+    public TeamService getTeamService() {
+        logger.info("Getting TeamService");
+        return new TeamService();
     }
 
     public TeamDbAdapter getTeamDbAdapter() {

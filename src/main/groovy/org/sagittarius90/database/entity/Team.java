@@ -16,6 +16,7 @@ public class Team  implements Serializable{
     public static final String ALL_TEAMS = "Event.allTeams";
 
     @Id @Column(name="team_id")
+    @GeneratedValue
     private Integer id;
 
     @Column(name="name")

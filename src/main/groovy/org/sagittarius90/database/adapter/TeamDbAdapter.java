@@ -36,4 +36,9 @@ public class TeamDbAdapter extends BaseDbAdapter {
     public Team getTeamById(Integer teamRealId) {
         return getEm().find(Team.class, teamRealId);
     }
+
+    public void createNewTeam(Team team) {
+        team.setId(null);
+        commit(team);
+    }
 }
