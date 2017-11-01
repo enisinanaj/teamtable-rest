@@ -8,10 +8,13 @@ public class EventModel extends AbstractModel {
 
     private String id;
     private UserModel creator;
+    private String creatorId;
     private LegalPracticeModel practice;
+    private String practiceId;
     private Date eventDate;
     private String description;
     private Date creationDate;
+
 
     public String getId() {
         return id;
@@ -29,12 +32,28 @@ public class EventModel extends AbstractModel {
         this.creator = creator;
     }
 
+    public String getCreatorId() {
+        return creatorId;
+    }
+
+    public void setCreatorId(String creatorId) {
+        this.creatorId = creatorId;
+    }
+
     public LegalPracticeModel getPractice() {
         return practice;
     }
 
     public void setPractice(LegalPracticeModel practice) {
         this.practice = practice;
+    }
+
+    public String getPracticeId() {
+        return practiceId;
+    }
+
+    public void setPracticeId(String practiceId) {
+        this.practiceId = practiceId;
     }
 
     public Date getEventDate() {

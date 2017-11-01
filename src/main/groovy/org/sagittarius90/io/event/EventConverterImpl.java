@@ -2,10 +2,15 @@ package org.sagittarius90.io.event;
 
 import org.sagittarius90.api.ApplicationConfig;
 import org.sagittarius90.api.resources.EventResource;
+import org.sagittarius90.database.adapter.LegalPracticeDbAdapter;
+import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.Event;
+import org.sagittarius90.database.entity.LegalPractice;
+import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
+import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.EventModel;
 
 import javax.ws.rs.core.UriBuilder;
@@ -18,7 +23,28 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
 
     @Override
     public Event createFrom(final EventModel model) {
-        return updateEntity(new Event(), model);
+        Event event = new Event();
+
+        event.setEventDate(model.getEventDate());
+        event.setDescription(model.getDescription());
+
+        if (model.getPracticeId() == null) {
+            //TODO: Use custom exceptions and converters to return them in a user-friendly manner from the API requests
+            throw new RuntimeException("Practice Identifier is required for new Events.");
+        }
+
+        LegalPractice legalPractice = getLegalPracticeDbAdapter().getLegalPracticeById(extractLegalPracticeId(model));
+        event.setPractice(legalPractice);
+
+        if (model.getCreatorId() == null) {
+            //TODO: Use custom exceptions and converters to return them in a user-friendly manner from the API requests
+            throw new RuntimeException("Creator Identifier is required for new Events.");
+        }
+
+        User user = getUserDbAdapter().getUserById(extractUserId(model));
+        event.setCreator(user);
+
+        return event;
     }
 
     @Override
@@ -28,11 +54,9 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         String eventId = getIdUtils().encodeId(Long.valueOf(entity.getId()));
 
         model.sethRef(getModelUri(eventId));
-        model.setCreationDate(entity.getCreationDate());
-        model.setCreator(getUserConverter().createFrom(entity.getCreator()));
-        model.setDescription(entity.getDescription());
         model.setEventDate(entity.getEventDate());
-        model.setPractice(getPracticeConverter().createFrom(entity.getPractice()));
+        model.setDescription(entity.getDescription());
+        model.setPractice(getLegalPracticeConverter().createFrom(entity.getPractice()));
 
         return model;
     }
@@ -61,4 +85,33 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
     protected UriBuilder getResourcePath() {
         return getUriInfo().getBaseUriBuilder().path(EventResource.class).path("/");
     }
+
+    public LegalPracticeDbAdapter getLegalPracticeDbAdapter() {
+        return LegalPracticeDbAdapter.getInstance();
+    }
+
+    public UserDbAdapter getUserDbAdapter() {
+        return UserDbAdapter.getInstance();
+    }
+
+    private Integer extractLegalPracticeId(EventModel model) {
+        return (int) IdUtils.getInstance().decodeId(model.getPracticeId());
+    }
+
+    private Integer extractUserId(EventModel model) {
+        return (int) IdUtils.getInstance().decodeId(model.getCreatorId());
+    }
+
+    protected LegalPracticeConverterImpl getLegalPracticeConverter() {
+        if (legalPracticeConverter == null) {
+            legalPracticeConverter = createLegalPracticeConverter();
+        }
+
+        return legalPracticeConverter;
+    }
+
+    protected LegalPracticeConverterImpl createLegalPracticeConverter() {
+        return new LegalPracticeConverterImpl();
+    }
+
 }
