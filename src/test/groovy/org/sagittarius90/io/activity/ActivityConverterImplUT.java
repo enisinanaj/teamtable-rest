@@ -3,6 +3,8 @@ package org.sagittarius90.io.activity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.sagittarius90.database.adapter.EventDbAdapter;
+import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.database.entity.Event;
 import org.sagittarius90.database.entity.User;
@@ -36,6 +38,8 @@ public class ActivityConverterImplUT {
     private UserModel userModelMocked;
     private String ANY_ID_STRING = "ID";
     private UriInfo uriInfoMocked;
+    private UserDbAdapter userDbAdapterMocked;
+    private EventDbAdapter eventDbAdapterMocked;
 
     private class ActivityConverterImplTestable extends ActivityConverterImpl {
         @Override
@@ -52,6 +56,16 @@ public class ActivityConverterImplUT {
         protected UriInfo getUriInfo() {
             return uriInfoMocked;
         }
+
+        @Override
+        protected UserDbAdapter getUserDbAdapter() {
+            return userDbAdapterMocked;
+        }
+
+        @Override
+        protected EventDbAdapter getEventDbAdapter() {
+            return eventDbAdapterMocked;
+        }
     }
 
     @Before
@@ -66,11 +80,15 @@ public class ActivityConverterImplUT {
         eventModelMocked = mock(EventModel.class);
         userModelMocked = mock(UserModel.class);
         uriInfoMocked = mock(UriInfo.class);
+        userDbAdapterMocked = mock(UserDbAdapter.class);
+        eventDbAdapterMocked = mock(EventDbAdapter.class);
         UriBuilder uriBuilderMocked = mock(UriBuilder.class);
 
         given(uriInfoMocked.getBaseUriBuilder()).willReturn(uriBuilderMocked);
         given(uriBuilderMocked.path(any(Class.class))).willReturn(uriBuilderMocked);
         given(uriBuilderMocked.path(anyString())).willReturn(uriBuilderMocked);
+        given(userDbAdapterMocked.getUserById(ANY_ID)).willReturn(userEntityMocked);
+        given(eventDbAdapterMocked.getEventById(ANY_ID)).willReturn(eventEntityMocked);
 
         createEntityMocked();
         createModelMocked();
@@ -107,7 +125,9 @@ public class ActivityConverterImplUT {
         given(modelMocked.getDescription()).willReturn("ANY_DESCRIPTION");
         given(modelMocked.getCompletionDate()).willReturn(mock(Date.class));
 
+        given(modelMocked.getCreatorId()).willReturn(ANY_ID_STRING);
         given(modelMocked.getCreator()).willReturn(userModelMocked);
+        given(modelMocked.getEventId()).willReturn(ANY_ID_STRING);
         given(modelMocked.getEvent()).willReturn(eventModelMocked);
 
         given(modelMocked.getExpirationDate()).willReturn(mock(Date.class));
@@ -133,8 +153,8 @@ public class ActivityConverterImplUT {
         Activity result = converter.createFrom(modelMocked);
 
         //then
-        then(userConverterMocked).should(times(2)).createFrom(userModelMocked);
-        then(eventConverterMocked).should(times(1)).createFrom(eventModelMocked);
+        then(userDbAdapterMocked).should(times(1)).getUserById(0);
+        then(eventDbAdapterMocked).should(times(1)).getEventById(0);
         assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
         assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
         assert result.getDescription().equals("ANY_DESCRIPTION");

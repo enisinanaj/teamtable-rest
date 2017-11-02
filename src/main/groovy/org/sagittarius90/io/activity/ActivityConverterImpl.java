@@ -44,7 +44,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         entity.setCreator(user);
 
         if (model.getEventId() == null) {
-            throw new RuntimeException("Missing creator identifier");
+            throw new RuntimeException("Missing event identifier");
         }
         Event event = getEventDbAdapter().getEventById(extractEventId(model));
         entity.setEvent(event);
@@ -95,7 +95,6 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<Date>().setIfNotNull(model::getExpirationDate, entity::setExpirationDate);
         new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
-        new ClassUtils<Date>().setIfNotNull(model::getCompletionDate, entity::setCompletionDate);
 
         return entity;
     }
@@ -140,11 +139,11 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         return (int) IdUtils.getInstance().decodeId(model.getCreatorId());
     }
 
-    private UserDbAdapter getUserDbAdapter() {
+    protected UserDbAdapter getUserDbAdapter() {
         return UserDbAdapter.getInstance();
     }
 
-    private EventDbAdapter getEventDbAdapter() {
+    protected EventDbAdapter getEventDbAdapter() {
         return EventDbAdapter.getInstance();
     }
 }
