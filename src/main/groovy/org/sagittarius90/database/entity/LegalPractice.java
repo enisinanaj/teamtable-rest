@@ -28,6 +28,9 @@ public class LegalPractice implements Serializable {
     @Column(name="description")
     private String description;
 
+    @Column(name="name")
+    private String name;
+
     public Integer getId() {
         return id;
     }
@@ -58,5 +61,13 @@ public class LegalPractice implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
