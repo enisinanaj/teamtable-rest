@@ -6,12 +6,14 @@ import java.util.List;
 
 @Entity
 @Table(name="legal_practice")
-@NamedQueries(
-        @NamedQuery(name = LegalPractice.ALL_LEGAL_PRACTICES, query = "from LegalPractice")
-)
+@NamedQueries({
+    @NamedQuery(name = LegalPractice.ALL_LEGAL_PRACTICES, query = "from LegalPractice"),
+    @NamedQuery(name = LegalPractice.NAME_FILTERED_LEGAL_PRACTICES, query = "from LegalPractice L where upper(L.name) like :name")
+})
 public class LegalPractice implements Serializable {
 
     public static final String ALL_LEGAL_PRACTICES = "LegalPractice.allLegalPractices";
+    public static final String NAME_FILTERED_LEGAL_PRACTICES = "LegalPractice.nameFilteredLegalPractices";
 
     @Id @Column(name="practice_id")
     @GeneratedValue

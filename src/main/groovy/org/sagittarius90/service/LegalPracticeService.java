@@ -11,11 +11,21 @@ import java.util.List;
 public class LegalPracticeService extends BaseServiceImpl<LegalPracticeModel> {
 
     @Override
+    public List<LegalPracticeModel> getFilteredCollection(BaseFilter filter) {
+        LegalPracticeFilter filterCasted = (LegalPracticeFilter) filter;
+
+        if (filterCasted != null && filterCasted.getName() != null) {
+            List<LegalPractice> activities = LegalPracticeDbAdapter.getInstance().getNameFilteredLegalPractices(filterCasted.getName());
+            return getLegalPracticeConverter().createFromEntities(activities);
+        }
+
+        return getCollection();
+    }
+
     public List<LegalPracticeModel> getCollection() {
         List<LegalPractice> activities = LegalPracticeDbAdapter.getInstance().getAllLegalPractices();
         return getLegalPracticeConverter().createFromEntities(activities);
     }
-
     @Override
     public LegalPracticeModel getSingleResultById(String id) {
         resolveId(id);

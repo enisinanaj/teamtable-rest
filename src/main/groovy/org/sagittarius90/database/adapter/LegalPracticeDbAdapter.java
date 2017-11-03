@@ -33,6 +33,11 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
     }
 
+    public List<LegalPractice> getNameFilteredLegalPractices(String name) {
+        return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.NAME_FILTERED_LEGAL_PRACTICES)
+                .setParameter("name", name.toUpperCase() + "%").getResultList();
+    }
+
     public LegalPractice getLegalPracticeById(Integer legalPracticeRealId) {
         return getEm().find(LegalPractice.class, legalPracticeRealId);
     }

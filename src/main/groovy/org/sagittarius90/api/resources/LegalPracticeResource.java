@@ -5,6 +5,7 @@ import org.sagittarius90.database.entity.LegalPractice;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.LegalPracticeModel;
+import org.sagittarius90.service.LegalPracticeFilter;
 import org.sagittarius90.service.LegalPracticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +32,14 @@ public class LegalPracticeResource {
 
     @GET
     @Path("/")
-    public Response getLegalPractices() {
+    public Response getLegalPractices(@QueryParam(value = "name") String name) {
         logger.info("Called GET method");
 
-        List<LegalPracticeModel> legalPractices = getLegalPracticeService().getCollection();
+        LegalPracticeFilter filter = new LegalPracticeFilter.LegalPracticeFilterBuilder()
+                .name(name)
+                .build();
+
+        List<LegalPracticeModel> legalPractices = getLegalPracticeService().getFilteredCollection(filter);
         GenericEntity<List<LegalPracticeModel>> result = new GenericEntity<List<LegalPracticeModel>>(legalPractices) {};
 
         return Response.ok().entity(result).build();
