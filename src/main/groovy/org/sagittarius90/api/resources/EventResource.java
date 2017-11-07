@@ -1,6 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.model.EventModel;
+import org.sagittarius90.service.event.EventFilter;
 import org.sagittarius90.service.event.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +27,13 @@ public class EventResource {
 
     @GET
     @Path("/")
-    public Response getEvents() {
-        logger.info("Called GET method");
+    public Response getEvents(@QueryParam(value="practice") String legalPracticeId) {
 
-        List<EventModel> events = getEventService().getCollection(null);
+        EventFilter filter = new EventFilter.EventFilterBuilder()
+                .legalPracticeId(legalPracticeId)
+                .build();
+
+        List<EventModel> events = getEventService().getCollection(filter);
         GenericEntity<List<EventModel>> result = new GenericEntity<List<EventModel>>(events) {};
 
         return Response.ok().entity(result).build();

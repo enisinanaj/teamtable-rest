@@ -1,8 +1,10 @@
 package org.sagittarius90.model;
 
+import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.model.utils.AbstractModel;
 
 import java.util.Date;
+import java.util.List;
 
 public class EventModel extends AbstractModel {
 
@@ -14,6 +16,7 @@ public class EventModel extends AbstractModel {
     private Date eventDate;
     private String description;
     private Date creationDate;
+    private List<ActivityModel> activities;
 
 
     public String getId() {
@@ -78,5 +81,13 @@ public class EventModel extends AbstractModel {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public List<ActivityModel> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<ActivityModel> activities) {
+        this.activities = activities;
     }
 }

@@ -7,12 +7,15 @@ import java.util.List;
 
 @Entity
 @Table(name="event")
-@NamedQueries(
-        @NamedQuery(name = Event.ALL_EVENTS, query = "from Event")
-)
+@NamedQueries({
+        @NamedQuery(name = Event.ALL_EVENTS, query = "from Event"),
+        @NamedQuery(name = Event.ALL_EVENTS_FROM_PRACTICE,
+                query = "from Event e where e.practice.id = :idPractice")
+})
 public class Event implements Serializable {
 
     public static final String ALL_EVENTS = "Event.allEvents";
+    public static final String ALL_EVENTS_FROM_PRACTICE = "Event.detailFromPractice";
 
     @Id @Column(name="event_id")
     @GeneratedValue
@@ -26,6 +29,9 @@ public class Event implements Serializable {
     @JoinColumn(name="practice", referencedColumnName="practice_id")
     private LegalPractice practice;
 
+    @OneToMany(fetch= FetchType.EAGER, mappedBy="event")
+    private List<Activity> activities;
+
     @Column(name="event_date")
     @Temporal(value= TemporalType.TIMESTAMP)
     private Date eventDate;
@@ -36,10 +42,6 @@ public class Event implements Serializable {
     @Column(name="creation_date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
-
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="event")
-    /*@JoinColumn(name="activity", referencedColumnName="activity_id")*/
-    private List<Activity> activities;
 
     public Integer getId() {
         return id;

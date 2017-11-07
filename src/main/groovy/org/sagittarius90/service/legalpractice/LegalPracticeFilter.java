@@ -50,7 +50,7 @@ public class LegalPracticeFilter implements BaseFilter {
     }
 
     public static final class LegalPracticeFilterBuilder {
-        String name;
+        private String name;
         private Date dateFrom;
         private Date dateTo;
         private Urgency urgency;

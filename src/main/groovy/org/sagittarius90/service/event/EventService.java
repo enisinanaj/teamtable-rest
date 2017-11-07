@@ -11,8 +11,30 @@ import java.util.List;
 
 public class EventService extends BaseServiceImpl<EventModel> {
 
+    private EventFilter filter;
+
     @Override
-    public List<EventModel> getCollection(BaseFilter baseFilter) {
+    public List<EventModel> getCollection(BaseFilter filter) {
+        this.filter = (EventFilter) filter;
+
+        if (isFilterSet()) {
+            return doSearchByPracticeId();
+        }
+
+        return getCollection();
+    }
+
+    private List<EventModel> doSearchByPracticeId() {
+        List<Event> events = EventDbAdapter.getInstance().getFilteredEvent(this.filter);
+        return getEventConverter().createFromEntities(events);
+    }
+
+    private boolean isFilterSet() {
+        return this.filter != null
+                && this.filter.isNotEmpty();
+    }
+
+    public List<EventModel> getCollection() {
         List<Event> activities = EventDbAdapter.getInstance().getAllEvents();
         return getEventConverter().createFromEntities(activities);
     }

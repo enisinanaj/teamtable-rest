@@ -22,7 +22,7 @@ import java.util.List;
 public class LegalPractice implements Serializable {
 
     public static final String ALL_LEGAL_PRACTICES = "LegalPractice.allLegalPractices";
-    public static final String FILTERED_LEGAL_PRACTICES = "LegalPractice.nameFilteredLegalPractices";
+    public static final String FILTERED_LEGAL_PRACTICES = "LegalPractice.filteredLegalPractices";
 
     @Id @Column(name="practice_id")
     @GeneratedValue
