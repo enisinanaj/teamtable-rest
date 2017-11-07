@@ -1,19 +1,15 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.database.adapter.LegalPracticeDbAdapter;
-import org.sagittarius90.database.entity.LegalPractice;
-import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
-import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.LegalPracticeModel;
-import org.sagittarius90.service.LegalPracticeFilter;
-import org.sagittarius90.service.LegalPracticeService;
+import org.sagittarius90.service.legalpractice.LegalPracticeFilter;
+import org.sagittarius90.service.legalpractice.LegalPracticeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 @Path("/legalPractices")
@@ -32,14 +28,19 @@ public class LegalPracticeResource {
 
     @GET
     @Path("/")
-    public Response getLegalPractices(@QueryParam(value = "name") String name) {
-        logger.info("Called GET method");
+    public Response getLegalPractices(@QueryParam(value="name") String name,
+                                      @QueryParam(value="dateFrom") Date dateFrom,
+                                      @QueryParam(value="dateTo") Date dateTo,
+                                      @QueryParam(value="urgencyCode") String urgencyCode) {
 
         LegalPracticeFilter filter = new LegalPracticeFilter.LegalPracticeFilterBuilder()
                 .name(name)
+                .dateFrom(dateFrom)
+                .dateTo(dateTo)
+                .urgency(urgencyCode)
                 .build();
 
-        List<LegalPracticeModel> legalPractices = getLegalPracticeService().getFilteredCollection(filter);
+        List<LegalPracticeModel> legalPractices = getLegalPracticeService().getCollection(filter);
         GenericEntity<List<LegalPracticeModel>> result = new GenericEntity<List<LegalPracticeModel>>(legalPractices) {};
 
         return Response.ok().entity(result).build();

@@ -1,17 +1,18 @@
 package org.sagittarius90.database.adapter;
 
 import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
-import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 import org.sagittarius90.database.entity.LegalPractice;
+import org.sagittarius90.service.legalpractice.LegalPracticeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public class LegalPracticeDbAdapter extends BaseDbAdapter {
 
     private static Logger logger = LoggerFactory.getLogger(LegalPracticeDbAdapter.class);
+    private LegalPracticeFilter filter;
 
     protected LegalPracticeDbAdapter() {
 
@@ -33,9 +34,30 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
     }
 
-    public List<LegalPractice> getNameFilteredLegalPractices(String name) {
-        return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.NAME_FILTERED_LEGAL_PRACTICES)
-                .setParameter("name", name.toUpperCase() + "%").getResultList();
+    public List<LegalPractice> getFilteredLegalPractices(LegalPracticeFilter filter) {
+        this.filter = filter;
+
+        Query namedQuery = getEm().createNamedQuery(LegalPractice.FILTERED_LEGAL_PRACTICES)
+                .setParameter("name", filter.getName().toUpperCase() + "%")
+                .setParameter("dateFrom", filter.getDateFrom())
+                .setParameter("dateTo", filter.getDateTo());
+
+        addUrgencyFilterToQuery(namedQuery);
+
+        return (List<LegalPractice>) namedQuery.getResultList();
+    }
+
+    private void addUrgencyFilterToQuery(Query namedQuery) {
+        if (urgencyIsSet()) {
+            namedQuery.setParameter("withinDays", this.filter.getUrgency().getDays());
+        } else {
+            namedQuery.setParameter("withinDays", null);
+        }
+
+    }
+
+    private boolean urgencyIsSet() {
+        return this.filter.getUrgency() != null;
     }
 
     public LegalPractice getLegalPracticeById(Integer legalPracticeRealId) {

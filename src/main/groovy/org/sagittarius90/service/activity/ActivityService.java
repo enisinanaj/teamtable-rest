@@ -1,9 +1,10 @@
-package org.sagittarius90.service;
+package org.sagittarius90.service.activity;
 
 import org.sagittarius90.database.adapter.ActivityDbAdapter;
 import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.io.activity.ActivityConverterImpl;
 import org.sagittarius90.model.ActivityModel;
+import org.sagittarius90.service.utils.BaseFilter;
 import org.sagittarius90.service.utils.BaseServiceImpl;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class ActivityService extends BaseServiceImpl<ActivityModel> {
 
     @Override
-    public List<ActivityModel> getCollection() {
+    public List<ActivityModel> getCollection(BaseFilter baseFilter) {
         List<Activity> activities = ActivityDbAdapter.getInstance().getAllActivities();
         return getActivityConverter().createFromEntities(activities);
     }

@@ -8,19 +8,27 @@ import java.util.List;
 @Table(name="legal_practice")
 @NamedQueries({
     @NamedQuery(name = LegalPractice.ALL_LEGAL_PRACTICES, query = "from LegalPractice"),
-    @NamedQuery(name = LegalPractice.NAME_FILTERED_LEGAL_PRACTICES, query = "from LegalPractice L where upper(L.name) like :name")
+    @NamedQuery(name = LegalPractice.FILTERED_LEGAL_PRACTICES,
+            query = "select l from LegalPractice l left join l.events e left join e.activities act " +
+                    "where upper(l.name) like :name " +
+                    "and (act.expirationDate between :dateFrom and :dateTo or :dateFrom is null) " +
+                    "and (NOW() - ("+
+                            "select MIN(innerAct.expirationDate) " +
+                            "from Activity innerAct join innerAct.event innerE join innerE.practice innerP " +
+                            "where innerP.id = l.id) " +
+                        "<= :withinDays or :withinDays is null ) " +
+                    "group by l")
 })
 public class LegalPractice implements Serializable {
 
     public static final String ALL_LEGAL_PRACTICES = "LegalPractice.allLegalPractices";
-    public static final String NAME_FILTERED_LEGAL_PRACTICES = "LegalPractice.nameFilteredLegalPractices";
+    public static final String FILTERED_LEGAL_PRACTICES = "LegalPractice.nameFilteredLegalPractices";
 
     @Id @Column(name="practice_id")
     @GeneratedValue
     private Integer id;
 
     @OneToMany(fetch= FetchType.EAGER, mappedBy="practice")
-    /*@JoinColumn(name="practice_id", referencedColumnName="practice")*/
     private List<Event> events;
 
     @OneToOne(fetch=FetchType.EAGER)

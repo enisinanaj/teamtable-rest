@@ -1,7 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.model.UserModel;
-import org.sagittarius90.service.UserService;
+import org.sagittarius90.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +28,7 @@ public class UserResource {
     public Response getUsers() {
         logger.info("Called GET method");
 
-        List<UserModel> users = getUserService().getCollection();
+        List<UserModel> users = getUserService().getCollection(null);
         GenericEntity<List<UserModel>> result = new GenericEntity<List<UserModel>>(users) {};
 
         return Response.ok().entity(result).build();

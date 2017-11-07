@@ -52,15 +52,13 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
     @Override
     public LegalPractice updateEntity(final LegalPractice entity, final LegalPracticeModel model) {
 
-        if (model.getCreator() == null) {
-            throw new RuntimeException("Creator identifier missing!");
+        if (model.getCreatorId() != null) {
+            User user = getUserDbAdapter().getUserById(extractUserId(model));
+            entity.setCreator(user);
         }
-
-        User user = getUserDbAdapter().getUserById(extractUserId(model));
 
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
-        entity.setCreator(user);
 
         return entity;
     }

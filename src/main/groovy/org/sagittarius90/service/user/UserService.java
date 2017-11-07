@@ -1,10 +1,11 @@
-package org.sagittarius90.service;
+package org.sagittarius90.service.user;
 
 import org.sagittarius90.api.resources.UserResource;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.model.UserModel;
+import org.sagittarius90.service.utils.BaseFilter;
 import org.sagittarius90.service.utils.BaseServiceImpl;
 
 import javax.persistence.Column;
@@ -16,7 +17,7 @@ import java.util.List;
 public class UserService extends BaseServiceImpl<UserModel> {
 
     @Override
-    public List<UserModel> getCollection() {
+    public List<UserModel> getCollection(BaseFilter baseFilter) {
         List<User> users = UserDbAdapter.getInstance().getAllUsers();
         return getUserConverter().createFromEntities(users);
     }

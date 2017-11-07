@@ -1,9 +1,10 @@
-package org.sagittarius90.service;
+package org.sagittarius90.service.event;
 
 import org.sagittarius90.database.adapter.EventDbAdapter;
 import org.sagittarius90.database.entity.Event;
 import org.sagittarius90.io.event.EventConverterImpl;
 import org.sagittarius90.model.EventModel;
+import org.sagittarius90.service.utils.BaseFilter;
 import org.sagittarius90.service.utils.BaseServiceImpl;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class EventService extends BaseServiceImpl<EventModel> {
 
     @Override
-    public List<EventModel> getCollection() {
+    public List<EventModel> getCollection(BaseFilter baseFilter) {
         List<Event> activities = EventDbAdapter.getInstance().getAllEvents();
         return getEventConverter().createFromEntities(activities);
     }

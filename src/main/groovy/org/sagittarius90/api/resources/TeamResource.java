@@ -5,7 +5,7 @@ import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.io.team.TeamConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.TeamModel;
-import org.sagittarius90.service.TeamService;
+import org.sagittarius90.service.team.TeamService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +63,8 @@ public class TeamResource {
     public Response getTeams() {
         logger.info("Called GET method");
 
-        List<Team> teams = getTeamDbAdapter().getAllTeams();
-        GenericEntity<List<TeamModel>> result = new GenericEntity<List<TeamModel>>(new TeamConverterImpl().createFromEntities(teams)) {};
+        List<TeamModel> teams = new TeamService().getCollection(null);
+        GenericEntity<List<TeamModel>> result = new GenericEntity<List<TeamModel>>(teams) {};
 
         return Response.ok().entity(result).build();
     }

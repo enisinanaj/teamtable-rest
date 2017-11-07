@@ -1,7 +1,6 @@
 package org.sagittarius90.service.utils;
 
 import org.sagittarius90.io.utils.IdUtils;
-import org.sagittarius90.service.BaseFilter;
 
 import java.util.List;
 
@@ -24,7 +23,7 @@ public abstract class BaseServiceImpl<T> implements BaseService<T> {
     }
 
     @Override
-    public List<T> getFilteredCollection(BaseFilter filter) {
+    public List<T> getCollection(BaseFilter filter) {
         return null;
     }
 }

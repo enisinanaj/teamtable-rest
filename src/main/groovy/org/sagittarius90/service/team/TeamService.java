@@ -1,9 +1,10 @@
-package org.sagittarius90.service;
+package org.sagittarius90.service.team;
 
 import org.sagittarius90.database.adapter.TeamDbAdapter;
 import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.io.team.TeamConverterImpl;
 import org.sagittarius90.model.TeamModel;
+import org.sagittarius90.service.utils.BaseFilter;
 import org.sagittarius90.service.utils.BaseServiceImpl;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class TeamService extends BaseServiceImpl<TeamModel> {
 
     @Override
-    public List<TeamModel> getCollection() {
+    public List<TeamModel> getCollection(BaseFilter baseFilter) {
         List<Team> activities = TeamDbAdapter.getInstance().getAllTeams();
         return getTeamConverter().createFromEntities(activities);
     }

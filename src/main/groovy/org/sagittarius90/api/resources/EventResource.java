@@ -1,7 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.model.EventModel;
-import org.sagittarius90.service.EventService;
+import org.sagittarius90.service.event.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +29,7 @@ public class EventResource {
     public Response getEvents() {
         logger.info("Called GET method");
 
-        List<EventModel> events = getEventService().getCollection();
+        List<EventModel> events = getEventService().getCollection(null);
         GenericEntity<List<EventModel>> result = new GenericEntity<List<EventModel>>(events) {};
 
         return Response.ok().entity(result).build();
