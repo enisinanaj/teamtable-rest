@@ -11,10 +11,32 @@ import java.util.List;
 
 public class ActivityService extends BaseServiceImpl<ActivityModel> {
 
+    private ActivityFilter filter;
+
     @Override
-    public List<ActivityModel> getCollection(BaseFilter baseFilter) {
+    public List<ActivityModel> getCollection(BaseFilter filter) {
+        this.filter = (ActivityFilter) filter;
+
+        if (isFilterSet()) {
+            return doSearchByEventId();
+        }
+
+        return getCollection();
+    }
+
+    private List<ActivityModel> getCollection() {
         List<Activity> activities = ActivityDbAdapter.getInstance().getAllActivities();
         return getActivityConverter().createFromEntities(activities);
+    }
+
+    private List<ActivityModel> doSearchByEventId() {
+        List<Activity> activities = ActivityDbAdapter.getInstance().getFilteredActivity(this.filter);
+        return getActivityConverter().createFromEntities(activities);
+    }
+
+    private boolean isFilterSet() {
+        return this.filter != null
+                && this.filter.isNotEmpty();
     }
 
     @Override

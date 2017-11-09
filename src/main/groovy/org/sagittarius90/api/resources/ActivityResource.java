@@ -1,6 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.model.ActivityModel;
+import org.sagittarius90.service.activity.ActivityFilter;
 import org.sagittarius90.service.activity.ActivityService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,14 @@ public class ActivityResource {
 
     @GET
     @Path("/")
-    public Response getActivities() {
-        logger.info("Called GET method");
+    public Response getActivities(@QueryParam(value="event") String eventId) {
 
-        List<ActivityModel> collection = new ActivityService().getCollection(null);
-        GenericEntity<List<ActivityModel>> result = new GenericEntity<List<ActivityModel>>(collection) {};
+        ActivityFilter filter = new ActivityFilter.ActivityFilterBuilder()
+                .EventId(eventId)
+                .build();
+
+        List<ActivityModel> activities = getActivityService().getCollection(filter);
+        GenericEntity<List<ActivityModel>> result = new GenericEntity<List<ActivityModel>>(activities) {};
 
         return Response.ok().entity(result).build();
     }

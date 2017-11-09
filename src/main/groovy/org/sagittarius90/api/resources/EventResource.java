@@ -30,7 +30,7 @@ public class EventResource {
     public Response getEvents(@QueryParam(value="practice") String legalPracticeId) {
 
         EventFilter filter = new EventFilter.EventFilterBuilder()
-                .legalPracticeId(legalPracticeId)
+                .LegalPracticeId(legalPracticeId)
                 .build();
 
         List<EventModel> events = getEventService().getCollection(filter);

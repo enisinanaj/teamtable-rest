@@ -9,12 +9,15 @@ import java.util.Date;
 
 @Entity
 @Table(name="activity")
-@NamedQueries(
-        @NamedQuery(name = Activity.ALL_ACTIVITIES, query = "from Activity")
-)
+@NamedQueries({
+        @NamedQuery(name = Activity.ALL_ACTIVITIES, query = "from Activity"),
+        @NamedQuery(name = Activity.ALL_ACTIVITIES_FROM_EVENT,
+                query = "from Activity a where a.event.id = :idEvent")
+})
 public class Activity implements Serializable {
 
     public static final String ALL_ACTIVITIES = "Activity.allActivities";
+    public static final String ALL_ACTIVITIES_FROM_EVENT = "Activity.activitiesFromEvent";
 
     @Id @Column(name="activity_id")
     @GeneratedValue

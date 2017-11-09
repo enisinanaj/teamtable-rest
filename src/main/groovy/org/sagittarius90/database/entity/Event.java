@@ -15,7 +15,7 @@ import java.util.List;
 public class Event implements Serializable {
 
     public static final String ALL_EVENTS = "Event.allEvents";
-    public static final String ALL_EVENTS_FROM_PRACTICE = "Event.detailFromPractice";
+    public static final String ALL_EVENTS_FROM_PRACTICE = "Event.eventsFromPractice";
 
     @Id @Column(name="event_id")
     @GeneratedValue

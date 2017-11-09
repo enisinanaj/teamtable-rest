@@ -15,12 +15,14 @@ public class EventFilter implements BaseFilter {
     }
 
     @Override
-    public boolean isNotEmpty() { return legalPracticeId != null; }
+    public boolean isNotEmpty() {
+        return legalPracticeId != null;
+    }
 
     public static final class EventFilterBuilder {
         private String legalPracticeId;
 
-        public EventFilterBuilder legalPracticeId(String legalPracticeId) {
+        public EventFilterBuilder LegalPracticeId(String legalPracticeId) {
             this.legalPracticeId = legalPracticeId;
             return this;
         }
