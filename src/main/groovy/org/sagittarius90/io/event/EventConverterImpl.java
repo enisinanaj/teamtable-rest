@@ -55,6 +55,7 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         model.sethRef(getModelUri(eventId));
         model.setEventDate(entity.getEventDate());
         model.setDescription(entity.getDescription());
+        model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setPractice(getLegalPracticeConverter().createFrom(entity.getPractice()));
         model.setActivities(getActivityConverter().createFromEntities(entity.getActivities()));
 
