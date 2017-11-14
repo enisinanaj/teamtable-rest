@@ -37,4 +37,16 @@ public class UserDbAdapter extends BaseDbAdapter {
         user.setId(null);
         commit(user);
     }
+
+    public User findByUsername(String username) {
+        User result = null;
+
+        try {
+            result = (User) getEm().createNamedQuery(User.GET_BY_USERNAME).setParameter("username", username).getSingleResult();
+        } catch(Exception e) {
+            return null;
+        }
+
+        return result;
+    }
 }

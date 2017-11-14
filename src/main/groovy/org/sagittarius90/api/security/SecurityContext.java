@@ -1,20 +1,19 @@
 package org.sagittarius90.api.security;
 
-import java.security.Principal;
-
 public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 	
 	String authenticationScheme;
-	private Principal principal;
+	private java.security.Principal principal;
 	
-	public class SagittariusPrincipal implements Principal {
+	public class Principal implements java.security.Principal {
 		private String username;
 		private String password;
+		private String token;
 
-		public SagittariusPrincipal() {
+		public Principal() {
 		}
 
-		public SagittariusPrincipal(String username, String password) {
+		public Principal(String username, String password) {
 			this.username = username;
 			this.password = password;
 		}
@@ -39,10 +38,22 @@ public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 		public void setPassword(String password) {
 			this.password = password;
 		}
+
+		public String getToken() {
+			return token;
+		}
+
+		public void setToken(String token) {
+			this.token = token;
+		}
+	}
+
+	public SecurityContext(String token) {
+		getPrincipalInstance().setToken(token);
 	}
 
 	@Override
-	public Principal getUserPrincipal() {
+	public java.security.Principal getUserPrincipal() {
 		return getPrincipal();
 	}
 
@@ -65,20 +76,20 @@ public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 		authenticationScheme = scheme;
 	}
 
-	public Principal getPrincipal() {
+	public java.security.Principal getPrincipal() {
 		return principal;
 	}
 
-	public void setPrincipal(SagittariusPrincipal principal) {
+	public void setPrincipal(Principal principal) {
 		this.principal = principal;
 	}
 	
-	public SagittariusPrincipal getSagittariusPrincipalInstance() {
+	public Principal getPrincipalInstance() {
 		if (this.principal == null) {
-			this.principal = new SagittariusPrincipal();
+			this.principal = new Principal();
 		}
 		
-		return (SagittariusPrincipal) this.principal;
+		return (Principal) this.principal;
 	}
 
 }

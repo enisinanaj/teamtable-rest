@@ -1,5 +1,6 @@
 package org.sagittarius90.api.resources;
 
+import org.sagittarius90.api.filters.utils.AuthenticationRequired;
 import org.sagittarius90.model.EventModel;
 import org.sagittarius90.service.event.EventFilter;
 import org.sagittarius90.service.event.EventService;
@@ -14,6 +15,7 @@ import java.util.List;
 @Path("/events")
 @Consumes("application/json")
 @Produces("application/json")
+@AuthenticationRequired
 public class EventResource {
 
     private static Logger logger = LoggerFactory.getLogger(EventResource.class);

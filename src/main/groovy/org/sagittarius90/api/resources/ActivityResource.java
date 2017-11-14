@@ -1,5 +1,6 @@
 package org.sagittarius90.api.resources;
 
+import org.sagittarius90.api.filters.utils.AuthenticationRequired;
 import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.service.activity.ActivityFilter;
 import org.sagittarius90.service.activity.ActivityService;
@@ -14,6 +15,7 @@ import java.util.List;
 @Path("/activities")
 @Consumes("application/json")
 @Produces("application/json")
+@AuthenticationRequired
 public class ActivityResource {
 
     private static Logger logger = LoggerFactory.getLogger(ActivityResource.class);

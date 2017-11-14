@@ -1,5 +1,6 @@
 package org.sagittarius90.api.resources;
 
+import org.sagittarius90.api.filters.utils.AuthenticationRequired;
 import org.sagittarius90.model.LegalPracticeModel;
 import org.sagittarius90.service.legalpractice.LegalPracticeFilter;
 import org.sagittarius90.service.legalpractice.LegalPracticeService;
@@ -15,6 +16,7 @@ import java.util.List;
 @Path("/legalPractices")
 @Consumes("application/json")
 @Produces("application/json")
+@AuthenticationRequired
 public class LegalPracticeResource {
 
     private static Logger logger = LoggerFactory.getLogger(LegalPracticeResource.class);

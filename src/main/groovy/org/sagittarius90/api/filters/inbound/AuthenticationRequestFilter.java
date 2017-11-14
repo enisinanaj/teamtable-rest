@@ -1,161 +1,91 @@
 package org.sagittarius90.api.filters.inbound;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.security.SecurityContext;
+import org.sagittarius90.database.adapter.ClientDbAdapter;
+import org.sagittarius90.database.entity.Client;
 
-import javax.annotation.security.DenyAll;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
 
-import org.glassfish.jersey.internal.util.Base64;
-import org.sagittarius90.api.security.SecurityContext;
-
+@AuthenticationRequired
 public class AuthenticationRequestFilter implements ContainerRequestFilter {
-	
-	@Context
-	ResourceInfo resourceInfo;
-	ContainerRequestContext requestContext; 
-	
-	String username;
-	String password;
-	
-	boolean authenticated = false;
-	List<String> authorization;
-	private Method method;
-	private SecurityContext security;
-	
-	private static final String AUTHORIZATION_PROPERTY = "Authorization";
-    private static final String AUTHENTICATION_SCHEME = "Basic";
-    private static final Response ACCESS_DENIED = Response.status(Response.Status.UNAUTHORIZED)
-                                                        .entity("You cannot access this resource").build();
-    private static final Response ACCESS_FORBIDDEN = Response.status(Response.Status.FORBIDDEN)
-                                                        .entity("Access blocked for all users !!").build();
 
-	
+	private static final String PARAM_API_KEY = "apiKey";
+	private static final String PARAM_TOKEN = "token";
+	private static final long SECONDS_IN_MILLISECOND = 1000L;
+	private static final int TTL_SECONDS = 60;
+
 	@Override
-	public void filter(ContainerRequestContext requestContext) throws IOException {
-		method = resourceInfo.getResourceMethod();
-		
-		loadRequestComponent(requestContext);
-		checkPrerequisites();
-		readCredentials();
-		authenticate(method.getAnnotation(RolesAllowed.class));
-		
-		if (authenticated) {
-			addSecurityToContext();
-		} else {
-			requestContext.abortWith(Response
-                .status(Response.Status.FORBIDDEN)
-                .entity("User cannot access the resource.")
-                .build());
+	public void filter(ContainerRequestContext context) throws IOException {
+		final String apiKey = extractParam(context, PARAM_API_KEY);
+		if (StringUtils.isEmpty(apiKey)) {
+			context.abortWith(responseMissingParameter(PARAM_API_KEY));
 		}
-	}
-	
-	private void addSecurityToContext() {
-		createSecurityContext();
-		requestContext.setSecurityContext(security);
+
+		final String token = extractParam(context, PARAM_TOKEN);
+		if (StringUtils.isEmpty(token)) {
+			context.abortWith(responseMissingParameter(PARAM_TOKEN));
+		}
+
+		if (!authenticate(apiKey, token)) {
+			context.abortWith(responseUnauthorized());
+		}
+
+		context.setSecurityContext(new SecurityContext(token));
 	}
 
-	private void checkPrerequisites() {
-		 //Access allowed for all
-	    if (!method.isAnnotationPresent(PermitAll.class)) {
-
-	    	//Access denied for all
-	        if (method.isAnnotationPresent(DenyAll.class)) {
-	            requestContext.abortWith(ACCESS_FORBIDDEN);
-	            return;
-	        }
-	          
-	        readAuthorizationHeader();
-	    }
+	private String extractParam(ContainerRequestContext context, String param) {
+		return context.getHeaders().getFirst(param);
 	}
 
-	void loadRequestComponent(ContainerRequestContext requestContext) {
-		this.requestContext = requestContext;
-	}
-	
-	private void readAuthorizationHeader() {
-		//Get request headers
-        final MultivaluedMap<String, String> headers = requestContext.getHeaders();
-          
-        //Fetch authorization header
-        authorization = headers.get(AUTHORIZATION_PROPERTY);
-          
-        //If no authorization information present; block access
-        if (authorization == null || authorization.isEmpty()) {
-            requestContext.abortWith(ACCESS_DENIED);
-            return;
-        }
-	}
-	
-	void readCredentials() {
-		//Get encoded username and password
-        final String encodedUserPassword = authorization.get(0).replaceFirst(AUTHENTICATION_SCHEME + " ", "");
-          
-        //Decode username and password
-        String credentials = new String(Base64.decode(encodedUserPassword.getBytes()));;
-
-        splitCredentials(credentials);
-	}
-	
-	private void splitCredentials(String credentials) {
-		final StringTokenizer tokenizer = new StringTokenizer(credentials, ":");
-        this.username = tokenizer.nextToken();
-        this.password = tokenizer.nextToken();
+	private Response responseMissingParameter(String name) {
+		return Response.status(Response.Status.BAD_REQUEST)
+				.type(MediaType.TEXT_PLAIN_TYPE)
+				.entity("Parameter '" + name + "' is required.")
+				.build();
 	}
 
-	void authenticate(RolesAllowed rolesAllowed) {
-		//Verify user access
-        if (rolesAllowed != null) {
-            Set<String> rolesSet = new HashSet<String>(Arrays.asList(rolesAllowed.value()));
-            exitIfUserNotAllowed(rolesSet);
-        }
-        authenticate();
-	}
-	
-	private void exitIfUserNotAllowed(Set<String> rolesSet) {
-		//Is user valid?
-        if ( !isUserAllowed(rolesSet)) {
-            requestContext.abortWith(ACCESS_DENIED);
-            return;
-        }
+	private boolean authenticate(String apiKey, String token) {
+		final String secretKey = getClientByApiKey(apiKey).getSecretKey();
+
+		// No need to calculate digest in case of wrong apiKey
+		if (StringUtils.isEmpty(secretKey)) {
+			return false;
+		}
+
+		final long nowSec = System.currentTimeMillis() / SECONDS_IN_MILLISECOND;
+		long startTime = nowSec - TTL_SECONDS;
+		long endTime = nowSec + TTL_SECONDS;
+		for (; startTime < endTime; startTime++) {
+			final String toHash = apiKey + secretKey + startTime;
+			final String sha1 = DigestUtils.sha256Hex(toHash);
+			if (sha1.equals(token)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	private boolean isUserAllowed(Set<String> rolesSet) {
-		boolean isAllowed = false;
-        
-		if (username.equals("sagittarius90") && password.equals("password")) {
-            String userRole = "ADMIN";
-             
-            if (rolesSet.contains(userRole)) {
-                isAllowed = true;
-            }
-        }
-		
-        return isAllowed;
-	}
-	
-	void authenticate() {
-		authenticated = true;
+	private Client getClientByApiKey(String apiKey) {
+		Client result =  ClientDbAdapter.getInstance().getClientByApiKey(apiKey);
+
+		if (result == null) {
+			responseUnauthorized();
+		}
+
+		return result;
 	}
 
-	void createSecurityContext() {
-		security = new SecurityContext();
-		SecurityContext.SagittariusPrincipal principal = security.getSagittariusPrincipalInstance();
-		
-		principal.setPassword(password);
-		principal.setUsername(username);
-		security.setAuthenticationScheme(javax.ws.rs.core.SecurityContext.BASIC_AUTH);
+	private Response responseUnauthorized() {
+		return Response.status(Response.Status.UNAUTHORIZED)
+				.type(MediaType.TEXT_PLAIN_TYPE)
+				.entity("Unauthorized")
+				.build();
 	}
 }

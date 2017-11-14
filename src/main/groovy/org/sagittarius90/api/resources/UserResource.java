@@ -1,5 +1,6 @@
 package org.sagittarius90.api.resources;
 
+import org.sagittarius90.api.filters.utils.AuthenticationRequired;
 import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.user.UserService;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import java.util.List;
 @Path("/users")
 @Consumes("application/json")
 @Produces("application/json")
+@AuthenticationRequired
 public class UserResource {
 
     private static Logger logger = LoggerFactory.getLogger(UserResource.class);
