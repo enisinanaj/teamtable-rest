@@ -51,7 +51,7 @@ public class ActivityDbAdapter extends BaseDbAdapter {
 
         long idDecoded = IdUtils.getInstance().decodeId(filter.getEventId());
         Query namedQuery = getEm().createNamedQuery(Activity.ALL_ACTIVITIES_FROM_EVENT)
-                .setParameter("idEvent", (int) idDecoded);
+                .setParameter("eventId", (int) idDecoded);
 
         return (List<Activity>) namedQuery.getResultList();
     }
