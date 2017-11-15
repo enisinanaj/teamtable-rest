@@ -8,6 +8,7 @@ public class PasswordEncryption {
         SHA256("sha2") {
             @Override
             public String convert(String value) {
+                System.out.print("Value to be decoded is: " + value);
                 return DigestUtils.sha256Hex(value);
             }
         },

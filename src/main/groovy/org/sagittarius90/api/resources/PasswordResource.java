@@ -13,8 +13,8 @@ public class PasswordResource {
 
     @GET
     @Path("/")
-    public Response getAs(@PathParam("value") String value,
-                          @PathParam("format") String format) {
+    public Response getAs(@QueryParam("value") String value,
+                          @QueryParam("format") String format) {
 
         Format transformationType = null;
 
