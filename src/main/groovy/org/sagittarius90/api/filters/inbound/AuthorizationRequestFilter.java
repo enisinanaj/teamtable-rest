@@ -1,10 +1,10 @@
 package org.sagittarius90.api.filters.inbound;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sagittarius90.api.filters.utils.AuthorizationRequired;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
+import org.sagittarius90.service.user.PasswordUtil;
 
 import java.io.IOException;
 
@@ -16,69 +16,64 @@ import javax.ws.rs.core.Response;
 @AuthorizationRequired
 public class AuthorizationRequestFilter implements ContainerRequestFilter {
 
-	private String username;
-	private String password;
+	private String authorizationUsername;
+	private String authorizationPassword;
 	private ContainerRequestContext context;
-	private String token;
+	private PasswordUtil passwordUtil;
 
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		this.context = requestContext;
 
-		getUsername();
-		getPassword();
-		getTokenFromPrincipal();
+		getAuthorizationUsername();
+		getAuthorizationPassword();
 
-		authenticaticateUser();
+		authenticateUser();
+	}
+	private void getAuthorizationPassword() {
+		this.authorizationPassword = context.getHeaders().getFirst("principal-token");
 	}
 
-	private void getTokenFromPrincipal() {
-		this.token = ((org.sagittarius90.api.security.SecurityContext)context.getSecurityContext()).getPrincipalInstance().getToken();
+	private void getAuthorizationUsername() {
+		this.authorizationUsername = context.getHeaders().getFirst("principal");
 	}
 
-	private void getPassword() {
-		this.password = context.getHeaders().getFirst("principal-token");
-	}
-
-	private void getUsername() {
-		this.username = context.getHeaders().getFirst("principal");
-	}
-
-	private void authenticaticateUser() {
+	private void authenticateUser() {
 		checkParams();
 
-		User principal = UserDbAdapter.getInstance().findByUsername(username);
+		User principal = UserDbAdapter.getInstance().findByUsername(authorizationUsername);
 		checkUserExists(principal);
 
-	String encryptedPassword = encryptUserPasswordWithToken(principal.getPassword());
-
-		if (!encryptedPassword.equals(password)) {
-		context.abortWith(responseUnauthorized());
-	}
-}
-
-	private void checkUserExists(User principal) {
-		if (principal == null) {
+		if (!getPasswordUtil().isValid(authorizationPassword)) {
 			context.abortWith(responseUnauthorized());
 		}
 	}
 
 	private void checkParams() {
-		if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-			context.abortWith(responseMissingParameter("username or password"));
+		if (StringUtils.isEmpty(authorizationUsername) || StringUtils.isEmpty(authorizationPassword)) {
+			context.abortWith(responseMissingParameter("username and password"));
 		}
 	}
 
-	private String encryptUserPasswordWithToken(String password) {
-		//TODO: password from DB is encrypted
-		final String sha1 = DigestUtils.sha256Hex(password + token);
-		return sha1;
+	private void checkUserExists(User principal) {
+		if (principal == null) {
+			context.abortWith(responseUnauthorized());
+		}
+		createPasswordUtil(principal);
+	}
+
+	private void createPasswordUtil(User user) {
+		this.passwordUtil = new PasswordUtil(user);
+	}
+
+	private PasswordUtil getPasswordUtil() {
+		return passwordUtil;
 	}
 
 	private Response responseMissingParameter(String name) {
 		return Response.status(Response.Status.BAD_REQUEST)
 				.type(MediaType.TEXT_PLAIN_TYPE)
-				.entity("Parameter '" + name + "' is required.")
+				.entity("Parameters '" + name + "' are required.")
 				.build();
 	}
 

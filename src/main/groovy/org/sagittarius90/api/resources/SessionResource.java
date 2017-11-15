@@ -14,11 +14,8 @@ import javax.ws.rs.core.Response;
 public class SessionResource {
 
     @POST
+    @Path("/")
     public Response getNewSession() {
-        //TODO: authenticate user and create result.
-        //The name of this resource is misleading because there is no server-side session being created
-        //The only responsibility for the resource is to authenticate the user for an eventual login view
-
         return Response.ok().build();
     }
 }

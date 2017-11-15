@@ -36,8 +36,6 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 		if (!authenticate(apiKey, token)) {
 			context.abortWith(responseUnauthorized());
 		}
-
-		context.setSecurityContext(new SecurityContext(token));
 	}
 
 	private String extractParam(ContainerRequestContext context, String param) {
