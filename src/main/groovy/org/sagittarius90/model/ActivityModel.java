@@ -19,6 +19,7 @@ public class ActivityModel extends AbstractModel {
     private String status;
     private Date completionDate;
     private Date creationDate;
+    private String name;
 
     private String archived;
 
@@ -132,5 +133,13 @@ public class ActivityModel extends AbstractModel {
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
