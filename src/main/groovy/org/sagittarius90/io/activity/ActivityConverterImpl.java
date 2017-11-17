@@ -74,8 +74,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         model.setDescription(entity.getDescription());
         model.setCompletionDate(entity.getCompletionDate());
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
-        // StackOverflowError
-        // model.setEvent(getEventConverter().createFrom(entity.getEvent()));
+        model.setEvent(getEventConverter().createFrom(entity.getEvent()));
         model.setExpirationDate(entity.getExpirationDate());
         model.setStatus(entity.getStatus());
 

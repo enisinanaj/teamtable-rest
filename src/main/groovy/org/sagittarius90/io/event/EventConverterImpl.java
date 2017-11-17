@@ -6,7 +6,6 @@ import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.Event;
 import org.sagittarius90.database.entity.LegalPractice;
 import org.sagittarius90.database.entity.User;
-import org.sagittarius90.io.activity.ActivityConverterImpl;
 import org.sagittarius90.io.legalpractice.LegalPracticeConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
@@ -21,7 +20,6 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
 
     private static UserConverterImpl userConverter;
     private static LegalPracticeConverterImpl legalPracticeConverter;
-    private static ActivityConverterImpl activityConverter;
 
     @Override
     public Event createFrom(final EventModel model) {
@@ -57,7 +55,6 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         model.setDescription(entity.getDescription());
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setPractice(getLegalPracticeConverter().createFrom(entity.getPractice()));
-        model.setActivities(getActivityConverter().createFromEntities(entity.getActivities()));
 
         return model;
     }
@@ -121,14 +118,6 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
 
     protected LegalPracticeConverterImpl createLegalPracticeConverter() {
         return new LegalPracticeConverterImpl();
-    }
-
-    protected ActivityConverterImpl getActivityConverter() {
-        if (activityConverter == null) {
-            activityConverter = new ActivityConverterImpl();
-        }
-
-        return activityConverter;
     }
 
 }
