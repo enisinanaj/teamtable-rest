@@ -61,6 +61,9 @@ public class Activity implements Serializable {
     @Temporal(value=TemporalType.TIMESTAMP)
     private Date creationDate;
 
+    @Column(name="name")
+    private String name;
+
     public Integer getId() {
         return id;
     }
@@ -149,5 +152,13 @@ public class Activity implements Serializable {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -50,9 +50,11 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         entity.setEvent(event);
 
         entity.setDescription(model.getDescription());
+        entity.setCreationDate(model.getCreationDate());
         entity.setCompletionDate(model.getCompletionDate());
         entity.setExpirationDate(model.getExpirationDate());
         entity.setStatus(model.getStatus());
+        entity.setName(model.getName());
 
         return entity;
     }
@@ -72,11 +74,13 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         }
 
         model.setDescription(entity.getDescription());
+        model.setCreationDate(entity.getCreationDate());
         model.setCompletionDate(entity.getCompletionDate());
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setEvent(getEventConverter().createFrom(entity.getEvent()));
         model.setExpirationDate(entity.getExpirationDate());
         model.setStatus(entity.getStatus());
+        model.setName(entity.getName());
 
         return model;
     }
@@ -95,6 +99,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<Date>().setIfNotNull(model::getExpirationDate, entity::setExpirationDate);
         new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
+        new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
 
         return entity;
     }
