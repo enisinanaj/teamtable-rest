@@ -3,7 +3,6 @@ package org.sagittarius90.api.filters.inbound;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sagittarius90.api.filters.utils.AuthenticationRequired;
-import org.sagittarius90.api.security.SecurityContext;
 import org.sagittarius90.database.adapter.ClientDbAdapter;
 import org.sagittarius90.database.entity.Client;
 
@@ -11,9 +10,11 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @AuthenticationRequired
+@Provider
 public class AuthenticationRequestFilter implements ContainerRequestFilter {
 
 	private static final String PARAM_API_KEY = "apiKey";
@@ -50,7 +51,11 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	}
 
 	private boolean authenticate(String apiKey, String token) {
-		final String secretKey = getClientByApiKey(apiKey).getSecretKey();
+		if (checkParameters(apiKey, token)) {
+			return false;
+		}
+
+		final String secretKey = getSecretKey(apiKey);
 
 		// No need to calculate digest in case of wrong apiKey
 		if (StringUtils.isEmpty(secretKey)) {
@@ -70,6 +75,14 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 		return false;
 	}
 
+	private boolean checkParameters(String apiKey, String token) {
+		if (apiKey == null || token == null) {
+			return false;
+		}
+
+		return true;
+	}
+
 	private Client getClientByApiKey(String apiKey) {
 		Client result =  ClientDbAdapter.getInstance().getClientByApiKey(apiKey);
 
@@ -85,5 +98,15 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 				.type(MediaType.TEXT_PLAIN_TYPE)
 				.entity("Unauthorized")
 				.build();
+	}
+
+	public String getSecretKey(String apiKey) {
+		Client clientInfo = getClientByApiKey(apiKey);
+
+		if (clientInfo == null) {
+			return null;
+		}
+
+		return clientInfo.getSecretKey();
 	}
 }
