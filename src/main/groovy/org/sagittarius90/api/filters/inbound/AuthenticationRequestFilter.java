@@ -17,7 +17,7 @@ import java.io.IOException;
 @Provider
 public class AuthenticationRequestFilter implements ContainerRequestFilter {
 
-	private static final String PARAM_API_KEY = "apiKey";
+	private static final String PARAM_API_KEY = "apikey";
 	private static final String PARAM_TOKEN = "token";
 	private static final long SECONDS_IN_MILLISECOND = 1000L;
 	private static final int TTL_SECONDS = 60;
@@ -40,7 +40,9 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	}
 
 	private String extractParam(ContainerRequestContext context, String param) {
-		return context.getHeaders().getFirst(param);
+		String value = context.getHeaders().getFirst(param);
+		System.out.println("Loaded parameter: " + param + " = " + value);
+		return value;
 	}
 
 	private Response responseMissingParameter(String name) {
@@ -51,7 +53,7 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	}
 
 	private boolean authenticate(String apiKey, String token) {
-		if (checkParameters(apiKey, token)) {
+		if (!checkParameters(apiKey, token)) {
 			return false;
 		}
 
@@ -62,21 +64,33 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 			return false;
 		}
 
+		StringBuilder logs = new StringBuilder();
+		logs.append("Calculated tokens: \n");
+
 		final long nowSec = System.currentTimeMillis() / SECONDS_IN_MILLISECOND;
 		long startTime = nowSec - TTL_SECONDS;
 		long endTime = nowSec + TTL_SECONDS;
 		for (; startTime < endTime; startTime++) {
 			final String toHash = apiKey + secretKey + startTime;
 			final String sha1 = DigestUtils.sha256Hex(toHash);
+
+			logs.append(sha1);
+			logs.append("\n");
+
 			if (sha1.equals(token)) {
 				return true;
 			}
 		}
+
+		//System.out.println(logs.toString());
+
 		return false;
 	}
 
 	private boolean checkParameters(String apiKey, String token) {
+		System.out.println("Params are: apiKey = " + apiKey + ", token: " + token);
 		if (apiKey == null || token == null) {
+			System.out.println("Params are missing");
 			return false;
 		}
 
@@ -85,6 +99,8 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 
 	private Client getClientByApiKey(String apiKey) {
 		Client result =  ClientDbAdapter.getInstance().getClientByApiKey(apiKey);
+
+		System.out.println("Client from DBAdapter is: " + (result != null));
 
 		if (result == null) {
 			responseUnauthorized();
@@ -102,6 +118,8 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 
 	public String getSecretKey(String apiKey) {
 		Client clientInfo = getClientByApiKey(apiKey);
+
+		System.out.println("Client found by api_key: " + (clientInfo != null));
 
 		if (clientInfo == null) {
 			return null;

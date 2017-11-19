@@ -35,12 +35,14 @@ public class ClientDbAdapter extends BaseDbAdapter {
     }
 
     public Client getClientByApiKey(String apiKey) {
-        try {
-            return (Client) getEm().createNamedQuery(Client.CLIENT_BY_API_KEY).setParameter("apiKey", apiKey)
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
+        Client client = null;
+        List<Client> clients = (List<Client>) getEm().createNamedQuery(Client.CLIENT_BY_API_KEY).setParameter("apiKey", apiKey)
+                .getResultList();
+
+        if (!clients.isEmpty()) {
+            client = clients.get(0);
         }
 
+       return client;
     }
 }
