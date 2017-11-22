@@ -22,6 +22,12 @@ public class UserResource {
     @Path("/{userId}")
     public Response getUser(@PathParam("userId") String userId) {
         UserModel userModel = getUserService().getSingleResultById(userId);
+
+        if (userModel == null) {
+            userModel = new UserModel();
+            userModel.setAnonymous(true);
+        }
+
         return Response.ok().entity(userModel).build();
     }
 

@@ -6,6 +6,7 @@ import java.util.Date;
 
 public class UserModel extends AbstractModel {
 
+    public static final String ANONYMOUS_USER_ID = "0";
     private String id;
     private String username;
     private String password;
@@ -13,6 +14,7 @@ public class UserModel extends AbstractModel {
     private Date lastAccess;
     private TeamModel team;
     private String teamId;
+    private boolean anonymous;
 
     public String getId() {
         return id;
@@ -68,5 +70,13 @@ public class UserModel extends AbstractModel {
 
     public void setTeamId(String teamId) {
         this.teamId = teamId;
+    }
+
+    public boolean isAnonymous() {
+        return anonymous;
+    }
+
+    public void setAnonymous(boolean anonymous) {
+        this.anonymous = anonymous;
     }
 }

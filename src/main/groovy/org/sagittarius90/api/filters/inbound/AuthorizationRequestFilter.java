@@ -2,8 +2,11 @@ package org.sagittarius90.api.filters.inbound;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sagittarius90.api.filters.utils.AuthorizationRequired;
+import org.sagittarius90.api.security.SecurityContext;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
+import org.sagittarius90.io.user.UserConverterImpl;
+import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.user.PasswordUtil;
 
 import java.io.IOException;
@@ -44,11 +47,19 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 		checkParams();
 
 		User principal = UserDbAdapter.getInstance().findByUsername(authorizationUsername);
-		checkUserExists(principal);
+		if (!checkUserExists(principal)) {
+			return;
+		}
 
 		if (!getPasswordUtil().isValid(authorizationPassword)) {
 			context.abortWith(responseUnauthorized());
 		}
+
+		context.setSecurityContext(new SecurityContext(getPrincipalAsModel(principal)));
+	}
+
+	private UserModel getPrincipalAsModel(User principal) {
+		return new UserConverterImpl().createFrom(principal);
 	}
 
 	private void checkParams() {
@@ -57,11 +68,13 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 		}
 	}
 
-	private void checkUserExists(User principal) {
+	private boolean checkUserExists(User principal) {
 		if (principal == null) {
 			context.abortWith(responseUnauthorized());
+			return false;
 		}
 		createPasswordUtil(principal);
+		return true;
 	}
 
 	private void createPasswordUtil(User user) {

@@ -24,6 +24,10 @@ public class UserService extends BaseServiceImpl<UserModel> {
 
     @Override
     public UserModel getSingleResultById(String id) {
+        if (UserModel.ANONYMOUS_USER_ID.equals(id)) {
+            return null;
+        }
+
         resolveId(id);
 
         if (!correctId()) {

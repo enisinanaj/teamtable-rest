@@ -1,55 +1,38 @@
 package org.sagittarius90.api.security;
 
+import org.sagittarius90.model.UserModel;
+
 public class SecurityContext implements javax.ws.rs.core.SecurityContext {
 	
 	String authenticationScheme;
 	private java.security.Principal principal;
 	
 	public class Principal implements java.security.Principal {
-		private String username;
-		private String password;
-		private String token;
+		UserModel user;
 
 		public Principal() {
 		}
 
-		public Principal(String username, String password) {
-			this.username = username;
-			this.password = password;
+		public Principal(UserModel user) {
+			this.user = user;
 		}
 
 		@Override
 		public String getName() {
-			return username;
+			return user.getUsername();
 		}
 
-		public String getUsername() {
-			return username;
+		public UserModel getUser() {
+			return user;
 		}
 
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
-		public String getToken() {
-			return token;
-		}
-
-		public void setToken(String token) {
-			this.token = token;
+		public void setUser(UserModel user) {
+			this.user = user;
 		}
 	}
 
-	public SecurityContext(String token) {
-		getPrincipalInstance().setToken(token);
+	public SecurityContext(UserModel user) {
+		getPrincipalInstance().setUser(user);
 	}
 
 	@Override

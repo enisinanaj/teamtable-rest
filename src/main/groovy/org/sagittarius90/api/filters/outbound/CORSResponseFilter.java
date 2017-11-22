@@ -19,7 +19,11 @@ public class CORSResponseFilter
         headers.add("Access-Control-Allow-Origin", "*");
         //headers.add("Access-Control-Allow-Origin", "http://localhost");
         headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-        headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, X-Codingpedia, token, apikey");
+        // headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, " +
+        //        "token, apikey, principal, principal-token");
+        headers.add("Access-Control-Allow-Headers", requestContext.getHeaders().getFirst("Access-Control-Request-Headers"));
+
+        System.out.println(headers.toString());
     }
 
 }
