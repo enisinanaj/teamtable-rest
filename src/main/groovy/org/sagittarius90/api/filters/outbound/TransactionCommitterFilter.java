@@ -16,6 +16,10 @@ public class TransactionCommitterFilter implements ContainerResponseFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
-        //PersistenceHelper.commit();
+        try {
+            PersistenceHelper.commit();
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

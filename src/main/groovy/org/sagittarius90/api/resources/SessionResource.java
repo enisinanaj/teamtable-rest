@@ -3,8 +3,8 @@ package org.sagittarius90.api.resources;
 import org.sagittarius90.api.filters.utils.AuthenticationRequired;
 import org.sagittarius90.api.filters.utils.AuthorizationRequired;
 
-import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 
@@ -15,7 +15,7 @@ import javax.ws.rs.core.SecurityContext;
 @AuthorizationRequired
 public class SessionResource {
 
-    @Inject
+    @Context
     SecurityContext security;
 
     @POST

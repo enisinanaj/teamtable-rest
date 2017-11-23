@@ -8,10 +8,6 @@ public class BaseDbAdapter {
         return PersistenceHelper.getEm();
     }
 
-    public void commit() {
-        PersistenceHelper.commit();
-    }
-
     public void commit(Object entity) {
         PersistenceHelper.commit(entity);
     }

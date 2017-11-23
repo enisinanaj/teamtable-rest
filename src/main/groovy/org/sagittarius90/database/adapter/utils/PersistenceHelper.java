@@ -30,11 +30,9 @@ public class PersistenceHelper {
         System.out.println("Entity " + entity.getClass().getName() + "isManaged: " + getEm().contains(entity));
 
         getEm().refresh(entity);
-        persistence.get().commit();
     }
 
     public static void commit() {
-        getEm().flush();
         persistence.get().commit();
     }
 }

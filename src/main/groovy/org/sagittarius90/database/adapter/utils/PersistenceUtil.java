@@ -43,6 +43,7 @@ public class PersistenceUtil {
         logger.info("Killing entityManagerFactory");
 
         if (entityManagerFactory != null) {
+            entityManager.close();
             entityManagerFactory.close();
             entityManagerFactory = null;
         }
@@ -53,6 +54,7 @@ public class PersistenceUtil {
     }
 
     public void commit() {
+        entityManager.flush();
         txn.commit();
         kill();
     }
