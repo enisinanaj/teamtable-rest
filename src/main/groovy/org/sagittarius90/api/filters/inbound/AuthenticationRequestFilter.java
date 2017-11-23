@@ -12,6 +12,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 @AuthenticationRequired
 @Provider
@@ -53,6 +55,11 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 	}
 
 	private boolean authenticate(String apiKey, String token) {
+
+		if (isDevMode()) {
+			return true;
+		}
+
 		if (!checkParameters(apiKey, token)) {
 			return false;
 		}
@@ -126,5 +133,26 @@ public class AuthenticationRequestFilter implements ContainerRequestFilter {
 		}
 
 		return clientInfo.getSecretKey();
+	}
+
+	private boolean isDevMode() {
+		InputStream confProperties = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream("/org/sagittarius90/rest/config.properties");
+
+		Properties props = new Properties();
+
+		try {
+			props.load(confProperties);
+			System.out.println("Property file read");
+
+			if (props.getProperty("debug").equals("true")) {
+				return true;
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+
+		return false;
 	}
 }

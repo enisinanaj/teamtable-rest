@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
 import java.util.List;
 
 @Path("/events")
@@ -54,8 +56,9 @@ public class EventResource {
     @POST
     @Path("/")
     public Response createEvent(EventModel event) {
-        if (eventCreated(event)) {
-            return Response.created(null).build();
+        EventModel eventModel = eventCreated(event);
+        if (eventModel != null) {
+            return Response.created(URI.create(eventModel.gethRef())).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
@@ -65,7 +68,7 @@ public class EventResource {
         return getEventService().update(id, event);
     }
 
-    private boolean eventCreated(EventModel event) {
+    private EventModel eventCreated(EventModel event) {
         return getEventService().create(event);
     }
 

@@ -22,8 +22,15 @@ public class PersistenceHelper {
     }
 
     public static void commit(Object entity) {
-        getEm().merge(entity);
-        commit();
+        getEm().persist(entity);
+        System.out.println("Entity " + entity.getClass().getName() + "isManaged: " + getEm().contains(entity));
+        getEm().flush();
+
+        System.out.println("Entity being committed: " + entity.getClass().getName());
+        System.out.println("Entity " + entity.getClass().getName() + "isManaged: " + getEm().contains(entity));
+
+        getEm().refresh(entity);
+        persistence.get().commit();
     }
 
     public static void commit() {

@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.net.URI;
 import java.util.List;
 
 @Path("/users")
@@ -55,14 +56,15 @@ public class UserResource {
     @POST
     @Path("/")
     public Response createUser(UserModel user) {
-        if (userCreated(user)) {
-            return Response.created(null).build();
+        UserModel userModel = userCreated(user);
+        if (userModel != null) {
+            return Response.created(URI.create(userModel.gethRef())).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    private boolean userCreated(UserModel user) {
+    private UserModel userCreated(UserModel user) {
         return getUserService().create(user);
     }
 

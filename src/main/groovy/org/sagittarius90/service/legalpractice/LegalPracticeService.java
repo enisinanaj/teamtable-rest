@@ -52,16 +52,16 @@ public class LegalPracticeService extends BaseServiceImpl<LegalPracticeModel> {
     }
 
     @Override
-    public boolean create(LegalPracticeModel fromModel) {
+    public LegalPracticeModel create(LegalPracticeModel fromModel) {
         LegalPractice legalPractice = getLegalPracticeConverter().createFrom(fromModel);
 
         try {
             LegalPracticeDbAdapter.getInstance().createNewLegalPractice(legalPractice);
         } catch (Exception e) {
-            return false;
+            throw e;
         }
 
-        return true;
+        return getLegalPracticeConverter().createFrom(legalPractice);
     }
 
     @Override

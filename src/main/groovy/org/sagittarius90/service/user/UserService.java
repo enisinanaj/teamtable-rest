@@ -39,16 +39,16 @@ public class UserService extends BaseServiceImpl<UserModel> {
     }
 
     @Override
-    public boolean create(UserModel fromModel) {
+    public UserModel create(UserModel fromModel) {
         User user = getUserConverter().createFrom(fromModel);
 
         try {
             UserDbAdapter.getInstance().createNewUser(user);
         } catch (Exception e) {
-            return false;
+            return null;
         }
 
-        return true;
+        return getUserConverter().createFrom(user);
     }
 
     @Override

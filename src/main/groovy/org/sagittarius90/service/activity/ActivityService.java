@@ -52,16 +52,16 @@ public class ActivityService extends BaseServiceImpl<ActivityModel> {
     }
 
     @Override
-    public boolean create(ActivityModel fromModel) {
+    public ActivityModel create(ActivityModel fromModel) {
         Activity activity = getActivityConverter().createFrom(fromModel);
 
         try {
             ActivityDbAdapter.getInstance().createNewActivity(activity);
         } catch (Exception e) {
-            return false;
+            return null;
         }
 
-        return true;
+        return getActivityConverter().createFrom(activity);
     }
 
     @Override

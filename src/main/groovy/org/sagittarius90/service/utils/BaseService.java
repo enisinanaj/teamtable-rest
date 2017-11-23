@@ -8,7 +8,7 @@ public interface BaseService<T> {
 
     T getSingleResultById(String id);
 
-    boolean create(T fromModel);
+    T create(T fromModel);
 
     boolean update(String id, T fromModel);
 

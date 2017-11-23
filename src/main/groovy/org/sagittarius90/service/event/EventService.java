@@ -52,16 +52,16 @@ public class EventService extends BaseServiceImpl<EventModel> {
     }
 
     @Override
-    public boolean create(EventModel fromModel) {
+    public EventModel create(EventModel fromModel) {
         Event event = getEventConverter().createFrom(fromModel);
 
         try {
             EventDbAdapter.getInstance().createNewEvent(event);
         } catch (Exception e) {
-            return false;
+            return null;
         }
 
-        return true;
+        return getEventConverter().createFrom(event);
     }
 
     @Override

@@ -48,8 +48,12 @@ public class PersistenceUtil {
         }
     }
 
+    public void kill() {
+        killEntityManagerFactory();
+    }
+
     public void commit() {
         txn.commit();
-        killEntityManagerFactory();
+        kill();
     }
 }

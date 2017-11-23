@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 @Path("/activities")
@@ -62,14 +63,15 @@ public class ActivityResource {
     @POST
     @Path("/")
     public Response createActivity(ActivityModel activity) {
-        if (activityCreated(activity)) {
-            return Response.created(null).build();
+        ActivityModel activityModel = activityCreated(activity);
+        if (activityModel != null) {
+            return Response.created(URI.create(activityModel.gethRef())).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    private boolean activityCreated(ActivityModel activity) {
+    private ActivityModel activityCreated(ActivityModel activity) {
         return getActivityService().create(activity);
     }
 

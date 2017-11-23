@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 @Path("/teams")
@@ -84,14 +85,15 @@ public class TeamResource {
     @POST
     @Path("/")
     public Response createTeam(TeamModel team) {
-        if (teamCreated(team)) {
-            return Response.created(null).build();
+        TeamModel teamModel = teamCreated(team);
+        if (teamModel != null) {
+            return Response.created(URI.create(teamModel.gethRef())).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
-    private boolean teamCreated(TeamModel team) {
+    private TeamModel teamCreated(TeamModel team) {
         return getTeamService().create(team);
     }
 

@@ -8,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +23,9 @@ import java.util.List;
 public class LegalPracticeResource {
 
     private static Logger logger = LoggerFactory.getLogger(LegalPracticeResource.class);
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     @Path("/{legalPracticeId}")
@@ -61,8 +67,10 @@ public class LegalPracticeResource {
     @POST
     @Path("/")
     public Response createLegalPractice(LegalPracticeModel legalPractice) {
-        if (legalPracticeCreated(legalPractice)) {
-            return Response.created(null).build();
+        LegalPracticeModel result = legalPracticeCreated(legalPractice);
+
+        if (result != null) {
+            return Response.created(URI.create(result.gethRef())).build();
         }
 
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
@@ -72,7 +80,7 @@ public class LegalPracticeResource {
         return getLegalPracticeService().update(id, legalPractice);
     }
 
-    private boolean legalPracticeCreated(LegalPracticeModel legalPractice) {
+    private LegalPracticeModel legalPracticeCreated(LegalPracticeModel legalPractice) {
         return getLegalPracticeService().create(legalPractice);
     }
 

@@ -30,16 +30,16 @@ public class TeamService extends BaseServiceImpl<TeamModel> {
     }
 
     @Override
-    public boolean create(TeamModel fromModel) {
+    public TeamModel create(TeamModel fromModel) {
         Team team = getTeamConverter().createFrom(fromModel);
 
         try {
             TeamDbAdapter.getInstance().createNewTeam(team);
         } catch (Exception e) {
-            return false;
+            return null;
         }
 
-        return true;
+        return getTeamConverter().createFrom(team);
     }
 
     @Override
