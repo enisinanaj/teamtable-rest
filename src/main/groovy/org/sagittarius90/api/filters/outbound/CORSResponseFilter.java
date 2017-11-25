@@ -22,6 +22,7 @@ public class CORSResponseFilter
         // headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type, " +
         //        "token, apikey, principal, principal-token");
         headers.add("Access-Control-Allow-Headers", requestContext.getHeaders().getFirst("Access-Control-Request-Headers"));
+        headers.add("Access-Control-Expose-Headers", "Location");
 
         System.out.println(headers.toString());
     }
