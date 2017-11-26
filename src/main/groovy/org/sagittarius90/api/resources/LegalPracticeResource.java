@@ -58,6 +58,7 @@ public class LegalPracticeResource {
     @Path("/{legalPracticeId}")
     public Response updateLegalPractice(@PathParam("legalPracticeId") String legalPracticeId, LegalPracticeModel legalPractice) {
         if (legalPracticeUpdated(legalPracticeId, legalPractice)) {
+            //TODO: return location
             return Response.ok().build();
         }
 

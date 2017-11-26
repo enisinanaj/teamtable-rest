@@ -78,9 +78,11 @@ dependencies {
 
 	// database
     compile 'javax.el:el-api:2.2'
-    compile 'mysql:mysql-connector-java:5.1.6'
+    compile 'mysql:mysql-connector-java:5.1.18'
 	compile 'org.hibernate:hibernate-core:5.2.11.Final'
-    compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
+	compile group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.2.11.Final'
+
+	compile 'org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final'
 	compile 'org.hibernate:hibernate-entitymanager:5.2.11.Final'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
