@@ -1,6 +1,7 @@
 package org.sagittarius90.api;
 
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.Priorities;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;

@@ -28,6 +28,9 @@ public class PersistenceUtil {
 
         logger.info("Creating a new entityManagerFactory");
         entityManagerFactory = Persistence.createEntityManagerFactory("teamtable");
+    }
+
+    public void beginTransaction() {
         entityManager = entityManagerFactory.createEntityManager();
         txn = entityManager.getTransaction();
         txn.begin();
@@ -43,19 +46,16 @@ public class PersistenceUtil {
         logger.info("Killing entityManagerFactory");
 
         if (entityManagerFactory != null) {
-            entityManager.close();
             entityManagerFactory.close();
             entityManagerFactory = null;
         }
     }
 
-    public void kill() {
-        killEntityManagerFactory();
+    public void commitTransaction() {
+        txn.commit();
     }
 
     public void commit() {
-        entityManager.flush();
-        txn.commit();
-        kill();
+        killEntityManagerFactory();
     }
 }

@@ -15,6 +15,6 @@ public class TransactionInitializerFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        PersistenceHelper.init();
+        PersistenceHelper.beginTransaction();
     }
 }
