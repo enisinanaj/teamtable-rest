@@ -5,7 +5,7 @@ import javax.persistence.EntityManager;
 public class BaseDbAdapter {
 
     protected EntityManager getEm() {
-        return PersistenceHelper.getEm();
+        return PersistenceUtil.getEntityManager();
     }
 
     public void commit(Object entity) {

@@ -4,26 +4,8 @@ import javax.persistence.EntityManager;
 
 public class PersistenceHelper {
 
-    private static PersistenceUtil persistence;
-
-    public static void init() {
-        final PersistenceUtil persistenceUtilInstance = new PersistenceUtil();
-        persistenceUtilInstance.begin();
-        persistence = persistenceUtilInstance;
-        /*new ThreadLocal<PersistenceUtil>(){
-            @Override
-            protected PersistenceUtil initialValue() {
-                return persistenceUtilInstance;
-            }
-        };*/
-    }
-
-    public static void beginTransaction() {
-        persistence.beginTransaction();
-    }
-
     public static EntityManager getEm() {
-        return persistence.getEntityManager();
+        return PersistenceUtil.getEntityManager();
     }
 
     public static void commit(Object entity) {
@@ -37,11 +19,4 @@ public class PersistenceHelper {
         getEm().refresh(entity);
     }
 
-    public static void commit() {
-        persistence.commit();
-    }
-
-    public static void commitTransaction() {
-        persistence.commitTransaction();
-    }
 }

@@ -2,7 +2,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
-             version="2.1">
+    version="2.1">
 
     <persistence-unit name="teamtable" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -21,15 +21,15 @@
             <property name="hibernate.id.new_generator_mappings" value="false" />
 
             <!-- Important -->
-            <!--property name="hibernate.connection.provider_class"
+            <property name="hibernate.connection.provider_class"
                       value="org.hibernate.connection.C3P0ConnectionProvider" />
 
-            <property name="hibernate.c3p0.max_size" value="20" />
+            <property name="hibernate.c3p0.max_size" value="200" />
             <property name="hibernate.c3p0.min_size" value="5" />
             <property name="hibernate.c3p0.acquire_increment" value="1" />
             <property name="hibernate.c3p0.idle_test_period" value="3000" />
             <property name="hibernate.c3p0.max_statements" value="50" />
-            <property name="hibernate.c3p0.timeout" value="300" / -->
+            <property name="hibernate.c3p0.timeout" value="300" />
         </properties>
     </persistence-unit>
 

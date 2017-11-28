@@ -1,6 +1,6 @@
 package org.sagittarius90.api.filters.outbound;
 
-import org.sagittarius90.database.adapter.utils.PersistenceHelper;
+import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -17,9 +17,14 @@ public class TransactionCommitterFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) throws IOException {
         try {
-            PersistenceHelper.commitTransaction();
+            PersistenceUtil.commitTransaction();
         } catch(Exception e) {
-            System.out.println(e.getMessage());
+            if ( PersistenceUtil.getEntityManager() != null
+                    && PersistenceUtil.getEntityManager().isOpen())
+                PersistenceUtil.rollback();
+            throw e;
+        } finally {
+            PersistenceUtil.closeEntityManager();
         }
     }
 }

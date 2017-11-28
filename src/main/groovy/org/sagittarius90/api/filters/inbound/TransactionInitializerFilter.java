@@ -1,6 +1,6 @@
 package org.sagittarius90.api.filters.inbound;
 
-import org.sagittarius90.database.adapter.utils.PersistenceHelper;
+import org.sagittarius90.database.adapter.utils.PersistenceUtil;
 
 import javax.annotation.Priority;
 import javax.ws.rs.Priorities;
@@ -15,6 +15,6 @@ public class TransactionInitializerFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        PersistenceHelper.beginTransaction();
+        PersistenceUtil.beginTransaction();
     }
 }
