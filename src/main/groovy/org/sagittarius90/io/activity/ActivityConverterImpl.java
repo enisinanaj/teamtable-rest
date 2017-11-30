@@ -29,7 +29,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         Activity entity = new Activity();
 
         entity.setActivityType(model.getActivityType());
-        entity.setArchived(model.getArchived());
+        entity.setArchived(model.getArchived() ? 1 : 0);
 
         if (model.getAssigneeId() != null) {
             User user = getUserDbAdapter().getUserById(extractAssigneeId(model));
@@ -67,7 +67,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
 
         model.sethRef(getModelUri(activityId));
         model.setActivityType(entity.getActivityType());
-        model.setArchived(entity.getArchived());
+        model.setArchived(entity.isArchived());
 
         if (entity.getAssignee() != null) {
             model.setAssignee(getUserConverter().createFrom(entity.getAssignee()));
@@ -79,10 +79,23 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setEvent(getEventConverter().createFrom(entity.getEvent()));
         model.setExpirationDate(entity.getExpirationDate());
-        model.setStatus(entity.getStatus());
+
+        setModelStatus(model, entity);
         model.setName(entity.getName());
 
         return model;
+    }
+
+    private void setModelStatus(ActivityModel model, Activity entity) {
+        String status = "OPEN";
+
+        if (entity.getExpirationDate().before(new Date())) {
+            status = "EXPIRED";
+        } else if (entity.getArchived().equals(1)) {
+            status = "ARCHIVED";
+        }
+
+        model.setStatus(status);
     }
 
     @Override
@@ -94,12 +107,17 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         }
 
         new ClassUtils<String>().setIfNotNull(model::getActivityType, entity::setActivityType);
-        new ClassUtils<String>().setIfNotNull(model::getArchived, entity::setArchived);
         new ClassUtils<Date>().setIfNotNull(model::getCompletionDate, entity::setCompletionDate);
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<Date>().setIfNotNull(model::getExpirationDate, entity::setExpirationDate);
         new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
         new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
+
+        if (model.getArchived()) {
+            entity.setArchived(1);
+        } else {
+            entity.setArchived(0);
+        }
 
         return entity;
     }

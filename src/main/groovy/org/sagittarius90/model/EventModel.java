@@ -14,6 +14,7 @@ public class EventModel extends AbstractModel {
     private Date eventDate;
     private String description;
     private Date creationDate;
+    private boolean archived;
 
 
     public String getId() {
@@ -78,5 +79,13 @@ public class EventModel extends AbstractModel {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }

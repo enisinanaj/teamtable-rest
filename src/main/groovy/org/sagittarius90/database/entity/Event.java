@@ -43,6 +43,9 @@ public class Event implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
+    @Column(name="archived")
+    private Integer archived;
+
     public Integer getId() {
         return id;
     }
@@ -105,5 +108,17 @@ public class Event implements Serializable {
         }
 
         return null;
+    }
+
+    public Integer getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Integer archived) {
+        this.archived = archived;
+    }
+
+    public boolean isArchived() {
+        return archived.equals(1);
     }
 }

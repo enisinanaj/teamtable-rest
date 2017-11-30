@@ -9,6 +9,7 @@ public class LegalPracticeModel extends AbstractModel {
     private String creatorId;
     private String name;
     private String description;
+    private boolean archived;
 
     public String getId() {
         return id;
@@ -48,5 +49,13 @@ public class LegalPracticeModel extends AbstractModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 }

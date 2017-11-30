@@ -49,10 +49,6 @@ public class Activity implements Serializable {
     @Column(name="status")
     private String status;
 
-    //TODO: archived if ActivityStatus.ARCHIVED
-    @Transient
-    private transient String archived;
-
     @Column(name="completion_date")
     @Temporal(value=TemporalType.TIMESTAMP)
     private Date completionDate;
@@ -63,6 +59,9 @@ public class Activity implements Serializable {
 
     @Column(name="name")
     private String name;
+
+    @Column(name="archived")
+    private Integer archived;
 
     public Integer getId() {
         return id;
@@ -122,14 +121,6 @@ public class Activity implements Serializable {
         this.status = status;
     }
 
-    public String getArchived() {
-        return archived;
-    }
-
-    public void setArchived(String archived) {
-        this.archived = archived;
-    }
-
     public Date getExpirationDate() {
         return expirationDate;
     }
@@ -160,5 +151,17 @@ public class Activity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setArchived(Integer archived) {
+        this.archived = archived;
+    }
+
+    public Integer getArchived() {
+        return archived;
+    }
+
+    public boolean isArchived() {
+        return archived.equals(1);
     }
 }

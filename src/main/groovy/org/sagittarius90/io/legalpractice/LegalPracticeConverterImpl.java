@@ -32,6 +32,7 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         legalPractice.setDescription(model.getDescription());
         legalPractice.setName(model.getName());
         legalPractice.setCreator(user);
+        legalPractice.setArchived(model.isArchived() ? 1 : 0);
 
         return legalPractice;
     }
@@ -45,6 +46,8 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setDescription(entity.getDescription());
         model.setName(entity.getName());
+
+        model.setArchived(entity.isArchived());
 
         return model;
     }

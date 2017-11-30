@@ -41,6 +41,9 @@ public class LegalPractice implements Serializable {
     @Column(name="name")
     private String name;
 
+    @Column(name="archived")
+    private Integer archived;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +82,17 @@ public class LegalPractice implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getArchived() {
+        return archived;
+    }
+
+    public void setArchived(Integer archived) {
+        this.archived = archived;
+    }
+
+    public boolean isArchived() {
+        return archived.equals(1);
     }
 }

@@ -40,6 +40,7 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         event.setDescription(model.getDescription());
         event.setPractice(legalPractice);
         event.setCreator(user);
+        event.setArchived(model.isArchived() ? 1 : 0);
 
         return event;
     }
@@ -55,6 +56,8 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         model.setDescription(entity.getDescription());
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setPractice(getLegalPracticeConverter().createFrom(entity.getPractice()));
+
+        model.setArchived(entity.isArchived());
 
         return model;
     }

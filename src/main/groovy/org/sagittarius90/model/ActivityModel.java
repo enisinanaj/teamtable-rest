@@ -20,8 +20,8 @@ public class ActivityModel extends AbstractModel {
     private Date completionDate;
     private Date creationDate;
     private String name;
+    private boolean archived;
 
-    private String archived;
 
     public String getId() {
         return id;
@@ -103,12 +103,14 @@ public class ActivityModel extends AbstractModel {
         this.creationDate = creationDate;
     }
 
-    public String getArchived() {
+    public boolean getArchived() {
         return archived;
     }
 
-    public void setArchived(String archived) {
-        this.archived = archived;
+    public void setArchived(Boolean archived) {
+        if (archived != null) {
+            this.archived = archived;
+        }
     }
 
     public String getCreatorId() {
