@@ -49,9 +49,10 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         Event event = getEventDbAdapter().getEventById(extractEventId(model));
         entity.setEvent(event);
 
+        System.out.println("Completeion date in model: " + model.getCompletionDate());
+
         entity.setDescription(model.getDescription());
         entity.setCreationDate(model.getCreationDate());
-        entity.setCompletionDate(model.getCompletionDate());
         entity.setExpirationDate(model.getExpirationDate());
         entity.setStatus(model.getStatus());
         entity.setName(model.getName());
@@ -91,8 +92,14 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
 
         if (entity.getExpirationDate().before(new Date())) {
             status = "EXPIRED";
-        } else if (entity.getArchived().equals(1)) {
+        }
+
+        if (entity.getArchived().equals(1)) {
             status = "ARCHIVED";
+        }
+
+        if (entity.getCompletionDate() != null) {
+            status = "COMPLETED";
         }
 
         model.setStatus(status);

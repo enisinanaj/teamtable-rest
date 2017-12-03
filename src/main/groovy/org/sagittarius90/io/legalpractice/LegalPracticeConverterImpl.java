@@ -63,7 +63,11 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
 
-        entity.setArchived(model.isArchived() ? 1 : 0);
+        if (model.isArchived()) {
+            entity.setArchived(1);
+        } else {
+            entity.setArchived(0);
+        }
 
         return entity;
     }
