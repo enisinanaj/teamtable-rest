@@ -72,6 +72,8 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         new ClassUtils<Date>().setIfNotNull(model::getEventDate, entity::setEventDate);
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
 
+        entity.setArchived(model.isArchived() ? 1 : 0);
+
         return entity;
     }
 

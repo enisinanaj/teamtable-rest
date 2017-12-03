@@ -29,7 +29,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         Activity entity = new Activity();
 
         entity.setActivityType(model.getActivityType());
-        entity.setArchived(model.getArchived() ? 1 : 0);
+        entity.setArchived(model.isArchived() ? 1 : 0);
 
         if (model.getAssigneeId() != null) {
             User user = getUserDbAdapter().getUserById(extractAssigneeId(model));
@@ -113,7 +113,7 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
         new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
 
-        if (model.getArchived()) {
+        if (model.isArchived()) {
             entity.setArchived(1);
         } else {
             entity.setArchived(0);

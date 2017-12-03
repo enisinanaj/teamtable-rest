@@ -103,14 +103,12 @@ public class ActivityModel extends AbstractModel {
         this.creationDate = creationDate;
     }
 
-    public boolean getArchived() {
+    public boolean isArchived() {
         return archived;
     }
 
-    public void setArchived(Boolean archived) {
-        if (archived != null) {
-            this.archived = archived;
-        }
+    public void setArchived(boolean archived) {
+        this.archived = archived;
     }
 
     public String getCreatorId() {
