@@ -100,7 +100,7 @@ public class ActivityConverterImplUT {
         
         given(entityMocked.getId()).willReturn(ANY_ID);
         given(entityMocked.getActivityType()).willReturn("ANY_ACTIVITY_TYPE");
-        given(entityMocked.getArchived()).willReturn("ANY_ARCHIVED_STATUS");
+        given(entityMocked.getArchived()).willReturn(0);
 
         given(entityMocked.getAssignee()).willReturn(userEntityMocked);
         given(entityMocked.getDescription()).willReturn("ANY_DESCRIPTION");
@@ -119,7 +119,7 @@ public class ActivityConverterImplUT {
 
         given(modelMocked.getId()).willReturn(ANY_ID_STRING);
         given(modelMocked.getActivityType()).willReturn("ANY_ACTIVITY_TYPE");
-        given(modelMocked.getArchived()).willReturn("ANY_ARCHIVED_STATUS");
+        given(modelMocked.isArchived()).willReturn(false);
 
         given(modelMocked.getAssignee()).willReturn(userModelMocked);
         given(modelMocked.getDescription()).willReturn("ANY_DESCRIPTION");
@@ -144,7 +144,7 @@ public class ActivityConverterImplUT {
         //TODO (not sure about this)
         //then(eventConverterMocked).should(times(1)).createFrom(eventEntityMocked);
         assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
-        assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
+        assert !result.isArchived();
         assert result.getDescription().equals("ANY_DESCRIPTION");
     }
 
@@ -157,7 +157,7 @@ public class ActivityConverterImplUT {
         then(userDbAdapterMocked).should(times(1)).getUserById(0);
         then(eventDbAdapterMocked).should(times(1)).getEventById(0);
         assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
-        assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
+        assert result.getArchived().equals(0);
         assert result.getDescription().equals("ANY_DESCRIPTION");
     }
 
@@ -171,7 +171,7 @@ public class ActivityConverterImplUT {
 
         //then
         assert result.getActivityType().equals("ANY_ACTIVITY_TYPE");
-        assert result.getArchived().equals("ANY_ARCHIVED_STATUS");
+        assert result.getArchived().equals(0);
         assert result.getDescription().equals("ANY_DESCRIPTION");
         assert entity == result;
     }
