@@ -1,14 +1,23 @@
 package org.sagittarius90.model;
 
+/**
+ *
+ rosso: 0-24 ore
+ arancione: 25-72 ore
+ verde: 73 ore
+ */
+
 public enum Urgency {
-    RED("red", 7), YELLOW("yellow", 15), GREEN("green", 30);
+    RED("red", -1, 1), YELLOW("yellow", RED.daysOut, 3), GREEN("green", YELLOW.daysOut, null);
 
+    private Integer daysIn;
     private String code;
-    private Integer days;
+    private Integer daysOut;
 
-    Urgency(String code, Integer days) {
+    Urgency(String code, Integer daysIn, Integer days) {
         this.code = code;
-        this.days = days;
+        this.daysIn = daysIn;
+        this.daysOut = days;
     }
 
     public static Urgency urgencyByCode(String code) {
@@ -25,7 +34,10 @@ public enum Urgency {
         return code;
     }
 
-    public Integer getDays() {
-        return days;
+    public Integer getDaysOut() {
+        return daysOut;
+    }
+    public Integer getDaysIn() {
+        return daysIn;
     }
 }

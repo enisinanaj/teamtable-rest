@@ -1,13 +1,17 @@
 package org.sagittarius90.api;
 
 import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.Priorities;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.ext.ContextResolver;
 
 import org.glassfish.jersey.message.filtering.SelectableEntityFilteringFeature;
+import org.glassfish.jersey.moxy.json.MoxyJsonConfig;
+import org.glassfish.jersey.moxy.json.MoxyJsonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ApplicationPath("/api")
 public class ApplicationConfig extends ResourceConfig {
@@ -18,19 +22,20 @@ public class ApplicationConfig extends ResourceConfig {
 	private static ApplicationConfig instance;
     
 	public ApplicationConfig() {
+		//registerFeatures();
         registerModels();
 		registerFilters();
 		registerResourcesPackage();
-		//registerFeatures();
 
 		instance = this;
     }
 
 	private void registerFeatures() {
-		register(SelectableEntityFilteringFeature.class);
-		property(SelectableEntityFilteringFeature.QUERY_PARAM_NAME, "select");
+		//register(SelectableEntityFilteringFeature.class);
+		//property(SelectableEntityFilteringFeature.QUERY_PARAM_NAME, "select");
 
 		//register(JacksonFeature.class);
+		//register(ObjectMapperProvider.class);
 		//register(MoxyJsonFeature.class);
 		//register(JsonMoxyConfigurationContextResolver.class);
 		//register(new MoxyJsonConfig().setFormattedOutput(true).resolver());

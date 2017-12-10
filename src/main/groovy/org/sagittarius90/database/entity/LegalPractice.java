@@ -11,18 +11,30 @@ import java.util.List;
     @NamedQuery(name = LegalPractice.FILTERED_LEGAL_PRACTICES,
             query = "select l from LegalPractice l left join l.events e left join e.activities act " +
                     "where upper(l.name) like :name " +
-                    "and (act.expirationDate between :dateFrom and :dateTo or :dateFrom is null) " +
-                    "and (NOW() - ("+
-                            "select MIN(innerAct.expirationDate) " +
+                    "and (DATEDIFF((select MIN(innerAct.expirationDate) " +
                             "from Activity innerAct join innerAct.event innerE join innerE.practice innerP " +
-                            "where innerP.id = l.id) " +
-                        "<= :withinDays or :withinDays is null ) " +
+                            "where innerP.id = l.id), NOW()) " +
+                        "between :withinDaysIn and :withinDaysOut or :withinDaysIn is null ) " +
+                    "group by l"),
+    @NamedQuery(name = LegalPractice.GREEN_LEGAL_PRACTICES,
+            query = "select l from LegalPractice l left join l.events e left join e.activities act " +
+                    "where (DATEDIFF((select MIN(innerAct.expirationDate) " +
+                        "from Activity innerAct join innerAct.event innerE join innerE.practice innerP " +
+                        "where innerP.id = l.id), NOW()) " +
+                    " > :withinDaysIn or :withinDaysIn is null) " +
+                    "group by l"),
+    @NamedQuery(name = LegalPractice.DATE_FILTERED_LEGAL_PRACTICES,
+            query = "select l from LegalPractice l left join l.events e left join e.activities act " +
+                    "where act.expirationDate " +
+                    "> :dateFrom and act.expirationDate < :dateTo " +
                     "group by l")
 })
 public class LegalPractice implements Serializable {
 
     public static final String ALL_LEGAL_PRACTICES = "LegalPractice.allLegalPractices";
     public static final String FILTERED_LEGAL_PRACTICES = "LegalPractice.filteredLegalPractices";
+    public static final String GREEN_LEGAL_PRACTICES = "LegalPractice.greenLegalPractices";
+    public static final String DATE_FILTERED_LEGAL_PRACTICES = "LegalPractice.dateFilteredLegalPractices";
 
     @Id @Column(name="practice_id")
     @GeneratedValue

@@ -36,24 +36,41 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
 
     public List<LegalPractice> getFilteredLegalPractices(LegalPracticeFilter filter) {
         this.filter = filter;
+        Query namedQuery;
 
-        Query namedQuery = getEm().createNamedQuery(LegalPractice.FILTERED_LEGAL_PRACTICES)
-                .setParameter("name", filter.getName().toUpperCase() + "%")
-                .setParameter("dateFrom", filter.getDateFrom())
-                .setParameter("dateTo", filter.getDateTo());
+        if (filter.getDateFrom() != null && filter.getDateTo() != null) {
+            namedQuery = getEm().createNamedQuery(LegalPractice.DATE_FILTERED_LEGAL_PRACTICES)
+                    .setParameter("dateFrom", filter.getDateFrom())
+                    .setParameter("dateTo", filter.getDateTo());
+        } else if(filter.getUrgency() != null && filter.getUrgency().getCode().equalsIgnoreCase("green")) {
+            namedQuery = getEm().createNamedQuery(LegalPractice.GREEN_LEGAL_PRACTICES)
+                    .setParameter("withinDaysIn", filter.getUrgency().getDaysIn());
+        } else {
+            namedQuery = getEm().createNamedQuery(LegalPractice.FILTERED_LEGAL_PRACTICES)
+                .setParameter("name", getNameFromFilter() + "%");
 
-        addUrgencyFilterToQuery(namedQuery);
+            addUrgencyFilterToQuery(namedQuery);
+        }
 
         return (List<LegalPractice>) namedQuery.getResultList();
     }
 
-    private void addUrgencyFilterToQuery(Query namedQuery) {
-        if (urgencyIsSet()) {
-            namedQuery.setParameter("withinDays", this.filter.getUrgency().getDays());
-        } else {
-            namedQuery.setParameter("withinDays", null);
+    private String getNameFromFilter() {
+        if (filter.getName() == null) {
+            return "";
         }
 
+        return filter.getName().toUpperCase();
+    }
+
+    private void addUrgencyFilterToQuery(Query namedQuery) {
+        if (urgencyIsSet() && this.filter.getUrgency().getDaysOut() != null) {
+            namedQuery.setParameter("withinDaysIn", this.filter.getUrgency().getDaysIn());
+            namedQuery.setParameter("withinDaysOut", this.filter.getUrgency().getDaysOut());
+        } else {
+            namedQuery.setParameter("withinDaysIn", null);
+            namedQuery.setParameter("withinDaysOut", null);
+        }
     }
 
     private boolean urgencyIsSet() {

@@ -1,6 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.io.utils.DateUtil;
 import org.sagittarius90.model.LegalPracticeModel;
 import org.sagittarius90.service.legalpractice.LegalPracticeFilter;
 import org.sagittarius90.service.legalpractice.LegalPracticeService;
@@ -13,7 +14,6 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.util.Date;
 import java.util.List;
 
 @Path("/legalPractices")
@@ -37,14 +37,14 @@ public class LegalPracticeResource {
     @GET
     @Path("/")
     public Response getLegalPractices(@QueryParam(value="name") String name,
-                                      @QueryParam(value="dateFrom") Date dateFrom,
-                                      @QueryParam(value="dateTo") Date dateTo,
+                                      @QueryParam(value="dateFrom") String dateFrom,
+                                      @QueryParam(value="dateTo") String dateTo,
                                       @QueryParam(value="urgencyCode") String urgencyCode) {
 
         LegalPracticeFilter filter = new LegalPracticeFilter.LegalPracticeFilterBuilder()
                 .name(name)
-                .dateFrom(dateFrom)
-                .dateTo(dateTo)
+                .dateFrom(DateUtil.parseDate(dateFrom))
+                .dateTo(DateUtil.parseDate(dateTo))
                 .urgency(urgencyCode)
                 .build();
 
@@ -58,7 +58,6 @@ public class LegalPracticeResource {
     @Path("/{legalPracticeId}")
     public Response updateLegalPractice(@PathParam("legalPracticeId") String legalPracticeId, LegalPracticeModel legalPractice) {
         if (legalPracticeUpdated(legalPracticeId, legalPractice)) {
-            //TODO: return location
             return Response.ok().build();
         }
 
@@ -86,7 +85,6 @@ public class LegalPracticeResource {
     }
 
     public LegalPracticeService getLegalPracticeService() {
-        logger.info("Getting LegalPracticeService");
         return new LegalPracticeService();
     }
 }

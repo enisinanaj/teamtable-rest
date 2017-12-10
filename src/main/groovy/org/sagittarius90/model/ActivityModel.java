@@ -2,7 +2,6 @@ package org.sagittarius90.model;
 
 import org.sagittarius90.model.utils.AbstractModel;
 
-import javax.persistence.*;
 import java.util.Date;
 
 public class ActivityModel extends AbstractModel {
