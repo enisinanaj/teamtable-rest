@@ -13,19 +13,19 @@ import java.util.List;
                     "where upper(l.name) like :name " +
                     "and (DATEDIFF((select MIN(innerAct.expirationDate) " +
                             "from Activity innerAct join innerAct.event innerE join innerE.practice innerP " +
-                            "where innerP.id = l.id), NOW()) " +
+                            "where innerP.id = l.id  and innerAct.archived = 0 and innerE.archived = 0), NOW()) " +
                         "between :withinDaysIn and :withinDaysOut or :withinDaysIn is null ) " +
                     "group by l"),
     @NamedQuery(name = LegalPractice.GREEN_LEGAL_PRACTICES,
             query = "select l from LegalPractice l left join l.events e left join e.activities act " +
                     "where (DATEDIFF((select MIN(innerAct.expirationDate) " +
                         "from Activity innerAct join innerAct.event innerE join innerE.practice innerP " +
-                        "where innerP.id = l.id), NOW()) " +
+                        "where innerP.id = l.id and innerAct.archived = 0 and innerE.archived = 0), NOW()) " +
                     " > :withinDaysIn or :withinDaysIn is null) " +
                     "group by l"),
     @NamedQuery(name = LegalPractice.DATE_FILTERED_LEGAL_PRACTICES,
             query = "select l from LegalPractice l left join l.events e left join e.activities act " +
-                    "where act.expirationDate " +
+                    "where act.archived = 0 and e.archived = 0 and act.expirationDate " +
                     "> :dateFrom and act.expirationDate < :dateTo " +
                     "group by l")
 })
