@@ -114,11 +114,12 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
         }
 
         new ClassUtils<String>().setIfNotNull(model::getActivityType, entity::setActivityType);
-        new ClassUtils<Date>().setIfNotNull(model::getCompletionDate, entity::setCompletionDate);
         new ClassUtils<String>().setIfNotNull(model::getDescription, entity::setDescription);
         new ClassUtils<Date>().setIfNotNull(model::getExpirationDate, entity::setExpirationDate);
         new ClassUtils<String>().setIfNotNull(model::getStatus, entity::setStatus);
         new ClassUtils<String>().setIfNotNull(model::getName, entity::setName);
+
+        entity.setCompletionDate(model.getCompletionDate());
 
         if (model.isArchived()) {
             entity.setArchived(1);
