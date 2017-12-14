@@ -1,6 +1,6 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.io.utils.DateUtil;
 import org.sagittarius90.model.LegalPracticeModel;
 import org.sagittarius90.service.legalpractice.LegalPracticeFilter;

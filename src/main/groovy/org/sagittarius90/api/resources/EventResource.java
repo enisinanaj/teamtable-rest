@@ -1,6 +1,6 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.model.EventModel;
 import org.sagittarius90.service.event.EventFilter;
 import org.sagittarius90.service.event.EventService;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.util.List;
 

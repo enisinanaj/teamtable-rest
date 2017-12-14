@@ -1,6 +1,6 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.user.UserService;
 import org.slf4j.Logger;

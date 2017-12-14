@@ -2,7 +2,7 @@ package org.sagittarius90.api.filters.inbound;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.database.adapter.ClientDbAdapter;
 import org.sagittarius90.database.entity.Client;
 

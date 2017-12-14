@@ -1,8 +1,8 @@
 package org.sagittarius90.api.filters.inbound;
 
 import org.apache.commons.lang3.StringUtils;
-import org.sagittarius90.api.filters.utils.AuthorizationRequired;
-import org.sagittarius90.api.security.SecurityContext;
+import org.sagittarius90.api.filters.security.AuthorizationRequired;
+import org.sagittarius90.api.filters.security.SecurityContext;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;

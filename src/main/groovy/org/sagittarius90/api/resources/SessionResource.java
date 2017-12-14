@@ -1,7 +1,7 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
-import org.sagittarius90.api.filters.utils.AuthorizationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthorizationRequired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -21,7 +21,7 @@ public class SessionResource {
     @POST
     @Path("/")
     public Response getNewSession() {
-        org.sagittarius90.api.security.SecurityContext.Principal principal = (org.sagittarius90.api.security.SecurityContext.Principal) security.getUserPrincipal();
+        org.sagittarius90.api.filters.security.SecurityContext.Principal principal = (org.sagittarius90.api.filters.security.SecurityContext.Principal) security.getUserPrincipal();
         return Response.ok().entity(principal.getUser()).build();
     }
 }

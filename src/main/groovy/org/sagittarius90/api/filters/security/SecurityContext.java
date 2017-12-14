@@ -1,4 +1,4 @@
-package org.sagittarius90.api.security;
+package org.sagittarius90.api.filters.security;
 
 import org.sagittarius90.model.UserModel;
 

@@ -1,6 +1,6 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.model.ActivityModel;
 import org.sagittarius90.service.activity.ActivityFilter;
 import org.sagittarius90.service.activity.ActivityService;

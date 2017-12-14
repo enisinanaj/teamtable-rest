@@ -45,7 +45,13 @@ public class PersistenceUtil {
         getEntityManager().getTransaction().rollback();
     }
 
+    public static void setRrollbackOnly() {
+        getEntityManager().getTransaction().setRollbackOnly();
+    }
+
     public static void commitTransaction() {
-        getEntityManager().getTransaction().commit();
+        if (!getEntityManager().getTransaction().getRollbackOnly()) {
+            getEntityManager().getTransaction().commit();
+        }
     }
 }

@@ -15,6 +15,11 @@ public class TransactionInitializerFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        PersistenceUtil.beginTransaction();
+        try {
+            PersistenceUtil.beginTransaction();
+        } catch(Exception e) {
+            PersistenceUtil.rollback();
+            PersistenceUtil.closeEntityManager();
+        }
     }
 }

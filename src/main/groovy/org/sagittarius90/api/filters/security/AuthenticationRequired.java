@@ -1,4 +1,4 @@
-package org.sagittarius90.api.filters.utils;
+package org.sagittarius90.api.filters.security;
 
 import javax.ws.rs.NameBinding;
 import java.lang.annotation.ElementType;

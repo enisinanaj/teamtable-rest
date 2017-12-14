@@ -1,6 +1,6 @@
 package org.sagittarius90.api.resources;
 
-import org.sagittarius90.api.filters.utils.AuthenticationRequired;
+import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.database.adapter.TeamDbAdapter;
 import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.io.team.TeamConverterImpl;
