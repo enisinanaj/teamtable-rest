@@ -3,7 +3,9 @@ package org.sagittarius90.api.filters.inbound;
 import org.apache.commons.lang3.StringUtils;
 import org.sagittarius90.api.filters.security.AuthorizationRequired;
 import org.sagittarius90.api.filters.security.SecurityContext;
+import org.sagittarius90.database.adapter.SessionDbAdapter;
 import org.sagittarius90.database.adapter.UserDbAdapter;
+import org.sagittarius90.database.entity.Session;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.model.UserModel;
@@ -47,15 +49,23 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 		checkParams();
 
 		User principal = UserDbAdapter.getInstance().findByUsername(authorizationUsername);
+
 		if (!checkUserExists(principal)) {
 			return;
 		}
 
 		if (!getPasswordUtil().isValid(authorizationPassword)) {
 			context.abortWith(responseUnauthorized());
+		} else {
+			openSession(principal);
 		}
 
 		context.setSecurityContext(new SecurityContext(getPrincipalAsModel(principal)));
+	}
+
+	private void openSession(User principal) {
+		Session session = SessionDbAdapter.getInstance().createNewSession();
+		principal.setSession(session);
 	}
 
 	private UserModel getPrincipalAsModel(User principal) {

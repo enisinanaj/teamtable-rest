@@ -41,7 +41,7 @@ public class PasswordUtil {
 
     private void checkIfUserExists() {
         if (this.user == null) {
-            throw new RuntimeException("No user base given for password util!");
+            throw new RuntimeException("No session base given for password util!");
         }
     }
 

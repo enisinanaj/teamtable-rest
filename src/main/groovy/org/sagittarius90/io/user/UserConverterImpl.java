@@ -5,6 +5,7 @@ import org.sagittarius90.api.resources.UserResource;
 import org.sagittarius90.database.adapter.TeamDbAdapter;
 import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.database.entity.User;
+import org.sagittarius90.io.session.SessionConverterImpl;
 import org.sagittarius90.io.team.TeamConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.IdUtils;
@@ -19,6 +20,7 @@ import java.util.List;
 public class UserConverterImpl extends BaseConverter implements UserConverter {
 
     private static TeamConverterImpl teamConverter;
+    private static SessionConverterImpl sessionConverter;
 
     @Override
     public User createFrom(final UserModel model) {
@@ -27,7 +29,7 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
         user.setPassword(model.getPassword());
 
         if (model.getTeamId() == null) {
-            //TODO: Use custom exceptions and converters to return them in a user-friendly manner from the API requests
+            //TODO: Use custom exceptions and converters to return them in a session-friendly manner from the API requests
             throw new RuntimeException("Team Identifier is required for new Users.");
         }
 
@@ -52,6 +54,8 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
         model.setTeam(getTeamConverter().createFrom(entity.getTeam()));
         model.setLastAccess(entity.getLastAccess());
         model.setUsername(entity.getUsername());
+
+        model.setSession(getSessionConverter().createFrom(entity.getSession()));
 
         return model;
     }
@@ -80,6 +84,14 @@ public class UserConverterImpl extends BaseConverter implements UserConverter {
         }
 
         return teamConverter;
+    }
+
+    private static SessionConverterImpl getSessionConverter() {
+        if (sessionConverter == null) {
+            sessionConverter = new SessionConverterImpl();
+        }
+
+        return sessionConverter;
     }
 
     public TeamDbAdapter getTeamDbAdapter() {

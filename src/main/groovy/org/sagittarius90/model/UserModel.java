@@ -16,6 +16,8 @@ public class UserModel extends AbstractModel {
     private String teamId;
     private boolean anonymous;
 
+    private SessionModel session;
+
     public String getId() {
         return id;
     }
@@ -78,5 +80,13 @@ public class UserModel extends AbstractModel {
 
     public void setAnonymous(boolean anonymous) {
         this.anonymous = anonymous;
+    }
+
+    public SessionModel getSession() {
+        return session;
+    }
+
+    public void setSession(SessionModel session) {
+        this.session = session;
     }
 }

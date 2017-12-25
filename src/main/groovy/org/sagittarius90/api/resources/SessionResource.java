@@ -21,7 +21,9 @@ public class SessionResource {
     @POST
     @Path("/")
     public Response getNewSession() {
-        org.sagittarius90.api.filters.security.SecurityContext.Principal principal = (org.sagittarius90.api.filters.security.SecurityContext.Principal) security.getUserPrincipal();
+        org.sagittarius90.api.filters.security.SecurityContext.Principal principal
+                = (org.sagittarius90.api.filters.security.SecurityContext.Principal) security.getUserPrincipal();
+
         return Response.ok().entity(principal.getUser()).build();
     }
 }
