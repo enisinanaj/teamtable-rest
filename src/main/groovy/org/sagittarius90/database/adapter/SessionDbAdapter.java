@@ -2,6 +2,7 @@ package org.sagittarius90.database.adapter;
 
 import org.sagittarius90.database.adapter.utils.BaseDbAdapter;
 import org.sagittarius90.database.entity.Session;
+import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.session.SessionConverterImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,9 @@ public class SessionDbAdapter extends BaseDbAdapter {
         return dbAdapterInstance;
     }
 
-    public Session createNewSession() {
+    public Session createNewSession(User principal) {
         Session session = new Session();
+        session.setUser(principal);
         session.setSessionKey(SessionConverterImpl.generateSessionKey());
         session.setSessionId(null);
         commit(session);
@@ -31,4 +33,8 @@ public class SessionDbAdapter extends BaseDbAdapter {
         return session;
     }
 
+    public Session getBySessionId(String sessionId) {
+        return (Session) getEm().createNamedQuery(Session.GET_BY_SESSION_ID)
+                .setParameter("sessionId", sessionId).getSingleResult();
+    }
 }

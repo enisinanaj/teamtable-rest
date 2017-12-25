@@ -64,7 +64,7 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 	}
 
 	private void openSession(User principal) {
-		Session session = SessionDbAdapter.getInstance().createNewSession();
+		Session session = SessionDbAdapter.getInstance().createNewSession(principal);
 		principal.setSession(session);
 	}
 
