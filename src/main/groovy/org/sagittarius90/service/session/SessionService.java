@@ -21,14 +21,20 @@ public class SessionService extends BaseServiceImpl<SessionModel> {
     }
 
     @Override
-    public SessionModel getSingleResultById(String sessionId) {
+    public SessionModel getSingleResultById(String id) {
+        return null;
+    }
+
+    public UserModel getUserSession(String sessionId) {
         Session session = SessionDbAdapter.getInstance().getBySessionId(sessionId);
 
         if (session == null) {
             return null;
         }
 
-        return getSessionConverter().createFrom(session);
+        session.getLoggedInUser().setSession(session);
+
+        return getUserConverter().createFrom(session.getLoggedInUser());
     }
 
     @Override
@@ -41,7 +47,7 @@ public class SessionService extends BaseServiceImpl<SessionModel> {
         return false;
     }
 
-    private SessionConverterImpl getSessionConverter() {
-        return new SessionConverterImpl();
+    private UserConverterImpl getUserConverter() {
+        return new UserConverterImpl();
     }
 }

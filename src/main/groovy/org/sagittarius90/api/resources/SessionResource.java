@@ -3,6 +3,7 @@ package org.sagittarius90.api.resources;
 import org.sagittarius90.api.filters.security.AuthenticationRequired;
 import org.sagittarius90.api.filters.security.AuthorizationRequired;
 import org.sagittarius90.model.SessionModel;
+import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.session.SessionService;
 
 import javax.ws.rs.*;
@@ -30,14 +31,16 @@ public class SessionResource {
     }
 
     @GET
+    @Path("/")
     public Response getSessionBySessionId(@HeaderParam("sessionId") String sessionId) {
-        SessionModel session = getSessionService().getSingleResultById(sessionId);
+        UserModel userModel = getSessionService().getUserSession(sessionId);
 
-        if (session == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+        if (userModel== null) {
+            userModel = new UserModel();
+            userModel.setAnonymous(true);
         }
 
-        return Response.ok().entity(session).build();
+        return Response.ok().entity(userModel).build();
     }
 
     private SessionService getSessionService() {

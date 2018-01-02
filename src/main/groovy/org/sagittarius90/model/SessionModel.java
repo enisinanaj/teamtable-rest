@@ -10,6 +10,7 @@ public class SessionModel extends AbstractModel {
     private String host;
     private Date dateIn;
     private Date dateOut;
+    private UserModel loggedInUser;
 
     public String getSessionKey() {
         return sessionKey;
@@ -41,5 +42,13 @@ public class SessionModel extends AbstractModel {
 
     public void setDateOut(Date dateOut) {
         this.dateOut = dateOut;
+    }
+
+    public UserModel getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public void setLoggedInUser(UserModel loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 }

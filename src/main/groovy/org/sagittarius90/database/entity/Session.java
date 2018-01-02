@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name="session")
 @NamedQuery(name=Session.GET_BY_SESSION_ID,
-            query="from Session s where s.sessionId = :sessionId")
+            query="from Session s where s.sessionKey = :sessionId")
 public class Session implements Serializable {
 
     public static final String GET_BY_SESSION_ID = "getSessionBySessionId";
@@ -26,15 +26,17 @@ public class Session implements Serializable {
     private String host;
 
     @Column(name="date_in")
+    @Temporal(value=TemporalType.TIMESTAMP)
     private Date dateIn;
 
     @Column(name="date_out")
+    @Temporal(value=TemporalType.TIMESTAMP)
     private Date dateOut;
 
     @OneToOne(fetch= FetchType.EAGER)
-    @JoinColumn(name="session", referencedColumnName="user_id")
+    @JoinColumn(name="user", referencedColumnName="user_id")
     @NotFound(action= NotFoundAction.IGNORE)
-    private User user;
+    private User loggedInUser;
 
     public Integer getSessionId() {
         return sessionId;
@@ -76,11 +78,11 @@ public class Session implements Serializable {
         this.dateOut = dateOut;
     }
 
-    public User getUser() {
-        return user;
+    public User getLoggedInUser() {
+        return loggedInUser;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 }

@@ -7,12 +7,16 @@ import org.sagittarius90.database.adapter.SessionDbAdapter;
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.Session;
 import org.sagittarius90.database.entity.User;
+import org.sagittarius90.io.session.SessionConverter;
+import org.sagittarius90.io.session.SessionConverterImpl;
 import org.sagittarius90.io.user.UserConverterImpl;
+import org.sagittarius90.model.SessionModel;
 import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.user.PasswordUtil;
 
 import java.io.IOException;
 
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.MediaType;
@@ -32,11 +36,20 @@ public class AuthorizationRequestFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		this.context = requestContext;
 
+		if (!methodForAuthentication()) {
+			return;
+		}
+
 		getAuthorizationUsername();
 		getAuthorizationPassword();
 
 		authenticateUser();
 	}
+
+	private boolean methodForAuthentication() {
+		return context.getMethod().equals(HttpMethod.POST);
+	}
+
 	private void getAuthorizationPassword() {
 		this.authorizationPassword = context.getHeaders().getFirst("principal-token");
 	}

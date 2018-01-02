@@ -6,6 +6,8 @@ import org.sagittarius90.database.entity.Session;
 import org.sagittarius90.database.entity.Team;
 import org.sagittarius90.database.entity.User;
 import org.sagittarius90.io.team.TeamConverterImpl;
+import org.sagittarius90.io.user.UserConverter;
+import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.SessionModel;
@@ -16,8 +18,11 @@ import javax.ws.rs.core.UriBuilder;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Base64;
 
 public class SessionConverterImpl extends BaseConverter implements SessionConverter {
+
+    private UserConverterImpl userConverter;
 
     @Override
     public Session createFrom(final SessionModel model) {
@@ -33,6 +38,10 @@ public class SessionConverterImpl extends BaseConverter implements SessionConver
 
     @Override
     public SessionModel createFrom(final Session entity) {
+        if (entity == null) {
+            return null;
+        }
+
         SessionModel model = new SessionModel();
 
         model.setDateIn(entity.getDateIn());
@@ -40,6 +49,7 @@ public class SessionConverterImpl extends BaseConverter implements SessionConver
         model.setHost(entity.getHost());
         model.setSessionKey(entity.getSessionKey());
 
+        entity.getLoggedInUser().setSession(entity);
         return model;
     }
 
@@ -64,6 +74,14 @@ public class SessionConverterImpl extends BaseConverter implements SessionConver
         return entity;
     }
 
+    private UserConverterImpl getUserConverter() {
+        if (userConverter == null) {
+            userConverter = new UserConverterImpl();
+        }
+
+        return userConverter;
+    }
+
     protected UriBuilder getResourcePath() {
         return getUriInfo().getBaseUriBuilder().path(UserResource.class).path("/");
     }
@@ -79,6 +97,6 @@ public class SessionConverterImpl extends BaseConverter implements SessionConver
         keyGenerator.init(128, new SecureRandom());
         Key key = keyGenerator.generateKey();
 
-        return key.getEncoded().toString();
+        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 }

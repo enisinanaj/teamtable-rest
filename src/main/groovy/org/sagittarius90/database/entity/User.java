@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name="session")
+@Table(name="user")
 @NamedQueries({
         @NamedQuery(name = User.ALL_USERS, query = "from User"),
         @NamedQuery(name = User.GET_BY_USERNAME, query = "from User u where u.username = :username")
@@ -39,8 +39,7 @@ public class User implements Serializable {
 
     @Transient
     private Session session;
-
-
+    
     public Integer getId() {
         return id;
     }
