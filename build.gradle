@@ -106,6 +106,16 @@ deploygf.doFirst {
     println "Copying to autodeploy dir"
 }
 
+task deploygfwindows(type: Copy) {
+    from "${buildDir}/libs/teamtable.war"
+    into "c:/tools/glassfish5/glassfish/domains/domain1/autodeploy/"
+}
+
+deploygfwindows.dependsOn war
+deploygfwindows.doFirst {
+    println "Copying to autodeploy dir"
+}
+
 defaultTasks "deploygf"
 
 tasks.withType(Test) {

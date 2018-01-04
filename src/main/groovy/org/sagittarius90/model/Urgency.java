@@ -8,7 +8,7 @@ package org.sagittarius90.model;
  */
 
 public enum Urgency {
-    RED("red", -1, 1), YELLOW("yellow", RED.daysOut, 3), GREEN("green", YELLOW.daysOut, null);
+    RED("red", -100, 1), YELLOW("yellow", RED.daysOut, 3), GREEN("green", YELLOW.daysOut, null);
 
     private Integer daysIn;
     private String code;

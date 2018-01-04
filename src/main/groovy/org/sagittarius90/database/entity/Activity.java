@@ -12,12 +12,30 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name = Activity.ALL_ACTIVITIES, query = "from Activity"),
         @NamedQuery(name = Activity.ALL_ACTIVITIES_FROM_EVENT,
-                query = "from Activity a where a.event.id = :eventId")
+                query = "from Activity a where a.event.id = :eventId"),
+        @NamedQuery(name = Activity.GREEN_ACTIVITIES,
+                query = "select a from Activity a join a.event e join e.practice l " +
+                        " where (a.archived = 0 and e.archived = 0 and l.archived = 0) " +
+                        " and (DATEDIFF(a.expirationDate, NOW()) > 3) " +
+                        " and a.completionDate is null"),
+        @NamedQuery(name = Activity.YELLOW_ACTIVITIES,
+                query = "select a from Activity a join a.event e join e.practice l " +
+                        " where (a.archived = 0 and e.archived = 0 and l.archived = 0) " +
+                        " and (DATEDIFF(a.expirationDate, NOW()) > 0 and DATEDIFF(a.expirationDate, NOW()) < 4) " +
+                        " and a.completionDate is null"),
+        @NamedQuery(name = Activity.RED_ACTIVITIES,
+                query = "select a from Activity a join a.event e join e.practice l " +
+                        " where (a.archived = 0 and e.archived = 0 and l.archived = 0) " +
+                        " and (DATEDIFF(a.expirationDate, NOW()) <= 0) " +
+                        " and a.completionDate is null")
 })
 public class Activity implements Serializable {
 
     public static final String ALL_ACTIVITIES = "Activity.allActivities";
     public static final String ALL_ACTIVITIES_FROM_EVENT = "Activity.activitiesFromEvent";
+    public static final String GREEN_ACTIVITIES = "Activity.greenActivities";
+    public static final String YELLOW_ACTIVITIES = "Activity.yellowActivities";
+    public static final String RED_ACTIVITIES = "Activity.redActivities";
 
     @Id @Column(name="activity_id")
     @GeneratedValue

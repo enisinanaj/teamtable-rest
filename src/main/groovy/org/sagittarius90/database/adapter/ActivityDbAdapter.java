@@ -48,11 +48,23 @@ public class ActivityDbAdapter extends BaseDbAdapter {
 
     public List<Activity> getFilteredActivity(ActivityFilter filter) {
         this.filter = filter;
+        Query namedQuery;
 
-        long idDecoded = IdUtils.getInstance().decodeId(filter.getEventId());
-        Query namedQuery = getEm().createNamedQuery(Activity.ALL_ACTIVITIES_FROM_EVENT)
-                .setParameter("eventId", (int) idDecoded);
-
+        if (filter.getEventId() != null) {
+            long idDecoded = IdUtils.getInstance().decodeId(filter.getEventId());
+            namedQuery = getEm().createNamedQuery(Activity.ALL_ACTIVITIES_FROM_EVENT)
+                    .setParameter("eventId", (int) idDecoded);
+        }  else if(filter.getUrgency() != null && filter.getUrgency().getCode().equalsIgnoreCase("green")) {
+            namedQuery = getEm().createNamedQuery(Activity.GREEN_ACTIVITIES);
+        }  else if(filter.getUrgency() != null && filter.getUrgency().getCode().equalsIgnoreCase("yellow")) {
+            namedQuery = getEm().createNamedQuery(Activity.YELLOW_ACTIVITIES);
+        } else {
+            namedQuery = getEm().createNamedQuery(Activity.RED_ACTIVITIES);
+        }
         return (List<Activity>) namedQuery.getResultList();
+    }
+
+    private boolean urgencyIsSet() {
+        return this.filter.getUrgency() != null;
     }
 }

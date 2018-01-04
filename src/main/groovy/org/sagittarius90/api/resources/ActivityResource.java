@@ -32,10 +32,12 @@ public class ActivityResource {
 
     @GET
     @Path("/")
-    public Response getActivities(@QueryParam(value="event") String eventId) {
+    public Response getActivities(@QueryParam(value="event") String eventId,
+                                  @QueryParam(value="urgencyCode") String urgencyCode) {
 
         ActivityFilter filter = new ActivityFilter.ActivityFilterBuilder()
                 .EventId(eventId)
+                .urgency(urgencyCode)
                 .build();
 
         List<ActivityModel> activities = getActivityService().getCollection(filter);

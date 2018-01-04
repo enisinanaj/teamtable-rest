@@ -18,19 +18,19 @@ public class ActivityService extends BaseServiceImpl<ActivityModel> {
         this.filter = (ActivityFilter) filter;
 
         if (isFilterSet()) {
-            return doSearchByEventId();
+            return doFilteredResearch();
         }
 
         return getCollection();
     }
 
-    private List<ActivityModel> getCollection() {
-        List<Activity> activities = ActivityDbAdapter.getInstance().getAllActivities();
+    private List<ActivityModel> doFilteredResearch() {
+        List<Activity> activities = ActivityDbAdapter.getInstance().getFilteredActivity(this.filter);
         return getActivityConverter().createFromEntities(activities);
     }
 
-    private List<ActivityModel> doSearchByEventId() {
-        List<Activity> activities = ActivityDbAdapter.getInstance().getFilteredActivity(this.filter);
+    private List<ActivityModel> getCollection() {
+        List<Activity> activities = ActivityDbAdapter.getInstance().getAllActivities();
         return getActivityConverter().createFromEntities(activities);
     }
 
