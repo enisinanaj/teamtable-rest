@@ -62,6 +62,23 @@ public class TeamService extends BaseServiceImpl<TeamModel> {
         return true;
     }
 
+    @Override
+    public boolean delete(String id) {
+        resolveId(id);
+
+        if (!correctId()) {
+            throw new RuntimeException("not correct Id");
+        }
+
+        try {
+            //TeamDbAdapter.getInstance().deleteTeamById((int)realId);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     public TeamConverterImpl getTeamConverter() {
         return new TeamConverterImpl();
     }

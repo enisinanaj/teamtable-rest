@@ -47,6 +47,11 @@ public class SessionService extends BaseServiceImpl<SessionModel> {
         return false;
     }
 
+    @Override
+    public boolean delete(String id) {
+        return false;
+    }
+
     private UserConverterImpl getUserConverter() {
         return new UserConverterImpl();
     }

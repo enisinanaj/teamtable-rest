@@ -76,6 +76,20 @@ public class LegalPracticeResource {
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
+    @DELETE
+    @Path("/{legalPracticeId}")
+    public Response deleteLegalPractice(@PathParam("legalPracticeId") String legalPracticeId) {
+        if (modelDeleted(legalPracticeId)) {
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    private boolean modelDeleted(String legalPracticeId) {
+        return getLegalPracticeService().delete(legalPracticeId);
+    }
+
     private boolean legalPracticeUpdated(String id, LegalPracticeModel legalPractice) {
         return getLegalPracticeService().update(id, legalPractice);
     }

@@ -71,6 +71,23 @@ public class UserService extends BaseServiceImpl<UserModel> {
         return true;
     }
 
+    @Override
+    public boolean delete(String id) {
+        resolveId(id);
+
+        if (!correctId()) {
+            throw new RuntimeException("not correct Id");
+        }
+
+        try {
+            //UserDbAdapter.getInstance().deleteUserById((int)realId);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     private UserConverterImpl getUserConverter() {
         return new UserConverterImpl();
     }

@@ -84,6 +84,23 @@ public class LegalPracticeService extends BaseServiceImpl<LegalPracticeModel> {
         return true;
     }
 
+    @Override
+    public boolean delete(String id) {
+        resolveId(id);
+
+        if (!correctId()) {
+            throw new RuntimeException("not correct Id");
+        }
+
+        try {
+            LegalPracticeDbAdapter.getInstance().deleteLegalPracticeById((int)realId);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     public LegalPracticeConverterImpl getLegalPracticeConverter() {
         return new LegalPracticeConverterImpl();
     }

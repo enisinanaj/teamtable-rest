@@ -67,4 +67,9 @@ public class ActivityDbAdapter extends BaseDbAdapter {
     private boolean urgencyIsSet() {
         return this.filter.getUrgency() != null;
     }
+
+    public void deleteActivityById(Integer activityRealId) {
+        Activity activity = getEm().find(Activity.class, activityRealId);
+        getEm().remove(activity);
+    }
 }

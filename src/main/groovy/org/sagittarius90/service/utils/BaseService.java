@@ -12,4 +12,6 @@ public interface BaseService<T> {
 
     boolean update(String id, T fromModel);
 
+    boolean delete(String id);
+
 }

@@ -63,6 +63,20 @@ public class EventResource {
         return Response.status(Response.Status.EXPECTATION_FAILED).build();
     }
 
+    @DELETE
+    @Path("/{eventId}")
+    public Response deleteEvent(@PathParam("eventId") String eventId) {
+        if (modelDeleted(eventId)) {
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    private boolean modelDeleted(String eventId) {
+        return getEventService().delete(eventId);
+    }
+
     private boolean eventUpdated(String id, EventModel event) {
         return getEventService().update(id, event);
     }

@@ -59,7 +59,7 @@ public class ActivityResource {
     }
 
     private boolean modelUpdated(ActivityModel activity) {
-        return new ActivityService().update(activityId, activity);
+        return getActivityService().update(activityId, activity);
     }
 
     @POST
@@ -75,6 +75,20 @@ public class ActivityResource {
 
     private ActivityModel activityCreated(ActivityModel activity) {
         return getActivityService().create(activity);
+    }
+
+    @DELETE
+    @Path("/{activityId}")
+    public Response deleteActivity(@PathParam("activityId") String activityId) {
+        if (modelDeleted(activityId)) {
+            return Response.ok().build();
+        }
+
+        return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    private boolean modelDeleted(String activityId) {
+        return getActivityService().delete(activityId);
     }
 
     public ActivityService getActivityService() {

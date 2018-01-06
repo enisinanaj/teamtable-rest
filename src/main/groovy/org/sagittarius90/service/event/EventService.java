@@ -84,6 +84,23 @@ public class EventService extends BaseServiceImpl<EventModel> {
         return true;
     }
 
+    @Override
+    public boolean delete(String id) {
+        resolveId(id);
+
+        if (!correctId()) {
+            throw new RuntimeException("not correct Id");
+        }
+
+        try {
+            EventDbAdapter.getInstance().deleteEventById((int)realId);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
+
     public EventConverterImpl getEventConverter() {
         return new EventConverterImpl();
     }

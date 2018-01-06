@@ -85,4 +85,9 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         legalPractice.setId(null);
         commit(legalPractice);
     }
+
+    public void deleteLegalPracticeById(Integer legalPracticeRealId) {
+        LegalPractice legalPractice = getEm().find(LegalPractice.class, legalPracticeRealId);
+        getEm().remove(legalPractice);
+    }
 }

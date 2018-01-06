@@ -53,4 +53,9 @@ public class EventDbAdapter extends BaseDbAdapter {
         event.setId(null);
         commit(event);
     }
+
+    public void deleteEventById(Integer eventRealId) {
+        Event event = getEm().find(Event.class, eventRealId);
+        getEm().remove(event);
+    }
 }
