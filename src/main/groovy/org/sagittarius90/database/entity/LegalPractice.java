@@ -27,6 +27,14 @@ import java.util.List;
             query = "select l from LegalPractice l left join l.events e left join e.activities act " +
                     "where act.archived = 0 and e.archived = 0 and act.expirationDate " +
                     "> :dateFrom and act.expirationDate < :dateTo " +
+                    "group by l"),
+    @NamedQuery(name = LegalPractice.PRACTICES_WITH_URGENCY_CODE,
+            query = "select l, (" +
+                        "select min(a.completionDate) from activity a join a.event e join e.practice p" +
+                        "where p.id = l.id) " +
+                    "from LegalPractice l left join l.events e left join e.activities act " +
+                    "where act.archived = 0 and e.archived = 0 and act.expirationDate " +
+                    "> :dateFrom and act.expirationDate < :dateTo " +
                     "group by l")
 })
 public class LegalPractice implements Serializable {
@@ -35,6 +43,7 @@ public class LegalPractice implements Serializable {
     public static final String FILTERED_LEGAL_PRACTICES = "LegalPractice.filteredLegalPractices";
     public static final String GREEN_LEGAL_PRACTICES = "LegalPractice.greenLegalPractices";
     public static final String DATE_FILTERED_LEGAL_PRACTICES = "LegalPractice.dateFilteredLegalPractices";
+    public static final String PRACTICES_WITH_URGENCY_CODE = "LegalPractice.practicesWithUrgencyCode";
 
     @Id @Column(name="practice_id")
     @GeneratedValue
