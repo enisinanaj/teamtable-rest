@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.persistence.Query;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LegalPracticeDbAdapter extends BaseDbAdapter {
@@ -37,7 +38,9 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
         List<LegalPractice> practices = new ArrayList<>();
         
         for (Object[] element : queryResult) {
-            practices.add((LegalPractice) element[0]);
+            LegalPractice temp = (LegalPractice) element[0];
+            temp.setExpirationDate((Date) element[1]);
+            practices.add(temp);
         }
         
         return practices;

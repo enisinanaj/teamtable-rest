@@ -35,8 +35,8 @@ public class LegalPracticeService extends BaseServiceImpl<LegalPracticeModel> {
     }
 
     public List<LegalPracticeModel> getCollection() {
-        List<LegalPractice> activities = LegalPracticeDbAdapter.getInstance().getAllLegalPractices();
-        return getLegalPracticeConverter().createFromEntities(activities);
+        List<LegalPractice> practices = LegalPracticeDbAdapter.getInstance().getAllLegalPractices();
+        return getLegalPracticeConverter().createFromEntities(practices);
     }
 
     @Override

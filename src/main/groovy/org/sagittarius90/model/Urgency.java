@@ -1,5 +1,8 @@
 package org.sagittarius90.model;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  *
  rosso: 0-24 ore
@@ -8,7 +11,7 @@ package org.sagittarius90.model;
  */
 
 public enum Urgency {
-    RED("red", -100, 1), YELLOW("yellow", RED.daysOut, 3), GREEN("green", YELLOW.daysOut, null);
+    RED("red", -10000, 0), YELLOW("yellow", RED.daysOut, 3), GREEN("green", YELLOW.daysOut, null);
 
     private Integer daysIn;
     private String code;
@@ -28,6 +31,39 @@ public enum Urgency {
         }
 
         throw new RuntimeException("Requested Urgency code does not exist");
+    }
+
+    public static Urgency urgencyByDate(Date toCompare) {
+        if(dateIsRed(toCompare)) {
+            return RED;
+        } else if (dateIsYellow(toCompare)) {
+            return YELLOW;
+        } else {
+            return GREEN;
+        }
+    }
+
+    private static boolean dateIsRed(Date date) {
+        Calendar c = Calendar.getInstance();
+
+        if(date.compareTo(c.getTime()) >= 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean dateIsYellow(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, 1);
+        Calendar cOut = Calendar.getInstance();
+        cOut.add(Calendar.DATE, 3);
+
+        if(date.compareTo(c.getTime()) >= 0 && date.compareTo(cOut.getTime()) <= 0) {
+            return true;
+        }
+
+        return false;
     }
 
     public String getCode() {

@@ -2,6 +2,7 @@ package org.sagittarius90.database.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -65,6 +66,9 @@ public class LegalPractice implements Serializable {
     @Column(name="archived")
     private Integer archived;
 
+    @Transient
+    private Date expirationDate;
+
     public Integer getId() {
         return id;
     }
@@ -115,5 +119,13 @@ public class LegalPractice implements Serializable {
 
     public boolean isArchived() {
         return archived.equals(1);
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }
