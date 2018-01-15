@@ -17,6 +17,7 @@ import org.sagittarius90.database.entity.Activity;
 import org.sagittarius90.model.EventModel;
 
 import javax.ws.rs.core.UriBuilder;
+import java.util.Calendar;
 import java.util.Date;
 
 public class ActivityConverterImpl extends BaseConverter implements ActivityConverter {
@@ -90,7 +91,18 @@ public class ActivityConverterImpl extends BaseConverter implements ActivityConv
     private void setModelStatus(ActivityModel model, Activity entity) {
         String status = "OPEN";
 
-        if (entity.getExpirationDate().before(new Date())) {
+        Calendar c = Calendar.getInstance();
+
+        // set the calendar to start of today
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        // and get that as a Date
+        Date today = c.getTime();
+
+        if (entity.getExpirationDate().before(today)) {
             status = "EXPIRED";
         }
 
