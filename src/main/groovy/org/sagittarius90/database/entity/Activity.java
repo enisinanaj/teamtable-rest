@@ -2,6 +2,7 @@ package org.sagittarius90.database.entity;
 
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.sagittarius90.model.Urgency;
 
 import javax.persistence.*;
 import java.io.Serializable;

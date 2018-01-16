@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class LegalPracticeDbAdapter extends BaseDbAdapter {
@@ -31,7 +33,17 @@ public class LegalPracticeDbAdapter extends BaseDbAdapter {
     }
 
     public List<LegalPractice> getAllLegalPractices() {
-        return (List<LegalPractice>) getEm().createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES).getResultList();
+        List<Object[]> queryResult = (List<Object[]>) getEm().createNamedQuery(LegalPractice.PRACTICES_WITH_URGENCY_CODE).getResultList();
+
+        List<LegalPractice> practices = new ArrayList<>();
+        
+        for (Object[] element : queryResult) {
+            LegalPractice temp = (LegalPractice) element[0];
+            temp.setExpirationDate((Date) element[1]);
+            practices.add(temp);
+        }
+        
+        return practices;
     }
 
     public List<LegalPractice> getFilteredLegalPractices(LegalPracticeFilter filter) {

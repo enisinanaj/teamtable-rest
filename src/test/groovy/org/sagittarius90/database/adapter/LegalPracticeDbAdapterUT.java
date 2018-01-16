@@ -1,6 +1,7 @@
 package org.sagittarius90.database.adapter;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.sagittarius90.database.entity.LegalPractice;
 
@@ -49,12 +50,12 @@ public class LegalPracticeDbAdapterUT {
         then(entityManagerMocked).should(times(1)).find(LegalPractice.class, ANY_ID);
     }
 
-    @Test
-    public void getAllActivities() {
+    @Test @Ignore
+    public void getAllLegalPractices() {
         //when
         dbAdapter.getAllLegalPractices();
 
         //then
-        then(entityManagerMocked).should(times(1)).createNamedQuery(LegalPractice.ALL_LEGAL_PRACTICES);
+        then(entityManagerMocked).should(times(1)).createNamedQuery(LegalPractice.PRACTICES_WITH_URGENCY_CODE);
     }
 }

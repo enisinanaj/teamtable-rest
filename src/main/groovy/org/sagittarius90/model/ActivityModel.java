@@ -21,7 +21,6 @@ public class ActivityModel extends AbstractModel {
     private String name;
     private boolean archived;
 
-
     public String getId() {
         return id;
     }

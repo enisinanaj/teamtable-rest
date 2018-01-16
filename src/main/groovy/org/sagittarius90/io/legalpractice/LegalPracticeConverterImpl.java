@@ -10,6 +10,7 @@ import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.ClassUtils;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.LegalPracticeModel;
+import org.sagittarius90.model.Urgency;
 
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
@@ -46,6 +47,12 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         model.setCreator(getUserConverter().createFrom(entity.getCreator()));
         model.setDescription(entity.getDescription());
         model.setName(entity.getName());
+
+        new ClassUtils<Date>().setIfNotNull(entity::getExpirationDate, model::setExpirationDate);
+
+        if (entity.getExpirationDate() != null) {
+            model.setUrgencyCode(Urgency.urgencyByDate(entity.getExpirationDate()).getCode());
+        }
 
         model.setArchived(entity.isArchived());
 
