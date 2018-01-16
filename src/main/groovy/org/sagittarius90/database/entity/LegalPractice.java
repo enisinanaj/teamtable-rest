@@ -31,11 +31,9 @@ import java.util.List;
                     "group by l"),
     @NamedQuery(name = LegalPractice.PRACTICES_WITH_URGENCY_CODE,
             query = "select l, (" +
-                        "select min(a.completionDate) from activity a join a.event e join e.practice p" +
+                        "select min(a.completionDate) from Activity a join a.event e join e.practice p " +
                         "where p.id = l.id) " +
                     "from LegalPractice l left join l.events e left join e.activities act " +
-                    "where act.archived = 0 and e.archived = 0 and act.expirationDate " +
-                    "> :dateFrom and act.expirationDate < :dateTo " +
                     "group by l")
 })
 public class LegalPractice implements Serializable {
