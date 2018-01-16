@@ -31,7 +31,7 @@ import java.util.List;
                     "group by l"),
     @NamedQuery(name = LegalPractice.PRACTICES_WITH_URGENCY_CODE,
             query = "select l, (" +
-                        "select min(a.completionDate) from Activity a join a.event e join e.practice p " +
+                        "select min(a.expirationDate) from Activity a join a.event e join e.practice p " +
                         "where p.id = l.id) " +
                     "from LegalPractice l left join l.events e left join e.activities act " +
                     "group by l")
