@@ -34,9 +34,19 @@ public enum Urgency {
     }
 
     public static Urgency urgencyByDate(Date toCompare) {
-        if(dateIsRed(toCompare)) {
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(toCompare);
+
+        // set the calendar to start of today
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        if(dateIsRed(c.getTime())) {
             return RED;
-        } else if (dateIsYellow(toCompare)) {
+        } else if (dateIsYellow(c.getTime())) {
             return YELLOW;
         } else {
             return GREEN;
@@ -46,7 +56,16 @@ public enum Urgency {
     private static boolean dateIsRed(Date date) {
         Calendar c = Calendar.getInstance();
 
-        if(date.compareTo(c.getTime()) >= 0) {
+        // set the calendar to start of today
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
+        // and get that as a Date
+        Date today = c.getTime();
+
+        if(date.compareTo(today) <= 0) {
             return true;
         }
 
@@ -55,8 +74,22 @@ public enum Urgency {
 
     private static boolean dateIsYellow(Date date) {
         Calendar c = Calendar.getInstance();
+
+        // set the calendar to start of today
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+        c.set(Calendar.MILLISECOND, 0);
+
         c.add(Calendar.DATE, 1);
         Calendar cOut = Calendar.getInstance();
+
+        // set the calendar to start of today
+        cOut.set(Calendar.HOUR_OF_DAY, 0);
+        cOut.set(Calendar.MINUTE, 0);
+        cOut.set(Calendar.SECOND, 0);
+        cOut.set(Calendar.MILLISECOND, 0);
+
         cOut.add(Calendar.DATE, 3);
 
         if(date.compareTo(c.getTime()) >= 0 && date.compareTo(cOut.getTime()) <= 0) {

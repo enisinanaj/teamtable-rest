@@ -32,7 +32,7 @@ import java.util.List;
     @NamedQuery(name = LegalPractice.PRACTICES_WITH_URGENCY_CODE,
             query = "select l, (" +
                         "select min(a.expirationDate) from Activity a join a.event e join e.practice p " +
-                        "where p.id = l.id and a.completionDate is null) " +
+                        "where p.id = l.id and a.completionDate is null and a.archived = 0 and e.archived = 0) " +
                     "from LegalPractice l left join l.events e left join e.activities act " +
                     "group by l")
 })
