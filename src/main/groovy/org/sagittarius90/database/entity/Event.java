@@ -10,12 +10,27 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = Event.ALL_EVENTS, query = "from Event"),
         @NamedQuery(name = Event.ALL_EVENTS_FROM_PRACTICE,
-                query = "from Event e where e.practice.id = :idPractice")
+                query = "from Event e where e.practice.id = :idPractice"),
+        @NamedQuery(name = Event.EVENTS_WITH_URGENCY_CODE,
+                query = "select e, (" +
+                        "select min(a.expirationDate) from Activity a join a.event ev " +
+                        "where ev.id = e.id and a.completionDate is null and a.archived = 0) " +
+                        "from Event e left join e.activities act " +
+                        "group by e"),
+        @NamedQuery(name = Event.EVENTS_WITH_URGENCY_CODE_FROM_PRACTICE,
+                query = "select e, (" +
+                        "select min(a.expirationDate) from Activity a join a.event ev " +
+                        "where ev.id = e.id and a.completionDate is null and a.archived = 0) " +
+                        "from Event e left join e.activities act " +
+                        "where e.practice.id = :idPractice " +
+                        "group by e")
 })
 public class Event implements Serializable {
 
     public static final String ALL_EVENTS = "Event.allEvents";
     public static final String ALL_EVENTS_FROM_PRACTICE = "Event.eventsFromPractice";
+    public static final String EVENTS_WITH_URGENCY_CODE = "Event.eventsWithUrgencyCode";
+    public static final String EVENTS_WITH_URGENCY_CODE_FROM_PRACTICE = "Event.eventsWithUrgencyCodeFromPractice";
 
     @Id @Column(name="event_id")
     @GeneratedValue
@@ -45,6 +60,9 @@ public class Event implements Serializable {
 
     @Column(name="archived")
     private Integer archived;
+
+    @Transient
+    private Date expirationDate;
 
     public Integer getId() {
         return id;
@@ -120,5 +138,13 @@ public class Event implements Serializable {
 
     public boolean isArchived() {
         return archived.equals(1);
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }

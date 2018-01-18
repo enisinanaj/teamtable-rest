@@ -16,6 +16,9 @@ public class EventModel extends AbstractModel {
     private Date creationDate;
     private boolean archived;
 
+    private Date expirationDate;
+    private String urgencyCode;
+
 
     public String getId() {
         return id;
@@ -87,5 +90,21 @@ public class EventModel extends AbstractModel {
 
     public void setArchived(boolean archived) {
         this.archived = archived;
+    }
+
+    public Date getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public String getUrgencyCode() {
+        return urgencyCode;
+    }
+
+    public void setUrgencyCode(String urgencyCode) {
+        this.urgencyCode = urgencyCode;
     }
 }

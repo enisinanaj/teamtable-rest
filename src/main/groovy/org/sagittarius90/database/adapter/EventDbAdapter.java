@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventDbAdapter extends BaseDbAdapter {
@@ -32,17 +34,37 @@ public class EventDbAdapter extends BaseDbAdapter {
     }
 
     public List<Event> getAllEvents() {
-        return (List<Event>) getEm().createNamedQuery(Event.ALL_EVENTS).getResultList();
+        List<Object[]> queryResult = (List<Object[]>) getEm().createNamedQuery(Event.EVENTS_WITH_URGENCY_CODE).getResultList();
+
+        List<Event> events = new ArrayList<>();
+
+        for (Object[] element : queryResult) {
+            Event temp = (Event) element[0];
+            temp.setExpirationDate((Date) element[1]);
+            events.add(temp);
+        }
+
+        return events;
     }
 
     public List<Event> getFilteredEvent(EventFilter filter) {
         this.filter = filter;
 
         long idDecoded = IdUtils.getInstance().decodeId(filter.getLegalPracticeId());
-        Query namedQuery = getEm().createNamedQuery(Event.ALL_EVENTS_FROM_PRACTICE)
+        Query namedQuery = getEm().createNamedQuery(Event.EVENTS_WITH_URGENCY_CODE_FROM_PRACTICE)
                 .setParameter("idPractice", (int) idDecoded);
 
-        return (List<Event>) namedQuery.getResultList();
+        List<Object[]> queryResult = (List<Object[]>) namedQuery.getResultList();
+
+        List<Event> events = new ArrayList<>();
+
+        for (Object[] element : queryResult) {
+            Event temp = (Event) element[0];
+            temp.setExpirationDate((Date) element[1]);
+            events.add(temp);
+        }
+        
+        return events;
     }
 
     public Event getEventById(Integer eventRealId) {

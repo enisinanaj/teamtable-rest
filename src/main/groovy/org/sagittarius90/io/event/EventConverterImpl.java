@@ -12,6 +12,7 @@ import org.sagittarius90.io.utils.BaseConverter;
 import org.sagittarius90.io.utils.ClassUtils;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.EventModel;
+import org.sagittarius90.model.Urgency;
 
 import javax.ws.rs.core.UriBuilder;
 import java.util.Date;
@@ -58,6 +59,12 @@ public class EventConverterImpl extends BaseConverter implements EventConverter 
         model.setPractice(getLegalPracticeConverter().createFrom(entity.getPractice()));
 
         model.setArchived(entity.isArchived());
+
+        new ClassUtils<Date>().setIfNotNull(entity::getExpirationDate, model::setExpirationDate);
+
+        if (entity.getExpirationDate() != null) {
+            model.setUrgencyCode(Urgency.urgencyByDate(entity.getExpirationDate()).getCode());
+        }
 
         return model;
     }
