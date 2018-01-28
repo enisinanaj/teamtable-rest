@@ -49,7 +49,10 @@ public class LegalPracticeConverterImpl extends BaseConverter implements LegalPr
         model.setName(entity.getName());
 
         new ClassUtils<Date>().setIfNotNull(entity::getExpirationDate, model::setExpirationDate);
-        model.setUrgencyCode(Urgency.urgencyByDate(entity.getExpirationDate()).getCode());
+
+        if (entity.getExpirationDate() != null) {
+            model.setUrgencyCode(Urgency.urgencyByDate(entity.getExpirationDate()).getCode());
+        }
 
         model.setArchived(entity.isArchived());
 
