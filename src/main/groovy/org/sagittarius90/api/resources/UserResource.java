@@ -1,6 +1,7 @@
 package org.sagittarius90.api.resources;
 
 import org.sagittarius90.api.filters.security.AuthenticationRequired;
+import org.sagittarius90.model.PasswordModel;
 import org.sagittarius90.model.UserModel;
 import org.sagittarius90.service.user.UserService;
 import org.slf4j.Logger;
@@ -51,6 +52,11 @@ public class UserResource {
         }
 
         return Response.status(Response.Status.NOT_FOUND).build();
+    }
+
+    @Path("/{userId}/passwords")
+    public PasswordResource getPasswordResource(@PathParam("userId") String userId) {
+        return new PasswordResource(userId);
     }
 
     @POST

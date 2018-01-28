@@ -20,9 +20,6 @@ public class PasswordUtil {
     }
 
     public boolean isValid(String password) {
-        System.out.println("Encrypted principal token: " + encodeForUserSalt(password));
-        System.out.println("Persistent password: " + persistentPassword);
-
         return encodeForUserSalt(password).equals(persistentPassword);
     }
 
@@ -53,7 +50,7 @@ public class PasswordUtil {
         return persistentSalt;
     }
 
-    private String encodeForUserSalt(String value) {
+    public String encodeForUserSalt(String value) {
         System.out.println("Persistent salt is: " + getPersistentSalt());
 
         if (getPersistentSalt() == null || "".equals(getPersistentSalt())) {
@@ -63,7 +60,16 @@ public class PasswordUtil {
         return encodeString(value + getPersistentSalt());
     }
 
+    public void setPersistentSalt(String persistentSalt) {
+        this.persistentSalt = persistentSalt;
+    }
+
     public static String encodeString(String value) {
         return passwordEncryptionFormat.convert(value);
+    }
+
+    public void updatePasswordForUser(String newPassword) {
+        String newPasswordEcnoded = encodeForUserSalt(newPassword);
+        user.setPassword(newPasswordEcnoded + PASSWORD_ENCRYPTION_DELIMITER + persistentSalt);
     }
 }
