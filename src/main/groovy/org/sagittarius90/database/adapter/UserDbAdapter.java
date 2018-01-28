@@ -49,4 +49,8 @@ public class UserDbAdapter extends BaseDbAdapter {
 
         return result;
     }
+
+    public void updateUser(User user) {
+        commit(user);
+    }
 }
