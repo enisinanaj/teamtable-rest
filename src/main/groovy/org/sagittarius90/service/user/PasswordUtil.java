@@ -69,7 +69,7 @@ public class PasswordUtil {
     }
 
     public void updatePasswordForUser(String newPassword) {
-        String newPasswordEcnoded = encodeForUserSalt(newPassword);
-        user.setPassword(newPasswordEcnoded + PASSWORD_ENCRYPTION_DELIMITER + persistentSalt);
+        String newPasswordEncoded = encodeForUserSalt(newPassword);
+        user.setPassword(newPasswordEncoded + PASSWORD_ENCRYPTION_DELIMITER + persistentSalt);
     }
 }

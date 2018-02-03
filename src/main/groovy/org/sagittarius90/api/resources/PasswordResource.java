@@ -2,6 +2,7 @@ package org.sagittarius90.api.resources;
 
 import org.sagittarius90.database.adapter.UserDbAdapter;
 import org.sagittarius90.database.entity.User;
+import org.sagittarius90.io.user.UserConverterImpl;
 import org.sagittarius90.io.utils.IdUtils;
 import org.sagittarius90.model.PasswordModel;
 import org.sagittarius90.model.UserModel;
@@ -20,6 +21,7 @@ public class PasswordResource {
 
     private String userId;
     private User user;
+    private UserModel userModel;
 
     public PasswordResource(String userId) {
         this.userId = userId;
@@ -50,7 +52,8 @@ public class PasswordResource {
             UserDbAdapter.getInstance().updateUser(this.user);
         }
 
-        return Response.ok().build();
+        userModel = getUserConverter().createFrom(this.user);
+        return Response.ok(userModel).build();
     }
 
     private boolean userIdIsCorrect() {
@@ -63,5 +66,9 @@ public class PasswordResource {
         } else {
             return false;
         }
+    }
+
+    private UserConverterImpl getUserConverter() {
+        return new UserConverterImpl();
     }
 }
